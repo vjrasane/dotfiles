@@ -5,8 +5,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [[ ! -s "~/antigen.zsh" ]]; then
-  curl -L git.io/antigen > ~/antigen.zsh 
+if [[ ! -f ~/antigen.zsh ]]; then
+  curl -L git.io/antigen > ~/antigen.zsh
 fi
 
 source ~/antigen.zsh
@@ -18,8 +18,9 @@ antigen bundle aliases
 antigen bundle command-not-found
 antigen bundle z
 antigen bundle fzf
+# antigen bundle docker
 # antigne bundle nvm  
-antigen bundle manlao/zsh-auto-nvm
+# antigen bundle manlao/zsh-auto-nvm
 antigen bundle zsh-users/zsh-syntax-highlighting
  
 antigen theme romkatv/powerlevel10k
