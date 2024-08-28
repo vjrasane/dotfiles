@@ -32,7 +32,7 @@ return {
 			{
 				"<leader>e",
 				function()
-					require("oil").toggle_float()
+					require("oil").open()
 				end,
 				desc = "Explorer (Oil)",
 			},
