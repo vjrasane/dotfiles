@@ -1,5 +1,12 @@
 local keymaps = {
 	{
+		"<leader>t",
+		function()
+			require("telescope.builtin").builtin()
+		end,
+		desc = "Find Telescope Pickers",
+	},
+	{
 		"<leader>b",
 		"<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
 		desc = "Buffers",
@@ -61,15 +68,6 @@ local keymaps = {
 	{ "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
 	{ "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },
 	{ "<leader>sR", "<cmd>Telescope resume<cr>", desc = "Resume" },
-	{
-		"<leader>ss",
-		function()
-			require("telescope.builtin").lsp_document_symbols({
-				symbols = require("utils.telescope").kind_filter,
-			})
-		end,
-		desc = "Goto Symbol",
-	},
 	{
 		"<leader>sS",
 		function()
