@@ -16,9 +16,24 @@ vim.opt.showmode = true
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
+local setup_clipboard = function()
 	vim.opt.clipboard = "unnamedplus"
-end)
+	if vim.fn.has("wsl") == 1 then
+		vim.g.clipboard = {
+			name = "WslClipboard",
+			copy = {
+				["+"] = "clip.exe",
+				["*"] = "clip.exe",
+			},
+			paste = {
+				["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+				["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+			},
+			cache_enabled = false,
+		}
+	end
+end
+vim.schedule(setup_clipboard)
 
 -- Enable break indent
 vim.opt.breakindent = true
