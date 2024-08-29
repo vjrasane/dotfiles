@@ -115,6 +115,14 @@ return {
 					{ name = "buffer" },
 				},
 			})
+
+			cmp.setup.filetype("oil", {
+				sources = {
+					{ name = "path" },
+					{ name = "buffer" },
+					{ name = "nvim_lsp" },
+				},
+			})
 		end,
 	},
 	{ -- Collection of various small independent plugins/modules

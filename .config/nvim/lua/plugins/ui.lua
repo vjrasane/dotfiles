@@ -21,7 +21,7 @@ return {
 					lualine_b = { { "filename", path = 1 } },
 					lualine_c = {},
 					lualine_x = { "diff" },
-					lualine_y = { "filetype" },
+					lualine_y = { { "filetype" }, { "encoding" } },
 					lualine_z = { "location" },
 				},
 				extensions = { "neo-tree", "lazy", "oil" },

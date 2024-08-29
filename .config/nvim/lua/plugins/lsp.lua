@@ -21,6 +21,8 @@ local servers = {
 	tsserver = {},
 	--
 
+	astro = {},
+	yamlls = {},
 	lua_ls = {
 		-- cmd = {...},
 		-- filetypes = { ...},

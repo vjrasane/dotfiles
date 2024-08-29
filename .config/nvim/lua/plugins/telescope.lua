@@ -204,6 +204,8 @@ return {
 					".svn",
 					"Makefile",
 					"package.json",
+					"lazy-lock.json",
+					"tsconfig.json",
 					".gitlab-ci.yml",
 				},
 				silent_chdir = true,
