@@ -70,5 +70,13 @@ if [[ -d "$HOME/.cargo" ]]; then
 	export PATH=$HOME/.cargo/bin:$PATH
 fi
 
+if [[ -d "$HOME/.pyenv" ]]; then
+	export PYENV_DIR="$HOME/.pyenv"
+	[[ -d "$PYENV_DIR" ]] || { curl https://pyenv.run | bash }
+	export PATH="$PYENV_DIR/bin:$PATH"
+	eval "$(pyenv init -)"
+	eval "$(pyenv virtualenv-init -)"
+fi
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
