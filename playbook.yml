@@ -1,0 +1,35 @@
+# - hosts: 127.0.0.1
+#   connection: local
+- name: Bootstrap
+  hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - name: Install packages
+      become: yes
+      ansible.builtin.package:
+        name: 
+          - zsh
+          - gcc
+          - build-essential
+          - libssl-dev
+          - git
+          - curl
+        state: present
+        update_cache: yes
+    - name: Install nvm
+      ansible.builtin.shell:
+        cmd: curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash
+        creates: /home/{{ ansible_user_id }}/.nvm/nvm.sh 
+    - name: Install node
+      ansible.builtin.shell:
+        cmd: . ~/.nvm/nvm.sh && nvm install 20.17.0
+        creates: /home/{{ ansible_user_id }}/.nvm/versions/node/v20.17.0
+    - name: Download Oh My Zsh install script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh 
+        dest: /tmp/install-ohmyzsh.sh
+    - name: Run Oh My Zsh install script
+      ansible.builtin.shell:
+        cmd: sh /tmp/install-ohmyzsh.sh --unattended
+      register: ohmyzsh
+      failed_when: "'FAILED' in ohmyzsh.stderr"
