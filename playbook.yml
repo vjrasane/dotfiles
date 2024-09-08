@@ -23,6 +23,7 @@
           - unzip
           - systemd
           - podman
+          - vim
         state: present
         update_cache: yes
     - name: Create directory for Docker's GPG key
@@ -69,6 +70,7 @@
       shell: systemctl 
       register: systemctl
       changed_when: false
+      ignore_errors: true
     - name: Enable and start Docker services
       systemd:
         name: "{{ item }}"
