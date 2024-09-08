@@ -82,25 +82,25 @@ vim.opt.autowrite = true
 
 vim.opt.completeopt = "menu,menuone,noselect"
 
-vim.opt.conceallevel = 0 -- Hide * markup for bold and italic
+vim.opt.conceallevel = 0           -- Hide * markup for bold and italic
 
-vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
-vim.opt.expandtab = true -- Use spaces instead of tabs
-vim.opt.tabstop = 2 -- Number of spaces tabs count for
+vim.opt.confirm = true             -- Confirm to save changes before exiting modified buffer
+vim.opt.expandtab = true           -- Use spaces instead of tabs
+vim.opt.tabstop = 2                -- Number of spaces tabs count for
 
 vim.opt.formatoptions = "jcroqlnt" -- tcqj
 
-vim.opt.laststatus = 3 -- global statusline
+vim.opt.laststatus = 3             -- global statusline
 
-vim.opt.list = true -- Show some invisible characters (tabs...
+vim.opt.list = true                -- Show some invisible characters (tabs...
 
-vim.opt.pumblend = 10 -- Popup blend
-vim.opt.pumheight = 10 -- Maximum number of entries in a popup
+vim.opt.pumblend = 10              -- Popup blend
+vim.opt.pumheight = 10             -- Maximum number of entries in a popup
 
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 
 vim.opt.shiftround = true -- Round indent
-vim.opt.shiftwidth = 2 -- Size of an indent
+vim.opt.shiftwidth = 2    -- Size of an indent
 
 vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
@@ -108,10 +108,10 @@ vim.opt.smartindent = true -- Insert indents automatically
 
 vim.opt.spelllang = { "en" }
 
-vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+vim.opt.virtualedit = "block"          -- Allow cursor to move where there is no text in visual block mode
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 
-vim.opt.winminwidth = 5 -- Minimum window width
+vim.opt.winminwidth = 5                -- Minimum window width
 
 vim.opt.wrap = true
 

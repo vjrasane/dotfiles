@@ -8,7 +8,7 @@
   tasks:
     - name: Install packages
       become: yes
-      ansible.builtin.package:
+      apt:
         name: 
           - zsh
           - gcc
@@ -22,19 +22,19 @@
         state: present
         update_cache: yes
     - name: Create directory for Docker's GPG key
-      ansible.builtin.file:
+      file:
         path: /etc/apt/keyrings
         state: directory
         mode: '0755'
     - name: Add Docker's official GPG key
       become: true
-      ansible.builtin.apt_key:
+      apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         keyring: /usr/share/keyrings/docker.gpg
         state: present
     - name: Add Docker repository
       become: true
-      ansible.builtin.apt_repository:
+      apt_repository:
         repo: >-
           deb [arch={{ arch_mapping[ansible_architecture] | default(ansible_architecture) }}
           signed-by=/usr/share/keyrings/docker.gpg]
@@ -52,16 +52,17 @@
         state: present
         update_cache: yes
     - name: Add Docker group
-      ansible.builtin.group:
+      group:
         name: docker
         state: present
     - name: Add user to Docker group
-      ansible.builtin.user:
-        name: "{{ ansible_user }}"
+      become: true
+      user:
+        name: "{{ ansible_user_id }}"
         groups: docker
         append: true
     - name: Enable and start Docker services
-      ansible.builtin.systemd:
+      systemd:
         name: "{{ item }}"
         enabled: true
         state: started
@@ -69,19 +70,20 @@
         - docker.service
         - containerd.service
     - name: Install nvm
-      ansible.builtin.shell:
+      shell:
         cmd: curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash
         creates: /home/{{ ansible_user_id }}/.nvm/nvm.sh 
     - name: Install node
-      ansible.builtin.shell:
+      shell:
         cmd: . ~/.nvm/nvm.sh && nvm install 20.17.0
         creates: /home/{{ ansible_user_id }}/.nvm/versions/node/v20.17.0
     - name: Download Oh My Zsh install script
-      ansible.builtin.get_url:
+      get_url:
         url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh 
         dest: /tmp/install-ohmyzsh.sh
     - name: Run Oh My Zsh install script
-      ansible.builtin.shell:
+      shell: 
         cmd: sh /tmp/install-ohmyzsh.sh --unattended
+        creates: /home/{{ ansible_user_id }}/.oh-my-zsh
       register: ohmyzsh
       failed_when: "'FAILED' in ohmyzsh.stderr"
