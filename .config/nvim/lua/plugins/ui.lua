@@ -8,6 +8,11 @@ return {
 		opts = function()
 			vim.o.laststatus = vim.g.lualine_laststatus
 
+			local function cwd()
+				local home = vim.env.HOME
+				local current_dir = vim.fn.getcwd()
+				return current_dir:gsub(home, "~")
+			end
 			return {
 				options = {
 					theme = "auto",
@@ -18,11 +23,27 @@ return {
 				},
 				sections = {
 					lualine_a = { "branch" },
-					lualine_b = { { "filename", path = 1 } },
+					lualine_b = { { cwd }, { "filename", path = 1 } },
 					lualine_c = {},
 					lualine_x = { "diff" },
 					lualine_y = { { "filetype" }, { "encoding" } },
 					lualine_z = { "location" },
+				},
+				winbar = {
+					lualine_a = {},
+					lualine_b = { "filename" },
+					lualine_c = {},
+					lualine_x = {},
+					lualine_y = {},
+					lualine_z = {},
+				},
+				inactive_winbar = {
+					lualine_a = {},
+					lualine_b = {},
+					lualine_c = { "filename" },
+					lualine_x = {},
+					lualine_y = {},
+					lualine_z = {},
 				},
 				extensions = { "neo-tree", "lazy", "oil" },
 			}
