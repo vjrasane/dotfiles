@@ -21,6 +21,8 @@
           - lsb-release
           - zip
           - unzip
+          - systemd
+          - podman
         state: present
         update_cache: yes
     - name: Create directory for Docker's GPG key
@@ -63,6 +65,10 @@
         name: "{{ ansible_user_id }}"
         groups: docker
         append: true
+    - name: Check systemd available
+      shell: systemctl --version
+      register: systemctl_version
+      changed_when: false
     - name: Enable and start Docker services
       systemd:
         name: "{{ item }}"
@@ -71,6 +77,7 @@
       loop:
         - docker.service
         - containerd.service
+      when: systemctl_version.rc == 0
     - name: Install nvm
       shell:
         cmd: curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash

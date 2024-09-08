@@ -2,7 +2,8 @@
 
 docker build . -t ubuntu-playground
 docker run -it \
+  -v ./install.sh:/home/ubuntu/install.sh \
   -v ./bootstrap:/home/ubuntu/bootstrap \
   -u ubuntu \
-  ubuntu-playground \
-  bash
+  ubuntu-playground
+bash
