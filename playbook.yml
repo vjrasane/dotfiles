@@ -24,6 +24,7 @@
           - systemd
           - podman
           - vim
+          - stow
         state: present
         update_cache: yes
     - name: Create directory for Docker's GPG key
@@ -100,3 +101,17 @@
         creates: /home/{{ ansible_user_id }}/.oh-my-zsh
       register: ohmyzsh
       failed_when: "'FAILED' in ohmyzsh.stderr"
+    - name: Clone dotfiles
+      git: git@github.com:vjrasane/dotfiles.git
+      dest: /home/{{ ansible_user_id }}/.dotfiles
+    - name: Remove default .zshrc
+      file:
+        path: /home/{{ ansible_user_id }}/.zshrc 
+        state: absent
+    - name: Run Stow
+      shell:
+        chdir: /home/{{ ansible_user_id }}/.dotfiles
+        cmd: stow .
+        creates: /home/{{ ansible_user_id }}/.zshrc
+
+
