@@ -19,6 +19,8 @@
           - ca-certificates
           - gnupg
           - lsb-release
+          - zip
+          - unzip
         state: present
         update_cache: yes
     - name: Create directory for Docker's GPG key
