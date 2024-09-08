@@ -102,8 +102,10 @@
       register: ohmyzsh
       failed_when: "'FAILED' in ohmyzsh.stderr"
     - name: Clone dotfiles
-      git: git@github.com:vjrasane/dotfiles.git
-      dest: /home/{{ ansible_user_id }}/.dotfiles
+      git:
+        repo: git@github.com:vjrasane/dotfiles.git
+        dest: /home/{{ ansible_user_id }}/.dotfiles
+        accept_hostkey: true
     - name: Remove default .zshrc
       file:
         path: /home/{{ ansible_user_id }}/.zshrc 
