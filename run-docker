@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+docker build . -t ubuntu-playground
+docker run -it \
+  -v ./bootstrap:/home/ubuntu/bootstrap \
+  -u ubuntu \
+  ubuntu-playground \
+  bash
