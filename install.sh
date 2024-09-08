@@ -7,10 +7,11 @@ sudo apt install -y ansible
 
 sudo apt install -y curl
 
+repo="https://github.com/vjrasane/dotfiles"
 get_file_from_repo() {
   local path="$1"
   local output="$2"
-  curl -fsSL https://github.com/vjrasane/dotfiles/raw/main/"$path" >"$output"
+  curl -fsSL "$repo"/raw/main/"$path" >"$output"
 }
 
 playbook=/tmp/playbook.yml
