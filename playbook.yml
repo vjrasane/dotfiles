@@ -88,6 +88,8 @@
       shell:
         cmd: . ~/.nvm/nvm.sh && nvm install 20.17.0
         creates: /home/{{ ansible_user_id }}/.nvm/versions/node/v20.17.0
+      environment:
+        NVM_DIR: /home/{{ ansible_user_id }}/.nvm
     - name: Download Oh My Zsh install script
       get_url:
         url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh 
