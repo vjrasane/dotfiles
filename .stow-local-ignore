@@ -21,3 +21,9 @@ _darcs
 ^/COPYING
 
 ^/bootstrap
+^/playbook.yml
+^/install.sh
+^/run-ansible
+^/run-docker
+^/Dockerfile
+^/*.tar.gz

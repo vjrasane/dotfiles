@@ -106,14 +106,37 @@
         repo: git@github.com:vjrasane/dotfiles.git
         dest: /home/{{ ansible_user_id }}/.dotfiles
         accept_hostkey: true
+      register: dotfiles_clone
+      failed_when:
+        - dotfiles_clone.failed
+        - not 'Local modifications exist' in dotfiles_clone.msg
+    - name: Check if .zshrc is symlink
+      stat:
+        path: /home/{{ ansible_user_id }}/.zshrc 
+      register: zshrc_stat
+      changed_when: false
     - name: Remove default .zshrc
       file:
         path: /home/{{ ansible_user_id }}/.zshrc 
         state: absent
+      when: not zshrc_stat.stat.islnk 
     - name: Run Stow
       shell:
         chdir: /home/{{ ansible_user_id }}/.dotfiles
         cmd: stow .
         creates: /home/{{ ansible_user_id }}/.zshrc
+    - name: Unpack Neovim
+      unarchive:
+        src: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+        dest: /opt
+        remote_src: true
+    - name: Add Neovim to path
+      lineinfile:
+        path: /home/{{ansible_user_id}}/.zshrc
+        state: present
+        line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
+             
+
+     
 
 
