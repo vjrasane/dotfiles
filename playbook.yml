@@ -1,17 +1,23 @@
 - name: Bootstrap
   hosts: 127.0.0.1
+  gather_facts: true
+  gather_subset:
+    - "!all"
+    - "min"
   connection: local
   vars:
     arch_mapping:  # Map ansible architecture {{ ansible_architecture }} names to Docker's architecture names
       x86_64: amd64
       aarch64: arm64
   tasks:
+    - name: Show Facts
+      debug:
+        msg: "{{ ansible_facts }}"
     - name: Install packages
       become: yes
       apt:
         name: 
           - zsh
-          - fzf
           - ripgrep
           - gcc
           - build-essential
@@ -149,13 +155,38 @@
         path: /home/{{ansible_user_id}}/.zshrc
         state: present
         line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
+
+    - name: Clone fzf
+      git:
+        repo: https://github.com/junegunn/fzf.git
+        dest: /home/{{ansible_user_id}}/.fzf
+        depth: 1
+    - name: Install fzf
+      shell: 
+        cmd: /home/{{ansible_user_id}}/.fzf/install
+        creates: /home/{{ansible_user_id}}/.fzf.zsh
     - name: Setup fzf shell integration
-      blockinfile:
-        marker: "# {mark} fzf"
-        block: |
-          source <(fzf --zsh)
-          [[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
+      lineinfile:
+        line: '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh'
         path: /home/{{ansible_user_id}}/.zshrc
+    - name: Clone fzf-git
+      git:
+        repo: https://github.com/junegunn/fzf-git.sh.git
+        dest: /home/{{ansible_user_id}}/fzf-git.sh
+        depth: 1
+    - name: Clone docker-fzf
+      git:
+        repo: https://github.com/mnowotnik/docker-fzf-completion.git
+        dest: /home/{{ansible_user_id}}/docker-fzf
+    - name: Add fzf config .fzfrc
+      blockinfile:
+        marker: "# {mark} fzf" 
+        block: |
+          [[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
+          source ~/docker-fzf/docker-fzf.zsh
+          source ~/fzf-git.sh/fzf-git.sh
+        path: /home/{{ansible_user_id}}/.zshrc
+
     - name: Install zoxide
       shell: 
         cmd: curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
@@ -164,8 +195,13 @@
       lineinfile: 
         path: /home/{{ansible_user_id}}/.zshrc
         line: 'export PATH="$PATH:$HOME/.local/bin"'
-             
-
-     
-
+      
+    - name: Add WSL clipboard to path
+      blockinfile:
+        path: /home/{{ ansible_user_id }}/.zshrc 
+        marker: "# {mark} WSL clipboard"
+        block: |
+          export PATH="$PATH:/mnt/c/Windows/System32"
+          export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
+      when: ansible_facts['os_family'] == "Debian" and "WSL" in ansible_facts['kernel']
 

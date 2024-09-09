@@ -66,6 +66,7 @@ if [[ -d "$HOME/.pyenv" ]]; then
 	eval "$(pyenv virtualenv-init -)"
 fi
 
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export PATH="$PATH:/opt/nvim-linux64/bin"
@@ -74,8 +75,15 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # END nvm
-# BEGIN fzf
-source <(fzf --zsh)
-[[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
-# END fzf
 export PATH="$PATH:$HOME/.local/bin"
+
+# BEGIN WSL clipboard
+export PATH="$PATH:/mnt/c/Windows/System32"
+export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
+# END WSL clipboard
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# BEGIN fzf
+[[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
+source ~/docker-fzf/docker-fzf.zsh
+source ~/fzf-git.sh/fzf-git.sh
+# END fzf
