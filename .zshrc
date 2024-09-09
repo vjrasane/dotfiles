@@ -5,10 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [[ ! -f ~/antigen.zsh ]]; then
-  curl -L git.io/antigen > ~/antigen.zsh
-fi
-
 source ~/antigen.zsh
 
 antigen use oh-my-zsh
@@ -50,14 +46,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 EDITOR=nvim
 
-source ~/.fzfrc
-
-# nvm
-if [[ -d "$HOME/.nvm" ]]; then
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
 
 # bun
 if [[ -d "$HOME/.bun" ]]; then
@@ -81,3 +69,13 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export PATH="$PATH:/opt/nvim-linux64/bin"
+# BEGIN nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# END nvm
+# BEGIN fzf
+source <(fzf --zsh)
+[[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
+# END fzf
+export PATH="$PATH:$HOME/.local/bin"

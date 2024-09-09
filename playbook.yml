@@ -11,6 +11,8 @@
       apt:
         name: 
           - zsh
+          - fzf
+          - ripgrep
           - gcc
           - build-essential
           - libssl-dev
@@ -85,6 +87,14 @@
       shell:
         cmd: curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash
         creates: /home/{{ ansible_user_id }}/.nvm/nvm.sh 
+    - name: Setup nvm
+      blockinfile:
+        path: /home/{{ ansible_user_id }}/.zshrc 
+        marker: "# {mark} nvm"
+        block: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     - name: Install node
       shell:
         cmd: . ~/.nvm/nvm.sh && nvm install 20.17.0
@@ -101,6 +111,10 @@
         creates: /home/{{ ansible_user_id }}/.oh-my-zsh
       register: ohmyzsh
       failed_when: "'FAILED' in ohmyzsh.stderr"
+    - name: Download Antigen
+      get_url:
+        url: https://git.io/antigen 
+        dest: /home/{{ansible_user_id}}/antigen.zsh
     - name: Clone dotfiles
       git:
         repo: git@github.com:vjrasane/dotfiles.git
@@ -135,6 +149,21 @@
         path: /home/{{ansible_user_id}}/.zshrc
         state: present
         line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
+    - name: Setup fzf shell integration
+      blockinfile:
+        marker: "# {mark} fzf"
+        block: |
+          source <(fzf --zsh)
+          [[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
+        path: /home/{{ansible_user_id}}/.zshrc
+    - name: Install zoxide
+      shell: 
+        cmd: curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+        creates: /home/{{ansible_user_id}}/.local/bin/zoxide
+    - name: Add local bin to path
+      lineinfile: 
+        path: /home/{{ansible_user_id}}/.zshrc
+        line: 'export PATH="$PATH:$HOME/.local/bin"'
              
 
      
