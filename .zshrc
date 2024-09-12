@@ -9,15 +9,15 @@ source ~/antigen.zsh
 
 antigen use oh-my-zsh
 
-antigen bundle git
-antigen bundle aliases
-antigen bundle command-not-found
-antigen bundle z
-antigen bundle fzf
+# antigen bundle git
+# antigen bundle aliases
+# antigen bundle command-not-found
+# antigen bundle z
+# antigen bundle fzf
 # antigen bundle docker
 # antigne bundle nvm  
 # antigen bundle manlao/zsh-auto-nvm
-antigen bundle zsh-users/zsh-syntax-highlighting
+# antigen bundle zsh-users/zsh-syntax-highlighting
  
 antigen theme romkatv/powerlevel10k
 # antigen theme robbyrussell
@@ -44,7 +44,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-EDITOR=nvim
+export EDITOR=nvim
 
 
 # bun
@@ -53,10 +53,6 @@ if [[ -d "$HOME/.bun" ]]; then
 	export PATH=$BUN_INSTALL/bin:$PATH
 fi
 
-# cargo
-if [[ -d "$HOME/.cargo" ]]; then
-	export PATH=$HOME/.cargo/bin:$PATH
-fi
 
 if [[ -d "$HOME/.pyenv" ]]; then
 	export PYENV_DIR="$HOME/.pyenv"
@@ -69,6 +65,7 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 export PATH="$PATH:/opt/nvim-linux64/bin"
 # BEGIN nvm
 export NVM_DIR="$HOME/.nvm"
@@ -86,4 +83,42 @@ export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
 [[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
 source ~/docker-fzf/docker-fzf.zsh
 source ~/fzf-git.sh/fzf-git.sh
+
+
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
+
+show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo \${}'"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+  esac
+}
+
 # END fzf
+export PATH="$PATH:/home/vjrasane/.local/bin"
+export PATH=$HOME/.cargo/bin:$PATH
+export BAT_THEME=OneHalfDark
+alias ls="eza --icons=always"
+alias tree="eza --icons=always --tree"
+alias ll="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"

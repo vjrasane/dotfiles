@@ -18,7 +18,7 @@ local servers = {
 	--    https://github.com/pmizio/typescript-tools.nvim
 	--
 	-- But for many setups, the LSP (`tsserver`) will work just fine
-	tsserver = {},
+	ts_ls = {},
 	--
 
 	astro = {},
@@ -159,7 +159,7 @@ return {
 
 			-- Useful status updates for LSP.
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-			{ "j-hui/fidget.nvim",       opts = {} },
+			{ "j-hui/fidget.nvim", opts = {} },
 
 			-- Allows extra capabilities provided by nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",

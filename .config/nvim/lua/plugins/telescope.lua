@@ -14,7 +14,7 @@ local keymaps = {
 	{
 		"<leader>f",
 		function()
-			require("telescope.builtin").find_files()
+			require("telescope.builtin").find_files({ hidden = true })
 		end,
 		desc = "Find Files (cwd)",
 	},
@@ -100,11 +100,6 @@ return {
 		-- cmd = "Telescope",
 		version = false, -- telescope did only one release, so use HEAD for now
 		dependencies = {
-			{
-				"nvim-telescope/telescope-fzf-native.nvim",
-				build = "make",
-				enabled = vim.fn.executable("make") == 1,
-			},
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
 			"nvim-telescope/telescope-file-browser.nvim",
@@ -183,7 +178,6 @@ return {
 		end,
 		config = function(_, opts)
 			require("telescope").setup(opts)
-			require("telescope").load_extension("fzf")
 			require("telescope").load_extension("file_browser")
 			require("telescope").load_extension("projects")
 		end,

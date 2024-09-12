@@ -12,10 +12,6 @@ fa() {
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
-fd() {
-  local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
-}
 
 # Modified version where you can press
 #   - CTRL-O to open with `open` command,

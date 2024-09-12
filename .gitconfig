@@ -1,8 +1,24 @@
 [user]
 	name = Ville Räsänen
 	email = vjrasane@gmail.com
+
 [core]
 	editor = nvim
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = true
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
 [alias]
 	ch = checkout
 	ac = !git status && git add -p && git commit
@@ -34,5 +50,6 @@
 	fetcha = fetch --all
 	fa = fetch --all
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+
 [push]
 	default = current
