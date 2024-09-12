@@ -119,6 +119,16 @@ _fzf_comprun() {
 export PATH="$PATH:/home/vjrasane/.local/bin"
 export PATH=$HOME/.cargo/bin:$PATH
 export BAT_THEME=OneHalfDark
+
+
+# cannot currently install thefuck
+# eval $(thefuck --alias)
+# eval $(thefuck --alias fk)
+
+# ---- Zoxide (better cd) ----
+eval "$(zoxide init zsh)"
+
+alias cd="z"
 alias ls="eza --icons=always"
 alias tree="eza --icons=always --tree"
 alias ll="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"

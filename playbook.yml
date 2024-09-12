@@ -36,6 +36,9 @@
           - stow
           - bat
           - fd-find
+          - python3-dev
+          - python3-pip
+          - python3-setuptools
         state: present
         update_cache: yes
 
@@ -222,3 +225,15 @@
         src: /usr/bin/fdfind
         dest: /home/{{ ansible_user_id }}/.local/bin/fd
         state: link
+        
+    - name: Install tlrc
+      shell:
+        cmd: /home/{{ ansible_user_id }}/.cargo/bin/cargo install tlrc
+        creates: /home/{{ ansible_user_id }}/.cargo/bin/tldr
+
+    # Cannot install with ansible before 2.17
+    # - name: Install thefuck
+    #   pip:
+    #     name: thefuck
+    #     break_system_packages: true
+    #     extra_args: --user
