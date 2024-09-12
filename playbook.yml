@@ -170,7 +170,7 @@
         depth: 1
     - name: Clone docker-fzf
       git:
-        repo: https://github.com/mnowotnik/docker-fzf-completion.git
+        repo: https://github.com/kwhrtsk/docker-fzf-completion.git
         dest: /home/{{ansible_user_id}}/docker-fzf
 
     - name: Install zoxide
