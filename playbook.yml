@@ -40,6 +40,7 @@
           - python3-pip
           - python3-setuptools
           - tmux
+          - net-tools
         state: present
         update_cache: yes
 
@@ -238,3 +239,8 @@
     #     name: thefuck
     #     break_system_packages: true
     #     extra_args: --user
+    - name: Clone tmux tpm
+      git:
+        repo: https://github.com/tmux-plugins/tpm
+        dest: /home/{{ ansible_user_id }}/.tmux/plugins/tpm
+        accept_hostkey: true

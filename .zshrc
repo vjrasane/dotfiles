@@ -130,15 +130,13 @@ export BAT_THEME=OneHalfDark
 # GENERAL ALIAS'S
 #######################################################
 
-if command -v rg &> /dev/null; then
-    # Alias grep to rg if ripgrep is installed
-    alias grep='rg'
-fi
 
-# alias cd="z"
+alias cd="z"
 alias ls="eza --icons=always"
 alias tree="eza --icons=always --tree"
-alias ll="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias ll="eza --color=always --long --git --icons=always"
+alias grep='rg'
+alias cat="bat"
 
 alias home='cd ~'
 alias cd..='cd ..'
@@ -226,15 +224,6 @@ up() {
 		d=..
 	fi
 	cd $d
-}
-
-cd ()
-{
-	if [ -n "$1" ]; then
-		z "$@" && ls
-	else
-		z ~ && ls
-	fi
 }
 
 # Returns the last 2 fields of the working directory
