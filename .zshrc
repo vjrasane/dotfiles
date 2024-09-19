@@ -134,7 +134,7 @@ export BAT_THEME=OneHalfDark
 alias cd="z"
 alias ls="eza --icons=always"
 alias tree="eza --icons=always --tree"
-alias ll="eza --color=always --long --git --icons=always"
+alias ll="eza --color=always --all --long --git --icons=always"
 alias grep='rg'
 alias cat="bat"
 

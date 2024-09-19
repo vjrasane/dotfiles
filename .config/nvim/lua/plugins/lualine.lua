@@ -25,10 +25,12 @@ return {
 				},
 			},
 			sections = {
-				lualine_a = { "branch" },
-				lualine_b = { { cwd }, { "filename", path = 1 } },
+				lualine_a = {
+					{ "filename", path = 1 },
+				},
+				lualine_b = { "diff" },
 				lualine_c = {},
-				lualine_x = { "diff" },
+				lualine_x = {},
 				lualine_y = { { "filetype" }, { "encoding" } },
 				lualine_z = { "location" },
 			},

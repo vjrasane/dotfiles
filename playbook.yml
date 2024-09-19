@@ -244,3 +244,8 @@
         repo: https://github.com/tmux-plugins/tpm
         dest: /home/{{ ansible_user_id }}/.tmux/plugins/tpm
         accept_hostkey: true
+    - name: Download gitmux binary
+      unarchive:
+        src: https://github.com/arl/gitmux/releases/download/v0.11.2/gitmux_v0.11.2_linux_amd64.tar.gz 
+        dest: /home/{{ ansible_user_id }}/.local/bin
+        remote_src: true
