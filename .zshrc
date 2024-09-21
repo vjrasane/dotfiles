@@ -5,6 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+export LC_ALL=en_IN.UTF-8
+export LANG=en_IN.UTF-8
+
 source ~/antigen.zsh
 
 antigen use oh-my-zsh
@@ -45,7 +48,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # HIST_STAMPS="mm/dd/yyyy"
 
 export EDITOR=nvim
-
 
 # bun
 if [[ -d "$HOME/.bun" ]]; then
