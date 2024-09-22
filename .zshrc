@@ -5,24 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source ~/antigen.zsh
-
-antigen use oh-my-zsh
-
-# antigen bundle git
-# antigen bundle aliases
-# antigen bundle command-not-found
-# antigen bundle z
-# antigen bundle fzf
-# antigen bundle docker
-# antigne bundle nvm  
-# antigen bundle manlao/zsh-auto-nvm
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle darvid/zsh-poetry
-antigen theme romkatv/powerlevel10k
-# antigen theme robbyrussell
-
-antigen apply
 
 
 # Uncomment the following line to display red dots whilst waiting for completion.
@@ -229,6 +211,16 @@ function whatsmyip () {
     curl -s ifconfig.me
 }
 
+source ~/antigen.zsh
+
+antigen use oh-my-zsh
+
+antigen bundle manlao/zsh-auto-nvm@main
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle darvid/zsh-poetry
+antigen theme romkatv/powerlevel10k
+
+antigen apply
 # ---- Zoxide (better cd) ----
 autoload -Uz compinit
 compinit -i
