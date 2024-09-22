@@ -5,9 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export LC_ALL=en_IN.UTF-8
-export LANG=en_IN.UTF-8
-
 source ~/antigen.zsh
 
 antigen use oh-my-zsh
@@ -20,8 +17,8 @@ antigen use oh-my-zsh
 # antigen bundle docker
 # antigne bundle nvm  
 # antigen bundle manlao/zsh-auto-nvm
-# antigen bundle zsh-users/zsh-syntax-highlighting
- 
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle darvid/zsh-poetry
 antigen theme romkatv/powerlevel10k
 # antigen theme robbyrussell
 
@@ -39,15 +36,15 @@ COMPLETION_WAITING_DOTS="true"
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+source ~/.p10k.zsh
+source ~/.fzf.zsh
+source ~/docker-fzf/docker-fzf.zsh
+source ~/fzf-git.sh/fzf-git.sh
+source ~/.local/share/tmuxinator.zsh
 
 export EDITOR=nvim
+export BAT_THEME=OneHalfDark
 
 # bun
 if [[ -d "$HOME/.bun" ]]; then
@@ -64,28 +61,15 @@ if [[ -d "$HOME/.pyenv" ]]; then
 	eval "$(pyenv virtualenv-init -)"
 fi
 
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-export PATH="$PATH:/opt/nvim-linux64/bin"
-# BEGIN nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-# END nvm
-export PATH="$PATH:$HOME/.local/bin"
 
-# BEGIN WSL clipboard
+export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:/opt/nvim-linux64/bin"
 export PATH="$PATH:/mnt/c/Windows/System32"
 export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
-# END WSL clipboard
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# BEGIN fzf
-[[ ! -f ~/.fzfrc ]] || source ~/.fzfrc
-source ~/docker-fzf/docker-fzf.zsh
-source ~/fzf-git.sh/fzf-git.sh
-
 
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -117,10 +101,6 @@ _fzf_comprun() {
   esac
 }
 
-# END fzf
-export PATH="$PATH:/home/vjrasane/.local/bin"
-export PATH=$HOME/.cargo/bin:$PATH
-export BAT_THEME=OneHalfDark
 
 
 # cannot currently install thefuck
@@ -133,7 +113,6 @@ export BAT_THEME=OneHalfDark
 #######################################################
 
 
-alias cd="z"
 alias ls="eza --icons=always"
 alias tree="eza --icons=always --tree"
 alias ll="eza --color=always --all --long --git --icons=always"
@@ -251,4 +230,7 @@ function whatsmyip () {
 }
 
 # ---- Zoxide (better cd) ----
-eval "$(zoxide init zsh)"
+autoload -Uz compinit
+compinit -i
+eval "$(zoxide init --cmd cd zsh)"
+

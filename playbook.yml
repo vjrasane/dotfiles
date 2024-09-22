@@ -41,6 +41,8 @@
           - python3-setuptools
           - tmux
           - net-tools
+          - pipx
+          - ruby-dev
         state: present
         update_cache: yes
 
@@ -249,8 +251,10 @@
         src: https://github.com/arl/gitmux/releases/download/v0.11.2/gitmux_v0.11.2_linux_amd64.tar.gz 
         dest: /home/{{ ansible_user_id }}/.local/bin
         remote_src: true
-    - name: Generate locale
-      community.general.locale_gen:
-        name:
-          - en_IN.UTF-8
-        state: present       
+    - name: Install poetry
+      community.general.pipx:
+        name: poetry
+    - name: Install tmuxinator
+      become: true
+      community.general.gem:
+        name: tmuxinator
