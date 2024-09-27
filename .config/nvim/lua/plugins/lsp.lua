@@ -20,6 +20,7 @@ local servers = {
 	-- But for many setups, the LSP (`tsserver`) will work just fine
 	ts_ls = {},
 	--
+	pyright = {},
 
 	astro = {},
 	-- yamlls = {},
@@ -215,5 +216,30 @@ return {
 		config = function()
 			require("lsp-file-operations").setup()
 		end,
+	},
+	{
+		"HallerPatrick/py_lsp.nvim",
+		-- event = "LspAttach",
+		dependencies = { "dharmx/toml.nvim" },
+		ft = { "python" },
+		opts = {
+			language_server = "pyright",
+			source_strategies = { "poetry", "default", "system" },
+			pylsp_plugins = {
+				autopep8 = {
+					enabled = true,
+				},
+				pyls_mypy = {
+					enabled = true,
+				},
+				pyls_isort = {
+					enabled = true,
+				},
+				flake8 = {
+					enabled = true,
+					executable = ".venv/bin/flake8",
+				},
+			},
+		},
 	},
 }

@@ -43,6 +43,7 @@
           - net-tools
           - pipx
           - ruby-dev
+          - jq
         state: present
         update_cache: yes
 
