@@ -1,6 +1,6 @@
 return {
 	"nvim-lualine/lualine.nvim",
-	event = "UiEnter",
+	event = "VeryLazy",
 	dependencies = {
 		{ "nvim-tree/nvim-web-devicons" },
 	},
@@ -13,6 +13,28 @@ return {
 			return current_dir:gsub(home, "~")
 		end
 
+		local function repo()
+			local repo_path = vim.fn.system("git rev-parse --show-toplevel | tr -d '\n'")
+			local repo_name = vim.fs.basename(repo_path)
+			return repo_name
+		end
+
+		local git_ext = {
+			sections = {
+				lualine_a = {
+					{ repo },
+				},
+				lualine_b = { "branch" },
+				lualine_c = {},
+				lualine_x = {},
+				lualine_y = { { "filetype" }, { "encoding" } },
+				lualine_z = { "location" },
+			},
+			disabled_filetypes = {
+				winbar = "gitcommit",
+			},
+			filetypes = { "gitcommit" },
+		}
 		return {
 			options = {
 				theme = "auto",
@@ -50,7 +72,7 @@ return {
 				lualine_y = {},
 				lualine_z = {},
 			},
-			extensions = { "neo-tree", "lazy", "oil" },
+			extensions = { "neo-tree", "lazy", "oil", "mason", git_ext },
 		}
 	end,
 }
