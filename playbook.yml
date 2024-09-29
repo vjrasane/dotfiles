@@ -9,6 +9,7 @@
     arch_mapping:  # Map ansible architecture {{ ansible_architecture }} names to Docker's architecture names
       x86_64: amd64
       aarch64: arm64
+    home: /home/{{ ansible_user_id }}
   tasks:
     - name: Show Facts
       debug:
@@ -44,8 +45,75 @@
           - pipx
           - ruby-dev
           - jq
+          - trash-cli
         state: present
         update_cache: yes
+
+    - name: Set zsh as default shell
+      become: true
+      user:
+        name: "{{ ansible_user_id }}"
+        shell: /usr/bin/zsh
+
+    - name: Generate SSH keypair
+      community.crypto.openssh_keypair:
+        path: "{{ home }}/.ssh/id_rsa"
+        regenerate: never
+      register: ssh_keygen
+    - name: Read SSH public key
+      command: "{{ home }}/.ssh/id_rsa.pub"
+      register: ssh_pub_key
+      when: ssh_keygen.changed
+      changed_when: false
+    - name: Print SSH public key
+      debug: "{{ ssh_pub_key.stdout }}"
+      when: ssh_keygen.changed
+    - name: Confirm SSH key is added to github
+      pause:
+        prompt: Confirm SSH public key is added to github
+      when: ssh_keygen.changed
+
+    - name: Clone dotfiles
+      git:
+        repo: git@github.com:vjrasane/dotfiles.git
+        dest: /home/{{ ansible_user_id }}/.dotfiles
+        accept_hostkey: true
+      register: dotfiles_clone
+      failed_when:
+        - dotfiles_clone.failed
+        - not 'Local modifications exist' in dotfiles_clone.msg
+    - name: Run Stow
+      shell:
+        chdir: /home/{{ ansible_user_id }}/.dotfiles
+        cmd: stow .
+      changed_when: false 
+
+    - name: Create local bin directory
+      file:
+        path: /home/{{ ansible_user_id }}/.local/bin
+        state: directory
+
+    - name: Unpack Neovim
+      become: true
+      unarchive:
+        src: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+        dest: /opt
+        remote_src: true
+
+    - name: Download Oh My Zsh install script
+      get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh 
+        dest: /tmp/install-ohmyzsh.sh
+    - name: Run Oh My Zsh install script
+      shell: 
+        cmd: sh /tmp/install-ohmyzsh.sh --unattended
+        creates: /home/{{ ansible_user_id }}/.oh-my-zsh
+      register: ohmyzsh
+      failed_when: "'FAILED' in ohmyzsh.stderr"
+    - name: Download Antigen
+      get_url:
+        url: https://git.io/antigen 
+        dest: /home/{{ansible_user_id}}/antigen.zsh
 
     - name: Create directory for Docker's GPG key
       file:
@@ -113,52 +181,6 @@
       environment:
         NVM_DIR: /home/{{ ansible_user_id }}/.nvm
         
-    - name: Download Oh My Zsh install script
-      get_url:
-        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh 
-        dest: /tmp/install-ohmyzsh.sh
-    - name: Run Oh My Zsh install script
-      shell: 
-        cmd: sh /tmp/install-ohmyzsh.sh --unattended
-        creates: /home/{{ ansible_user_id }}/.oh-my-zsh
-      register: ohmyzsh
-      failed_when: "'FAILED' in ohmyzsh.stderr"
-    - name: Download Antigen
-      get_url:
-        url: https://git.io/antigen 
-        dest: /home/{{ansible_user_id}}/antigen.zsh
-
-    - name: Clone dotfiles
-      git:
-        repo: git@github.com:vjrasane/dotfiles.git
-        dest: /home/{{ ansible_user_id }}/.dotfiles
-        accept_hostkey: true
-      register: dotfiles_clone
-      failed_when:
-        - dotfiles_clone.failed
-        - not 'Local modifications exist' in dotfiles_clone.msg
-    - name: Check if .zshrc is symlink
-      stat:
-        path: /home/{{ ansible_user_id }}/.zshrc 
-      register: zshrc_stat
-      changed_when: false
-    - name: Remove default .zshrc
-      file:
-        path: /home/{{ ansible_user_id }}/.zshrc 
-        state: absent
-      when: not zshrc_stat.stat.islnk 
-    - name: Run Stow
-      shell:
-        chdir: /home/{{ ansible_user_id }}/.dotfiles
-        cmd: stow .
-        creates: /home/{{ ansible_user_id }}/.zshrc
-
-    - name: Unpack Neovim
-      unarchive:
-        src: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-        dest: /opt
-        remote_src: true
-
     - name: Clone fzf
       git:
         repo: https://github.com/junegunn/fzf.git
@@ -183,10 +205,6 @@
         cmd: curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
         creates: /home/{{ansible_user_id}}/.local/bin/zoxide
 
-    - name: Create local bin directory
-      file:
-        path: /home/{{ ansible_user_id }}/.local/bin
-        state: directory
     - name: Check if batcat exists
       stat:
         path: /usr/bin/batcat
@@ -255,7 +273,3 @@
     - name: Install poetry
       community.general.pipx:
         name: poetry
-    - name: Install tmuxinator
-      become: true
-      community.general.gem:
-        name: tmuxinator

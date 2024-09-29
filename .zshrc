@@ -20,7 +20,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 source ~/.p10k.zsh
-source ~/.local/share/tmuxinator.zsh
 
 export EDITOR=nvim
 export BAT_THEME=OneHalfDark
@@ -196,6 +195,7 @@ alias tree="eza --icons=always --tree"
 alias ll="eza --color=always --all --long --git --icons=always"
 alias grep='rg'
 alias cat="bat"
+alias rm="trash"
 
 alias home='cd ~'
 alias cd..='cd ..'
