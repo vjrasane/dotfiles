@@ -94,6 +94,12 @@
         path: /home/{{ ansible_user_id }}/.local/bin
         state: directory
 
+    - name: Copy Ansible bootstrap script to local bin
+      copy:
+        src: "{{ home }}/.dotfiles/bootstrap/run-ansible"
+        dest: "{{ home }}/.local/bin/bootstrap"
+        mode: 'u+rwx'
+
     - name: Unpack Neovim
       become: true
       unarchive:
@@ -274,3 +280,4 @@
     - name: Install poetry
       community.general.pipx:
         name: poetry
+
