@@ -60,18 +60,19 @@
         path: "{{ home }}/.ssh/id_rsa"
         regenerate: never
       register: ssh_keygen
-    - name: Read SSH public key
-      command: "{{ home }}/.ssh/id_rsa.pub"
-      register: ssh_pub_key
+    - name: Wait for user to add SSH key to GitLab
       when: ssh_keygen.changed
-      changed_when: false
-    - name: Print SSH public key
-      debug: "{{ ssh_pub_key.stdout }}"
-      when: ssh_keygen.changed
-    - name: Confirm SSH key is added to github
-      pause:
-        prompt: Confirm SSH public key is added to github
-      when: ssh_keygen.changed
+      block:
+      - name: Read SSH public key
+        command: cat "{{ home }}/.ssh/id_rsa.pub"
+        register: ssh_pub_key
+        changed_when: false
+      - name: Print SSH public key
+        debug: 
+          msg: "{{ ssh_pub_key.stdout }}"
+      - name: Confirm SSH key is added to github
+        pause:
+          prompt: Confirm SSH public key is added to github
 
     - name: Clone dotfiles
       git:
