@@ -22,7 +22,7 @@ echo "# Fetching files"
 echo "#######################################################"
 
 playbook=/tmp/playbook.yml
-get_file_from_repo playbook.yml "$playbook"
+get_file_from_repo bootstrap/playbook.yml "$playbook"
 
 echo "#######################################################"
 echo "# Running Ansible"
