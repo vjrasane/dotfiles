@@ -1,0 +1,78 @@
+- name: Bootstrap
+  hosts: 127.0.0.1
+  gather_facts: true
+  gather_subset:
+    - "!all"
+    - "min"
+  connection: local
+
+  vars:
+    arch_mapping:  # Map ansible architecture {{ ansible_architecture }} names to Docker's architecture names
+      x86_64: amd64
+      aarch64: arm64
+    home: /home/{{ ansible_user_id }}
+    dotfiles: "{{ home }}/.dotfiles"
+    dotfiles_repo_path: vjrasane/dotfiles
+    dotfiles_repo_https: https://github.com/{{ dotfiles_repo_path }}
+    dotfiles_repo_ssh: git@github.com:{{ dotfiles_repo_path }}.git
+    bootstrap: "{{ dotfiles }}/bootstrap"
+
+  tasks:
+    - name: Show Facts
+      debug:
+        msg: "{{ ansible_facts }}"
+
+    - name: Install Git & Stow
+      become: true
+      package:
+        name:
+          - git
+          - libssl-dev
+          - stow
+        state: present
+        update_cache: true
+       
+    - name: Clone dotfiles
+      git:
+        repo: "{{ dotfiles_repo_https }}"
+        dest: "{{ dotfiles }}"
+        accept_hostkey: true
+      register: dotfiles_clone
+      failed_when:
+        - dotfiles_clone.failed
+        - not 'Local modifications exist' in dotfiles_clone.msg
+
+    - name: Run Stow
+      shell:
+        chdir: /home/{{ ansible_user_id }}/.dotfiles
+        cmd: stow .
+      changed_when: false 
+
+    - name: Common tasks
+      include_tasks:
+        file: "{{ bootstrap }}/common-tasks.yml"
+
+    - name: Generate SSH keypair
+      community.crypto.openssh_keypair:
+        path: "{{ home }}/.ssh/id_rsa"
+        regenerate: never
+      register: ssh_keygen
+    - name: Wait for user to add SSH key to GitLab
+      when: ssh_keygen.changed
+      block:
+      - name: Read SSH public key
+        command: cat "{{ home }}/.ssh/id_rsa.pub"
+        register: ssh_pub_key
+        changed_when: false
+      - name: Print SSH public key
+        debug: 
+          msg: "{{ ssh_pub_key.stdout }}"
+      - name: Confirm SSH key is added to github
+        pause:
+          prompt: Confirm SSH public key is added to github
+
+    - name: Set dotfiles remote to use SSH
+      shell:
+        cmd: git remote set-url origin {{ dotfiles_repo_ssh }}
+        chdir: "{{ dotfiles }}"
+      changed_when: false

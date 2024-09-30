@@ -2,10 +2,7 @@
 
 docker build . -t ubuntu-playground
 docker run -it \
-  -v ./install.sh:/home/ubuntu/install.sh \
-  -v ./bootstrap:/home/ubuntu/bootstrap \
-  -v ./playbook.yml:/home/ubuntu/playbook.yml \
-  -v ./run-ansible:/home/ubuntu/run-ansible \
+  -v .:/home/ubuntu/bootstrap \
   -u ubuntu \
   ubuntu-playground
 bash

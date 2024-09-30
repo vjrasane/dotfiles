@@ -1,4 +1,5 @@
 #!/bin/bash
 
-playbook="$HOME/.dotfiles/bootstrap/playbook.yml"
+bootstrap="$HOME/.dotfiles/bootstrap"
+playbook="${1:-$bootstrap/playbook.yml}"
 ansible-playbook --connection=local --inventory 127.0.0.1, "$playbook" --ask-become-pass
