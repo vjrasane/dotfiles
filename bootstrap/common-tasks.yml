@@ -44,10 +44,11 @@
     path: /home/{{ ansible_user_id }}/.local/bin
     state: directory
 
-- name: Copy Ansible bootstrap script to local bin
-  copy:
+- name: Create Ansible bootstrap link to local bin
+  file:
     src: "{{ home }}/.dotfiles/bootstrap/run-ansible"
     dest: "{{ home }}/.local/bin/bootstrap"
+    state: link
     mode: 'u+rwx'
 
 - name: Unpack Neovim
