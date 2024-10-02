@@ -190,6 +190,9 @@ return {
 				ts_ls = {},
 				ruff_lsp = {},
 				astro = {},
+				eslint_d = {},
+				tailwindcss = {},
+				markdownlint = {},
 				pyright = {
 					-- settings = {
 					-- 	python = {
