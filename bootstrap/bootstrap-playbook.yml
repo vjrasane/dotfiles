@@ -52,6 +52,7 @@
       include_tasks:
         file: "{{ bootstrap }}/common-tasks.yml"
 
+
     - name: Generate SSH keypair
       community.crypto.openssh_keypair:
         path: "{{ home }}/.ssh/id_rsa"
@@ -76,3 +77,10 @@
         cmd: git remote set-url origin {{ dotfiles_repo_ssh }}
         chdir: "{{ dotfiles }}"
       changed_when: false
+
+  handlers:
+    - name: Restart Docker
+      become: true
+      service:
+        name: docker
+        state: restarted

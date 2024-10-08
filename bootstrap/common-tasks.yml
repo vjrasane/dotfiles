@@ -30,6 +30,7 @@
       - ruby-dev
       - jq
       - trash-cli
+      - neofetch
     state: present
     update_cache: yes
 
@@ -124,6 +125,15 @@
     - docker.service
     - containerd.service
   when: systemctl.rc == 0
+# FIXME: required by microk8s
+# - name: Create docker daemon json
+#   become: true
+#   copy: 
+#     dest: /etc/docker/daemon.json
+#     content: '{ "insecure-registries" : ["localhost:32000"] }'
+#     force: false
+#   register: docker_daemon_json
+#   notify: Restart Docker
 
 - name: Install nvm
   shell:
@@ -209,12 +219,13 @@
     cmd: /home/{{ ansible_user_id }}/.cargo/bin/cargo install tlrc
     creates: /home/{{ ansible_user_id }}/.cargo/bin/tldr
 
-# Cannot install with ansible before 2.17
+# FIXME: Cannot install with ansible before 2.17
 # - name: Install thefuck
 #   pip:
 #     name: thefuck
 #     break_system_packages: true
 #     extra_args: --user
+
 - name: Clone tmux tpm
   git:
     repo: https://github.com/tmux-plugins/tpm
@@ -228,4 +239,36 @@
 - name: Install poetry
   community.general.pipx:
     name: poetry
+
+# FIXME: microk8s is bad?
+# - name: Install microk8s for current distro
+#   include_tasks:
+#     file: "{{ bootstrap }}/{{ ansible_distribution }}/microk8s.yml"
+# - name: Add user to microk8s group
+#   become: true
+#   user:
+#     name: "{{ ansible_user_id }}"
+#     groups:
+#      - microk8s
+#     append: true
+# - name: Change kube owner
+#   become: true
+#   file:
+#     path: /home/{{ ansible_user_id }}/.kube
+#     owner: "{{ ansible_user_id }}"
+#     state: directory
+# - name: Change hostname if not lowercase and does not contain underscores
+#   when: 'ansible_nodename | lower != ansible_nodename or "_" in ansible_nodename'
+#   block:
+#     - name: Print current hostname
+#       debug:
+#         msg: "{{ ansible_nodename }}"
+#     - name: Ask for a new hostname
+#       pause:
+#         prompt: Please enter hostname without uppercase letters or underscores
+#       register: hostname_prompt
+#     - name: Set username
+#       become: true
+#       hostname:
+#         name: "{{ hostname_prompt.user_input }}"
 
