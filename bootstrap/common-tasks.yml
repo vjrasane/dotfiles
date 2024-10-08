@@ -43,13 +43,10 @@
   file:
     path: /home/{{ ansible_user_id }}/.local/bin
     state: directory
-
-- name: Create Ansible bootstrap link to local bin
+- name: Create repositories directory
   file:
-    src: "{{ home }}/.dotfiles/bootstrap/run-ansible"
-    dest: "{{ home }}/.local/bin/bootstrap"
-    state: link
-    mode: 'u+rwx'
+    path: /home/{{ ansible_user_id }}/repositories
+    state: directory
 
 - name: Unpack Neovim
   become: true

@@ -10,7 +10,24 @@ return {
 		"petertriho/nvim-scrollbar",
 		-- enabled = false,
 		event = { "BufReadPre", "BufNewFile" },
-		config = true,
+		config = function()
+			require("scrollbar").setup({
+				show_in_active_only = true,
+				max_lines = 50000,
+				hide_if_all_visible = true,
+				excluded_buftypes = {
+					"terminal",
+				},
+				excluded_filetypes = {
+					"cmp_docs",
+					"cmp_menu",
+					"noice",
+					"prompt",
+					"TelescopePrompt",
+					"gitcommit",
+				},
+			})
+		end,
 	},
 	{
 		"rcarriga/nvim-notify",
