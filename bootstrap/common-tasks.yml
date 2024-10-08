@@ -64,7 +64,7 @@
     dest: /tmp/install-ohmyzsh.sh
 - name: Run Oh My Zsh install script
   shell: 
-    cmd: sh /tmp/install-ohmyzsh.sh --unattended
+    cmd: sh /tmp/install-ohmyzsh.sh --unattended --keep-zshrc
     creates: /home/{{ ansible_user_id }}/.oh-my-zsh
   register: ohmyzsh
   failed_when: "'FAILED' in ohmyzsh.stderr"

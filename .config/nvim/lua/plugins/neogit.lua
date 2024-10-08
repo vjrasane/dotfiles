@@ -11,10 +11,12 @@ return {
 	},
 	config = true,
 	keys = {
-		"<leader>gg",
-		function()
-			require("neogit").open()
-		end,
-		desc = "Open Neogit",
+		{
+			"<leader>gg",
+			function()
+				require("neogit").open()
+			end,
+			desc = "Open Neogit",
+		},
 	},
 }
