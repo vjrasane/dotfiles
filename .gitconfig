@@ -1,6 +1,6 @@
 [user]
 	name = Ville Räsänen
-	email = vjrasane@gmail.com
+	email = git@vjm.anonaddy.me
 
 [core]
 	editor = nvim
