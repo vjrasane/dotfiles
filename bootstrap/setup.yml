@@ -1,0 +1,35 @@
+
+- name: Create local bin directory
+  file:
+    path: "{{ home }}/.local/bin"
+    state: directory
+- name: Create repositories directory
+  file:
+    path: "{{ home }}/repositories"
+    state: directory
+
+- name: Download Oh My Zsh install script
+  get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh 
+    dest: /tmp/install-ohmyzsh.sh
+- name: Run Oh My Zsh install script
+  shell: 
+    cmd: sh /tmp/install-ohmyzsh.sh --unattended --keep-zshrc
+    creates: "{{ home }}/.oh-my-zsh"
+  register: ohmyzsh
+  failed_when: "'FAILED' in ohmyzsh.stderr"
+- name: Download Antigen
+  get_url:
+    url: https://git.io/antigen 
+    dest: "{{ home }}/antigen.zsh"
+
+- name: Clone fzf-git
+  git:
+    repo: https://github.com/junegunn/fzf-git.sh.git
+    dest: "{{ home }}/fzf-git.sh"
+    depth: 1
+- name: Clone docker-fzf
+  git:
+    repo: https://github.com/kwhrtsk/docker-fzf-completion.git
+    dest: "{{ home }}/docker-fzf"
+    depth: 1

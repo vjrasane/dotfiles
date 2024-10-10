@@ -1,0 +1,17 @@
+- name: Install packages
+  package:
+    name:
+      - git
+      - stow
+      - vim
+      - jq
+      - neovim
+      - tmux
+      - bat
+      - nvm
+      - zoxide
+      - eza 
+      - ripgrep
+      - fzf
+      - git-delta
+    state: present

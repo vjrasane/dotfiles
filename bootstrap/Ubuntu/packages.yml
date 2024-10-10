@@ -1,0 +1,49 @@
+- name: Install packages
+  become: true
+  package:
+    name:
+      - git
+      - libssl-dev
+      - stow
+      - zsh
+      - ripgrep
+      - gcc
+      - build-essential
+      - libssl-dev
+      - git
+      - curl
+      - ca-certificates
+      - gpg
+      - gnupg
+      - lsb-release
+      - zip
+      - unzip
+      - systemd
+      - podman
+      - vim
+      - bat
+      - fd-find
+      - python3-dev
+      - python3-pip
+      - python3-setuptools
+      - tmux
+      - net-tools
+      - pipx
+      - ruby-dev
+      - jq
+      - trash-cli
+      - neofetch
+    state: present
+    update_cache: true
+
+- name: Unpack Neovim
+  become: true
+  unarchive:
+    src: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+    dest: /opt
+    remote_src: true
+
+- name: Install nvm
+  shell:
+    cmd: curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash
+    creates: "{{ home }}/.nvm/nvm.sh"

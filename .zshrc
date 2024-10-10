@@ -40,9 +40,13 @@ if [[ -d "$HOME/.pyenv" ]]; then
 fi
 
 export NVM_DIR="$HOME/.nvm"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+fi
 export PATH="$PATH:$HOME/.dotfiles/bin"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
@@ -181,9 +185,9 @@ _fzf_comprun() {
   esac
 }
 
-source ~/.fzf.zsh
-source ~/docker-fzf/docker-fzf.zsh
-source ~/fzf-git.sh/fzf-git.sh
+[[ -s "~/.fzf.zsh" ]] && source ~/.fzf.zsh
+[[ -s "~/docker-fzf/docker-fzf.zsh" ]] && source ~/docker-fzf/docker-fzf.zsh
+[[ -s "~/fzf-git/fzf-git.sh" ]] && source ~/fzf-git.sh/fzf-git.sh
 
 autoload -Uz compinit
 compinit -i

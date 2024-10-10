@@ -1,0 +1,7 @@
+
+- name: Install node
+  shell:
+    cmd: . ~/.nvm/nvm.sh && nvm install 20.17.0
+    creates: "{{ home }}/.nvm/versions/node/v20.17.0"
+  environment:
+    NVM_DIR: "{{ home }}/.nvm"

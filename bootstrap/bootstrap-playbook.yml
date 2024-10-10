@@ -10,7 +10,7 @@
     arch_mapping:  # Map ansible architecture {{ ansible_architecture }} names to Docker's architecture names
       x86_64: amd64
       aarch64: arm64
-    home: /home/{{ ansible_user_id }}
+    home: "{{ ansible_env.HOME }}"
     dotfiles: "{{ home }}/.dotfiles"
     dotfiles_repo_path: vjrasane/dotfiles
     dotfiles_repo_https: https://github.com/{{ dotfiles_repo_path }}
@@ -22,15 +22,9 @@
       debug:
         msg: "{{ ansible_facts }}"
 
-    - name: Install Git & Stow
-      become: true
-      package:
-        name:
-          - git
-          - libssl-dev
-          - stow
-        state: present
-        update_cache: true
+    - name: Install packages for current distro
+      include_tasks:
+        file: "{{ bootstrap }}/{{ ansible_distribution }}/packages.yml"
        
     - name: Clone dotfiles
       git:
@@ -44,13 +38,18 @@
 
     - name: Run Stow
       shell:
-        chdir: /home/{{ ansible_user_id }}/.dotfiles
+        chdir: "{{ home }}/.dotfiles"
         cmd: stow .
       changed_when: false 
 
-    - name: Common tasks
+    - name: Run setup for current distro
       include_tasks:
-        file: "{{ bootstrap }}/common-tasks.yml"
+        file: "{{ bootstrap }}/{{ ansible_distribution }}/setup.yml"
+
+    - name: Run common setup
+      include_tasks:
+        file: "{{ bootstrap }}/setup.yml"
+
 
 
     - name: Generate SSH keypair

@@ -1,39 +1,3 @@
-- name: Install packages
-  become: true
-  package:
-    name: 
-      - zsh
-      - ripgrep
-      - gcc
-      - build-essential
-      - libssl-dev
-      - git
-      - curl
-      - ca-certificates
-      - gpg
-      - gnupg
-      - lsb-release
-      - zip
-      - unzip
-      - systemd
-      - podman
-      - vim
-      - stow
-      - bat
-      - fd-find
-      - python3-dev
-      - python3-pip
-      - python3-setuptools
-      - tmux
-      - net-tools
-      - pipx
-      - ruby-dev
-      - jq
-      - trash-cli
-      - neofetch
-    state: present
-    update_cache: yes
-
 - name: Set zsh as default shell
   become: true
   user:
@@ -155,15 +119,7 @@
   shell: 
     cmd: /home/{{ansible_user_id}}/.fzf/install
     creates: /home/{{ansible_user_id}}/.fzf.zsh
-- name: Clone fzf-git
-  git:
-    repo: https://github.com/junegunn/fzf-git.sh.git
-    dest: /home/{{ansible_user_id}}/fzf-git.sh
-    depth: 1
-- name: Clone docker-fzf
-  git:
-    repo: https://github.com/kwhrtsk/docker-fzf-completion.git
-    dest: /home/{{ansible_user_id}}/docker-fzf
+
 
 - name: Install zoxide
   shell: 
