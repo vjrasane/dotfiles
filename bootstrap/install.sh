@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -e
 
 echo "#######################################################"
 echo "# Installing requirements"
@@ -13,6 +15,7 @@ sudo apt install -y curl
 }
 
 macos_install() {
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew install ansible
   brew install curl
 }
