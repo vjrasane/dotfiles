@@ -1,3 +1,9 @@
+- name: Set zsh as default shell
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
+
 - name: Install node
   shell:
     cmd: . /opt/homebrew/opt/nvm/nvm.sh && nvm install 20.17.0

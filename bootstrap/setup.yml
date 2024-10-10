@@ -33,3 +33,61 @@
     repo: https://github.com/kwhrtsk/docker-fzf-completion.git
     dest: "{{ home }}/docker-fzf"
     depth: 1
+
+- name: Download Cargo install script
+  get_url:
+    url: https://sh.rustup.rs 
+    dest: /tmp/cargoinstall.sh
+    mode: 'u+rwx'
+- name: Install Cargo
+  shell:
+    cmd: /tmp/cargoinstall.sh -y
+    creates: "{{ home }}/.cargo"
+
+- name: Clone tmux tpm
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ home }}/.tmux/plugins/tpm"
+    accept_hostkey: true
+- name: Download gitmux binary
+  unarchive:
+    src: https://github.com/arl/gitmux/releases/download/v0.11.2/gitmux_v0.11.2_linux_amd64.tar.gz 
+    dest: "{{ home }}/.local/bin"
+    remote_src: true
+
+- name: Install poetry
+  community.general.pipx:
+    name: poetry
+
+# FIXME: microk8s is bad?
+# - name: Install microk8s for current distro
+#   include_tasks:
+#     file: "{{ bootstrap }}/{{ ansible_distribution }}/microk8s.yml"
+# - name: Add user to microk8s group
+#   become: true
+#   user:
+#     name: "{{ ansible_user_id }}"
+#     groups:
+#      - microk8s
+#     append: true
+# - name: Change kube owner
+#   become: true
+#   file:
+#     path: /home/{{ ansible_user_id }}/.kube
+#     owner: "{{ ansible_user_id }}"
+#     state: directory
+# - name: Change hostname if not lowercase and does not contain underscores
+#   when: 'ansible_nodename | lower != ansible_nodename or "_" in ansible_nodename'
+#   block:
+#     - name: Print current hostname
+#       debug:
+#         msg: "{{ ansible_nodename }}"
+#     - name: Ask for a new hostname
+#       pause:
+#         prompt: Please enter hostname without uppercase letters or underscores
+#       register: hostname_prompt
+#     - name: Set username
+#       become: true
+#       hostname:
+#         name: "{{ hostname_prompt.user_input }}"
+

@@ -1,3 +1,8 @@
+- name: Set zsh as default shell
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
 
 - name: Install node
   shell:
@@ -5,3 +10,128 @@
     creates: "{{ home }}/.nvm/versions/node/v20.17.0"
   environment:
     NVM_DIR: "{{ home }}/.nvm"
+
+- name: Create directory for Docker's GPG key
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+- name: Add Docker's official GPG key
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: /usr/share/keyrings/docker.gpg
+    state: present
+- name: Add Docker repository
+  become: true
+  apt_repository:
+    repo: >-
+      deb [arch={{ arch_mapping[ansible_architecture] | default(ansible_architecture) }}
+      signed-by=/usr/share/keyrings/docker.gpg]
+      https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    filename: docker
+    state: present
+- name: Install Docker and related packages
+  become: true
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
+    update_cache: yes
+- name: Add Docker group
+  group:
+    name: docker
+    state: present
+- name: Add user to Docker group
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: true
+- name: Check systemd available
+  shell: systemctl 
+  register: systemctl
+  changed_when: false
+  ignore_errors: true
+- name: Enable and start Docker services
+  systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop:
+    - docker.service
+    - containerd.service
+  when: systemctl.rc == 0
+
+# FIXME: required by microk8s
+# - name: Create docker daemon json
+#   become: true
+#   copy: 
+#     dest: /etc/docker/daemon.json
+#     content: '{ "insecure-registries" : ["localhost:32000"] }'
+#     force: false
+#   register: docker_daemon_json
+#   notify: Restart Docker
+
+- name: Clone fzf
+  git:
+    repo: https://github.com/junegunn/fzf.git
+    dest: /home/{{ansible_user_id}}/.fzf
+    depth: 1
+- name: Install fzf
+  shell: 
+    cmd: /home/{{ansible_user_id}}/.fzf/install
+    creates: /home/{{ansible_user_id}}/.fzf.zsh
+- name: Install zoxide
+  shell: 
+    cmd: curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+    creates: /home/{{ansible_user_id}}/.local/bin/zoxide
+
+- name: Check if batcat exists
+  stat:
+    path: /usr/bin/batcat
+  register: batcat_stat
+- name: Setup bat -> batcat symlink
+  become: true
+  file: 
+    src: /usr/bin/batcat
+    dest: /home/{{ ansible_user_id }}/.local/bin/bat
+    state: link
+  when: batcat_stat.stat.exists
+
+- name: Download Git Delta
+  get_url:
+    url: https://github.com/dandavison/delta/releases/download/0.18.2/git-delta_0.18.2_amd64.deb
+    dest: /tmp/git-delta_0.18.2_amd64.deb
+- name: Install Git Delta
+  become: true
+  shell: 
+    cmd: dpkg -i /tmp/git-delta_0.18.2_amd64.deb
+    creates: /usr/bin/delta
+
+- name: Install eza
+  shell:
+    cmd: /home/{{ ansible_user_id }}/.cargo/bin/cargo install eza
+    creates: /home/{{ ansible_user_id }}/.cargo/bin/eza
+
+- name: Setup fdfind -> fd symlink
+  become: true
+  file: 
+    src: /usr/bin/fdfind
+    dest: /home/{{ ansible_user_id }}/.local/bin/fd
+    state: link
+
+- name: Install tlrc
+  shell:
+    cmd: /home/{{ ansible_user_id }}/.cargo/bin/cargo install tlrc
+    creates: /home/{{ ansible_user_id }}/.cargo/bin/tldr
+
+# FIXME: Cannot install with ansible before 2.17
+# - name: Install thefuck
+#   pip:
+#     name: thefuck
+#     break_system_packages: true
+#     extra_args: --user

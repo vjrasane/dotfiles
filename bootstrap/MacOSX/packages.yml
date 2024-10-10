@@ -14,4 +14,9 @@
       - ripgrep
       - fzf
       - git-delta
+      - fd
+      - tlrc
+      - thefuck
+      - python
+      - pipx
     state: present

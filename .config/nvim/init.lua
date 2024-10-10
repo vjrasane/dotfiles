@@ -40,4 +40,6 @@ require("lazy").setup({
 	},
 })
 
-vim.cmd("language en_US")
+if require("utils").get_os() == "OSX" then
+	vim.cmd("language en_US")
+end

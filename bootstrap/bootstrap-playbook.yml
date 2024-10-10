@@ -42,15 +42,12 @@
         cmd: stow .
       changed_when: false 
 
-    - name: Run setup for current distro
-      include_tasks:
-        file: "{{ bootstrap }}/{{ ansible_distribution }}/setup.yml"
-
     - name: Run common setup
       include_tasks:
         file: "{{ bootstrap }}/setup.yml"
-
-
+    - name: Run setup for current distro
+      include_tasks:
+        file: "{{ bootstrap }}/{{ ansible_distribution }}/setup.yml"
 
     - name: Generate SSH keypair
       community.crypto.openssh_keypair:
