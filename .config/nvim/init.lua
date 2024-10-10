@@ -39,3 +39,5 @@ require("lazy").setup({
 		},
 	},
 })
+
+vim.cmd("language en_US")
