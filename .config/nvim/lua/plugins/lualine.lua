@@ -19,6 +19,7 @@ return {
 			return repo_name
 		end
 
+		local git_filetypes = { "gitcommit", "NeogitStatus", "NeogitDiffView", "NeogitCommitMessage" }
 		local git_ext = {
 			sections = {
 				lualine_a = {
@@ -31,10 +32,11 @@ return {
 				lualine_z = { "location" },
 			},
 			disabled_filetypes = {
-				winbar = "gitcommit",
+				winbar = git_filetypes,
 			},
-			filetypes = { "gitcommit" },
+			filetypes = git_filetypes,
 		}
+
 		return {
 			options = {
 				theme = "auto",
@@ -43,7 +45,7 @@ return {
 				component_separators = "|",
 				disabled_filetypes = {
 					statusline = { "dashboard", "alpha", "starter" },
-					winbar = { "oil", "gitcommit" },
+					winbar = vim.list_extend({ "oil" }, git_filetypes),
 				},
 			},
 			sections = {
