@@ -188,7 +188,6 @@ return {
 				--
 				-- But for many setups, the LSP (`tsserver`) will work just fine
 				ts_ls = {},
-				ruff_lsp = {},
 				astro = {},
 				eslint_d = {},
 				tailwindcss = {},
@@ -251,16 +250,16 @@ return {
 			require("lsp-file-operations").setup()
 		end,
 	},
-	{
-		"HallerPatrick/py_lsp.nvim",
-		ft = { "python" },
-		config = function()
-			local capabilities = make_client_capabilities()
-			require("py_lsp").setup({
-				language_server = "pyright",
-				source_strategies = { "poetry", "default", "system" },
-				capabilities = capabilities,
-			})
-		end,
-	},
+	-- {
+	-- 	"HallerPatrick/py_lsp.nvim",
+	-- 	ft = { "python" },
+	-- 	config = function()
+	-- 		local capabilities = make_client_capabilities()
+	-- 		require("py_lsp").setup({
+	-- 			language_server = "basedpyright",
+	-- 			source_strategies = { "poetry", "default", "system" },
+	-- 			capabilities = capabilities,
+	-- 		})
+	-- 	end,
+	-- },
 }

@@ -201,7 +201,7 @@ alias tree="eza --icons=always --tree"
 alias ll="eza --color=always --all --long --git --icons=always"
 alias grep='rg'
 alias cat="bat"
-alias rm="trash"
+# alias rm="trash"
 
 alias home='cd ~'
 alias cd..='cd ..'
