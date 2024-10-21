@@ -140,9 +140,9 @@ source ~/antigen.zsh
 
 antigen use oh-my-zsh
 
-antigen bundle manlao/zsh-auto-nvm@main
+# antigen bundle manlao/zsh-auto-nvm@main
 antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle darvid/zsh-poetry
+# antigen bundle darvid/zsh-poetry
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle reegnz/jq-zsh-plugin
 antigen bundle sineto/vi-mode
@@ -158,6 +158,7 @@ export FZF_COMPLETION_TRIGGER="**"
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+export FZF_DEFAULT_OPTS=' --height=40% --preview="bat --color=always {}" --preview-window=right:60%:wrap'
 
 _fzf_compgen_path() {
   fd --hidden --exclude .git . "$1"
@@ -241,3 +242,4 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 # ---- Zoxide (better cd) ----
 eval "$(zoxide init --cmd cd zsh)"
 
+source <(fzf --zsh)
