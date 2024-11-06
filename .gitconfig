@@ -25,6 +25,7 @@
 	aa = !git status && git add -p && git commit --amend
 	behead = reset --hard HEAD
 	amend = commit --amend
+  ameno = commit --amend --no-edit
 	meco = merge --continue
 	redo = "!f() { git checkout ${1-develop} && git pull && git checkout - && git rebase ${1-develop}; }; f"
 	reco = rebase --continue
@@ -53,3 +54,5 @@
 
 [push]
 	default = current
+[rebase]
+	updateRefs = true
