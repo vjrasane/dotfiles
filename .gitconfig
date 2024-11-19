@@ -56,3 +56,5 @@
 	default = current
 [rebase]
 	updateRefs = true
+[rerere]
+	enabled = true
