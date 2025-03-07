@@ -51,7 +51,7 @@ export PATH="$PATH:$HOME/.dotfiles/bin"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:/snap/bin"
-export PATH="$PATH:/opt/nvim-linux64/bin"
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 export PATH="$PATH:/mnt/c/Windows/System32"
 export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
 
@@ -187,9 +187,9 @@ _fzf_comprun() {
   esac
 }
 
-[[ -s "~/.fzf.zsh" ]] && source ~/.fzf.zsh
-[[ -s "~/docker-fzf/docker-fzf.zsh" ]] && source ~/docker-fzf/docker-fzf.zsh
-[[ -s "~/fzf-git/fzf-git.sh" ]] && source ~/fzf-git.sh/fzf-git.sh
+[[ -s ~/.fzf.zsh ]] && source ~/.fzf.zsh
+[[ -s ~/docker-fzf/docker-fzf.zsh ]] && source ~/docker-fzf/docker-fzf.zsh
+[[ -s ~/fzf-git/fzf-git.sh ]] && source ~/fzf-git.sh/fzf-git.sh
 
 autoload -Uz compinit
 compinit -i

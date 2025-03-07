@@ -24,7 +24,11 @@
 
     - name: Install Git
       become: true
-      package: git
+      package:
+        name:
+          - git
+        state: present
+        update_cache: true
 
     - name: Clone dotfiles
       git:
