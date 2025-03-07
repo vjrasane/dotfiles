@@ -39,7 +39,7 @@
 - name: Unpack Neovim
   become: true
   unarchive:
-    src: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+    src: https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-x86_64.tar.gz
     dest: /opt
     remote_src: true
 
