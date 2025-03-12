@@ -5,6 +5,8 @@
 [core]
 	editor = nvim
 	pager = delta
+	fsmonitor = true
+	untrackedCache = true
 
 [interactive]
 	diffFilter = delta --color-only
@@ -17,7 +19,10 @@
 	conflictstyle = diff3
 
 [diff]
-	colorMoved = default
+	colorMoved = plain
+	algorithm = histogram
+	mnemonicPrefix = true
+	renames = true
 
 [alias]
 	ch = checkout
@@ -53,8 +58,31 @@
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 
 [push]
-	default = current
+	default = simple
+	autoSetupRemote = true
+	followTags = true
 [rebase]
 	updateRefs = true
+	autoSquash = true
+	autoStash = true
 [rerere]
 	enabled = true
+	autoupdate = true
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[init]
+	defaultBranch = main
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
+[commit]
+	verbose = true
+[pull]
+	rebase = true
