@@ -203,6 +203,8 @@ alias tree="eza --icons=always --tree"
 alias ll="eza --color=always --all --long --git --icons=always"
 alias grep='rg'
 alias cat="bat"
+alias tf="terraform"
+alias kb="kubectl"
 # alias rm="trash"
 
 alias home='cd ~'
