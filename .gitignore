@@ -1,4 +1,3 @@
-.config/pypoetry
-.config/uv
-.config/github-copilot
-.config/iterm2
+.config/
+
+!.config/nvim

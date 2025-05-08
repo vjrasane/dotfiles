@@ -107,6 +107,7 @@ return {
 		-- used for completion, annotations and signatures of Neovim apis
 		"folke/lazydev.nvim",
 		ft = "lua",
+		enaled = false,
 		dependencies = { "Bilal2453/luvit-meta" },
 		opts = {
 			library = {
@@ -119,6 +120,7 @@ return {
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile", "VeryLazy" },
+		enabled = false,
 		dependencies = {
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
@@ -243,6 +245,7 @@ return {
 	{
 		"antosha417/nvim-lsp-file-operations",
 		event = "LspAttach",
+		enabled = false,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
