@@ -245,4 +245,9 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 # ---- Zoxide (better cd) ----
 eval "$(zoxide init --cmd cd zsh)"
 
+# Custom autoload
+fpath=( ~/.zsh_autoload_functions "${fpath[@]}" )
+
+autoload -Uz bwrun
+
 source <(fzf --zsh)

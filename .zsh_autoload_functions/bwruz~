@@ -1,0 +1,115 @@
+#¿¿ List of required commands
+typeset -a deps=(bws jq)
+
+#¿¿ 1) Check that required commands are installed
+function _bwrun_check_deps() {
+  local missing=()
+  for cmd in "${deps[@]}"; do
+    if ! command -v $cmd >/dev/null 2>&1; then
+      missing+=($cmd)
+    fi
+  done
+
+  if (( ${#missing[@]} )); then
+    echo "Error: missing dependencies: ${missing[*]}. Please install them and retry." >&2
+    return 1
+  fi
+}
+
+#¿¿ 2) Find the nearest .bws.env up to $HOME
+function _bwrun_find_env() {
+  local dir="$PWD" home="$HOME"
+  while true; do
+    if [[ -f "$dir/.bws.env" ]]; then
+      printf '%s' "$dir/.bws.env"
+      return 0
+    fi
+    [[ "$dir" == "$home" || "$dir" == "/" ]] && break
+    dir=${dir:h}
+  done
+  return 1
+}
+
+#¿¿ 3) Load the env file, export token only
+function _bwrun_load_env() {
+  local envfile
+  if ! envfile=$(_bwrun_find_env); then
+    echo "Error: .bws.env not found in $(pwd) or any parent up to $HOME" >&2
+    return 1
+  fi
+  echo "Using env file: $envfile"
+  setopt localoptions allexport
+  source "$envfile"
+  unsetopt localoptions allexport
+
+  if [[ -z $BWS_ACCESS_TOKEN ]]; then
+    echo "Error: BWS_ACCESS_TOKEN not set in $envfile" >&2
+    return 1
+  fi
+}
+
+#¿¿ 4a) Show project name if ID was provided
+function _bwrun_show_project() {
+  local info name
+  info=$(bws project get "$1" 2>/dev/null)
+  if (( $? != 0 )); then
+    echo "Error: unable to fetch project $1" >&2
+    return 1
+  fi
+  name=$(printf '%s' "$info" | jq -r '.name')
+  echo "Using project: $name ($1)"
+}
+
+#¿¿ 4b) Interactive project pick (no export) ¿ prints ID
+function _bwrun_pick_project_local() {
+  local projects proj_name project_id
+  projects=$(bws project list 2>/dev/null)
+  if (( $? != 0 )); then
+    echo "Error: unable to list projects; check your token and retry." >&2
+    return 1
+  fi
+
+  echo "Available projects:"
+  echo "$projects" | jq -r '.[] | "  ¿ \(.name) (\(.id))"'
+
+  read "proj_name?Select project name: "
+  if [[ -z $proj_name ]]; then
+    echo "Error: project name is required" >&2
+    return 1
+  fi
+
+  project_id=$(printf '%s' "$projects" \
+    | jq -r --arg NAME "$proj_name" '.[] | select(.name==$NAME) | .id')
+
+  if [[ -z $project_id ]]; then
+    echo "Error: no project named '$proj_name'" >&2
+    return 1
+  fi
+
+  printf '%s' "$project_id"
+}
+
+#¿¿ 4) Determine project ID (returns it)
+function _bwrun_get_project_id() {
+  local project_id
+  if [[ -n $BWS_PROJECT_ID ]]; then
+    project_id=$BWS_PROJECT_ID
+  else
+    project_id=$(_bwrun_pick_project_local) || return 1
+    echo "Using project ID: $project_id (not saved)"
+  fi
+  printf '%s' "$project_id"
+}
+
+#¿¿ Main entrypoint
+function bwrun() {
+  _bwrun_check_deps   || return 1
+  _bwrun_load_env     || return 1
+
+  local project_id
+  project_id=$(_bwrun_get_project_id) || return 1
+  _bwrun_show_project "$project_id" || return 1
+
+  bws run --project-id "$project_id" -- "$@"
+}
+

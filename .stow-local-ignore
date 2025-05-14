@@ -21,4 +21,5 @@ _darcs
 ^/COPYING
 
 bootstrap
+bin
 ^/*.tar.gz

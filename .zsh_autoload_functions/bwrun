@@ -1,0 +1,100 @@
+#compdef bwrun
+
+function _bwrun_check_deps() {
+  local deps=(bws jq sops)
+  local missing=()
+  for cmd in "${deps[@]}"; do
+    if ! command -v $cmd >/dev/null 2>&1; then
+      missing+=($cmd)
+    fi
+  done
+  if (( ${#missing[@]} )); then
+    echo "Error: missing dependencies: ${missing[*]}. Please install them and retry." >&2
+    return 1
+  fi
+}
+
+function _bwrun_find_env() {
+  local dir="$PWD" home="$HOME"
+  while true; do
+    if [[ -f "$dir/.bws.env" ]]; then
+      echo "$dir/.bws.env"
+      return 0
+    fi
+    [[ "$dir" == "$home" || "$dir" == "/" ]] && break
+    dir=${dir:h}
+  done
+  return 1
+}
+
+function _bwrun_load_env() {
+  local envfile
+  if ! envfile=$(_bwrun_find_env); then
+    echo "Error: .bws.env not found in $(pwd) or any parent up to $HOME" >&2
+    return 1
+  fi
+  echo "Using env file: $envfile"
+  setopt localoptions allexport
+  source <(sops -d "$envfile")
+  unsetopt localoptions allexport
+  if [[ -z $BWS_ACCESS_TOKEN ]]; then
+    echo "Error: BWS_ACCESS_TOKEN not set in $envfile" >&2
+    return 1
+  fi
+}
+
+function _bwrun_show_project() {
+  local info name
+  info="$(bws project get $BWS_PROJECT_ID 2>/dev/null)" || { echo "Error: unable to fetch project $BWS_PROJECT_ID" >&2; return 1; }
+  name=$(printf '%s' "$info" | jq -r '.name')
+  echo "Using project: $name ($BWS_PROJECT_ID)"
+}
+
+function _bwrun_pick_project_local() {
+  local projects proj_name
+  projects="$(bws project list 2>/dev/null)" || { echo "Error: unable to list projects; check your token and retry." >&2; return 1; }
+  echo "Available projects:"
+  echo "$projects" | jq -r '.[] | "  * \(.name) (\(.id))"'
+  read "proj_name?Select project name: "
+  set -x
+  [[ -z $proj_name ]] && { echo "Error: project name is required" >&2; return 1; }
+  BWS_PROJECT_ID=$(printf '%s' "$projects" | jq -r --arg NAME "$proj_name" '.[] | select(.name==$NAME) | .id')
+  [[ -z $BWS_PROJECT_ID ]] && { echo "Error: no project named '$proj_name'" >&2; return 1; }
+  set +x
+}
+
+function _bwrun_resolve_project_id() {
+  if [[ -z $BWS_PROJECT_ID ]]; then
+    _bwrun_pick_project_local || return 1
+  fi
+}
+
+function _bwrun_preview_secrets() {
+  local keys key confirm
+  keys=$(bws secret list "$BWS_PROJECT_ID" 2>/dev/null | jq -r '.[].key') || { echo "Error: unable to list secrets" >&2; return 1; }
+  echo "Secrets to be injected:"
+  while read -r key; do
+    echo "* $key"
+  done <<<"$keys"
+  echo -n "Proceed? [y/N] "
+  read confirm
+  case $confirm in
+    [Yy]) return 0 ;; 
+    *) echo "Aborted."; return 1 ;;
+  esac
+}
+
+function bwrun() {
+  trap 'unset BWS_PROJECT_ID' EXIT
+  _bwrun_check_deps || return 1
+  _bwrun_load_env   || return 1
+
+  _bwrun_resolve_project_id || return 1
+  _bwrun_show_project  || return 1
+  _bwrun_preview_secrets || return 1
+
+  bws run --project-id "$BWS_PROJECT_ID" -- "$@"
+}
+
+bwrun "$@"
+
