@@ -195,6 +195,8 @@ autoload -Uz bwrun
 autoload -Uz bwenv
 autoload -Uz compinit
 compinit -i
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
 
 #######################################################
 # ALIAS
@@ -247,3 +249,4 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 eval "$(zoxide init --cmd cd zsh)"
 
 source <(fzf --zsh)
+
