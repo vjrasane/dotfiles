@@ -140,9 +140,7 @@ source ~/antigen.zsh
 
 antigen use oh-my-zsh
 
-# antigen bundle manlao/zsh-auto-nvm@main
 antigen bundle zsh-users/zsh-syntax-highlighting
-# antigen bundle darvid/zsh-poetry
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle reegnz/jq-zsh-plugin
 antigen bundle sineto/vi-mode
@@ -191,6 +189,10 @@ _fzf_comprun() {
 [[ -s ~/docker-fzf/docker-fzf.zsh ]] && source ~/docker-fzf/docker-fzf.zsh
 [[ -s ~/fzf-git/fzf-git.sh ]] && source ~/fzf-git.sh/fzf-git.sh
 
+# Custom autoload
+fpath=( ~/.zsh_autoload_functions "${fpath[@]}" )
+autoload -Uz bwrun
+autoload -Uz bwenv
 autoload -Uz compinit
 compinit -i
 
@@ -205,7 +207,6 @@ alias grep='rg'
 alias cat="bat"
 alias tf="terraform"
 alias kb="kubectl"
-# alias rm="trash"
 
 alias home='cd ~'
 alias cd..='cd ..'
@@ -244,10 +245,5 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 
 # ---- Zoxide (better cd) ----
 eval "$(zoxide init --cmd cd zsh)"
-
-# Custom autoload
-fpath=( ~/.zsh_autoload_functions "${fpath[@]}" )
-
-autoload -Uz bwrun
 
 source <(fzf --zsh)
