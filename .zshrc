@@ -144,6 +144,7 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle reegnz/jq-zsh-plugin
 antigen bundle sineto/vi-mode
+antigen bundle vjrasane/zsh-bitwarden-secrets-manager --branch=main
 antigen theme romkatv/powerlevel10k
 
 antigen apply
