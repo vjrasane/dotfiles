@@ -49,7 +49,7 @@ export PATH="$PATH:$HOME/.dotfiles/bin"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:/snap/bin"
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export PATH="$PATH:/opt/nvim/bin"
 export PATH="$PATH:/mnt/c/Windows/System32"
 export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
 export BUN_INSTALL="$HOME/.bun"
@@ -99,23 +99,24 @@ ftext() {
 	grep -iIHrn --color=always "$1" . | less -r
 }
 
-# Goes up a specified number of directories  (i.e. up 4)
-up() {
-	local d=""
-	limit=$1
-	for ((i = 1; i <= limit; i++)); do
-		d=$d/..
-	done
-	d=$(echo $d | sed 's/^\///')
-	if [ -z "$d" ]; then
-		d=..
-	fi
-	cd $d
-}
+f() {
+	# Search with grep, then pipe to fzf with preview and editor support
+	local result
+	result=$(grep -iIHrn --color=never "$1" . \
+		| fzf --ansi \
+			--delimiter ':' \
+      --preview '
+FILE=$(echo {} | cut -d: -f1); LINE=$(echo {} | cut -d: -f2); 
+START=$((LINE > 10 ? LINE - 10 : 0));
+bat --style=numbers --color=always --highlight-line $LINE --line-range "$START:" $FILE' \
+			)
 
-# Returns the last 2 fields of the working directory
-pwdtail() {
-	pwd | awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
+	if [[ -n "$result" ]]; then
+		local file line
+		file=$(echo "$result" | cut -d: -f1)
+		line=$(echo "$result" | cut -d: -f2)
+		"$EDITOR" "+$line" "$file"
+	fi
 }
 
 # IP address lookup
@@ -201,7 +202,6 @@ complete -o nospace -C /usr/bin/terraform terraform
 alias ls="eza --icons=always"
 alias tree="eza --icons=always --tree"
 alias ll="eza --color=always --all --long --git --icons=always"
-alias grep='rg'
 alias cat="bat"
 alias tf="terraform"
 alias kb="kubectl"
@@ -240,6 +240,8 @@ alias mountedinfo='df -hT'
 
 # Show all logs in /var/log
 alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
+
+alias cdtmp='cd $(mktemp -d)'
 
 # ---- Zoxide (better cd) ----
 eval "$(zoxide init --cmd cd zsh)"
