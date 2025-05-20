@@ -189,8 +189,6 @@ _fzf_comprun() {
 [[ -s ~/fzf-git/fzf-git.sh ]] && source ~/fzf-git.sh/fzf-git.sh
 
 # Custom autoload
-fpath=( ~/.zsh_autoload_functions "${fpath[@]}" )
-autoload -Uz bwrun
 autoload -Uz compinit
 compinit -i
 autoload -U +X bashcompinit && bashcompinit
