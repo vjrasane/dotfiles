@@ -24,12 +24,6 @@ source ~/.p10k.zsh
 export EDITOR=nvim
 export BAT_THEME=OneHalfDark
 
-# bun
-if [[ -d "$HOME/.bun" ]]; then
-	export BUN_INSTALL="$HOME/.bun"
-	export PATH=$BUN_INSTALL/bin:$PATH
-fi
-
 
 if [[ -d "$HOME/.pyenv" ]]; then
 	export PYENV_DIR="$HOME/.pyenv"
@@ -47,6 +41,10 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 fi
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
 export PATH="$PATH:$HOME/.dotfiles/bin"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
@@ -54,7 +52,8 @@ export PATH="$PATH:/snap/bin"
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 export PATH="$PATH:/mnt/c/Windows/System32"
 export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
-
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH
 
 # cannot currently install thefuck
 # eval $(thefuck --alias)
@@ -192,7 +191,6 @@ _fzf_comprun() {
 # Custom autoload
 fpath=( ~/.zsh_autoload_functions "${fpath[@]}" )
 autoload -Uz bwrun
-autoload -Uz bwenv
 autoload -Uz compinit
 compinit -i
 autoload -U +X bashcompinit && bashcompinit
