@@ -21,7 +21,11 @@ require("lazy").setup({
 		version = "*",
 	},
 	install = { colorscheme = { "nightfly" } },
-	checker = { enabled = true, notify = true }, -- automtically check for plugin updates
+	checker = { 
+      enabled = true,
+      notify = true,
+      frequency = 60 * 60 * 24 * 7 -- check once a week
+  }, 
 	change_detection = { notify = false },
 	performance = {
 		rtp = {
