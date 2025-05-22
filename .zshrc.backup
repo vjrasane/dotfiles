@@ -1,0 +1,43 @@
+# Load the 'init.sh'.
+source ~/zshrc/init.sh
+
+source ~/zshrc/js.sh
+source ~/zshrc/python.sh
+source ~/zshrc/path.sh
+source ~/zshrc/functions.sh
+
+source ~/antigen.zsh
+
+antigen use oh-my-zsh
+
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle MichaelAquilina/zsh-you-should-use
+antigen bundle reegnz/jq-zsh-plugin
+antigen bundle sineto/vi-mode
+antigen bundle vjrasane/zsh-bitwarden-secrets-manager --branch=main
+
+antigen theme romkatv/powerlevel10k
+
+antigen apply
+
+# Custom autoload
+autoload -Uz compinit
+compinit -i
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
+
+source ~/zshrc/alias.sh
+# source ~/zshrc/zoxide.sh
+# source ~/zshrc/fzf.sh
+# # Find all .sh files in ~/zshrc, exclude 'init.sh'.
+# FILES_STR=$(fd --glob '*.sh' --exclude 'init.sh' ~/zshrc)
+# # 'tr' is a find-and-replace utility.
+# # Outer () will convert the output of $() to array.
+# FILES=($(echo $FILES_STR | tr '\n' ' '))
+# for FILE in $FILES; do
+#     source $FILE
+# done
+
+# cannot currently install thefuck
+# eval $(thefuck --alias)
+# eval $(thefuck --alias fk)

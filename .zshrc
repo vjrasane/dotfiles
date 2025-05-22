@@ -5,7 +5,17 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+autoload -Uz compinit
+compinit
 
+# Clone antidote if necessary.
+[[ -e ${ZDOTDIR:-~}/.antidote ]] ||
+  git clone https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+
+# Source antidote.
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+
+antidote load ${ZDOTDIR:-~}/.zsh_plugins.txt
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
@@ -19,7 +29,7 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-source ~/.p10k.zsh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 export EDITOR=nvim
 export BAT_THEME=OneHalfDark
@@ -136,18 +146,17 @@ function whatsmyip () {
     curl -s ifconfig.me
 }
 
-source ~/antigen.zsh
 
-antigen use oh-my-zsh
+# antigen use oh-my-zsh
 
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle MichaelAquilina/zsh-you-should-use
-antigen bundle reegnz/jq-zsh-plugin
-antigen bundle sineto/vi-mode
-antigen bundle vjrasane/zsh-bitwarden-secrets-manager --branch=main
-antigen theme romkatv/powerlevel10k
-
-antigen apply
+# antigen bundle zsh-users/zsh-syntax-highlighting
+# antigen bundle MichaelAquilina/zsh-you-should-use
+# antigen bundle reegnz/jq-zsh-plugin
+# antigen bundle sineto/vi-mode
+# # antigen bundle vjrasane/zsh-bitwarden-secrets-manager --branch=main
+# antigen theme romkatv/powerlevel10k
+#
+# antigen apply
 
 #####################################################
 # FZF
