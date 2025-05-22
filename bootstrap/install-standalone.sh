@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -e
 
 dotfiles_dir="$HOME/.dotfiles"
 dotfiles_repo_path="vjrasane/.dotfiles"
 dotfiles_repo_https="https://github.com/$dotfiles_repo_path"
 
-{
+install_on_ubuntu () {
   sudo apt update
 
   sudo apt install -y \
@@ -20,10 +20,36 @@ dotfiles_repo_https="https://github.com/$dotfiles_repo_path"
   cd "$dotfiles_dir"
   stow .
 
+  # zsh
   chsh -s $(which zsh)
 
+  # Nvm
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-  nvm install 20.17.0
+
+  # Docker
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+  echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  sudo apt update
+  sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+
+
 
 
 }
+
+install_on_macos () {
+
+}
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  install_on_ubuntu
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  install_on_ubuntu
+fi
