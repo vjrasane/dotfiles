@@ -19,7 +19,8 @@ install_on_ubuntu () {
 
   cd "$dotfiles_dir"
   stow .
-
+  
+  git clone https://github.com/mattmc3/antidote.git "$HOME/.antidote"
   # zsh
   chsh -s $(which zsh)
 
@@ -37,6 +38,8 @@ install_on_ubuntu () {
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
   sudo apt update
   sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  [[ -f "$HOME/.ssh/id_rsa" ]] || ssh-keygen -t rsa -b 4096 -N '' -f "$HOME/.ssh/id_rsa"
 
 
 
