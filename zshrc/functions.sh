@@ -39,23 +39,35 @@ ftext() {
 }
 
 f() {
-	# Search with grep, then pipe to fzf with preview and editor support
-	local result
-	result=$(grep -iIHrn --color=never "$1" . \
-		| fzf --ansi \
-			--delimiter ':' \
-      --preview '
-FILE=$(echo {} | cut -d: -f1); LINE=$(echo {} | cut -d: -f2); 
-START=$((LINE > 10 ? LINE - 10 : 0));
-bat --style=numbers --color=always --highlight-line $LINE --line-range "$START:" $FILE' \
-			)
+  # local search="$1"
+#
+# 	# Run search using rg and fzf
+	local selected
+# 	IFS=: read -ra selected < <(rg --with-filename --line-number --no-heading --color=never -L \
+#     "$search" . 2>/dev/null | fzf --ansi \
+# 			--delimiter ':' \
+#       --preview '
+# FILE=$(echo {} | cut -d: -f1); LINE=$(echo {} | cut -d: -f2); 
+# START=$((LINE > 10 ? LINE - 10 : 0));
+# bat --style=numbers --color=always --highlight-line $LINE --line-range "$START:" $FILE' \
+#
+IFS=: read -rA selected < <(
+  rg --color=always --line-number --no-heading --smart-case -L "${*:-}" 2>/dev/null |
+    fzf --ansi \
+        --color "hl:-1:underline,hl+:-1:underline:reverse" \
+        --delimiter : \
+        --preview 'bat --color=always {1} --highlight-line {2}' \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+)
 
-	if [[ -n "$result" ]]; then
-		local file line
-		file=$(echo "$result" | cut -d: -f1)
-		line=$(echo "$result" | cut -d: -f2)
-		"$EDITOR" "+$line" "$file"
-	fi
+[ -n "${selected[0]}" ] && "$EDITOR" "${selected[0]}" "+${selected[1]}"
+	# if [[ -s "$result" ]]; then
+	# 	local file line
+ #    read -r file line _ < <(curt -d: -f1-2 "$result")
+	# 	# file=$(echo "$result" | cut -d: -f1)
+	# 	# line=$(echo "$result" | cut -d: -f2)
+	# 	"$EDITOR" "+$line" "$file"
+	# fi
 }
 
 # IP address lookup

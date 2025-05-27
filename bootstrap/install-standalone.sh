@@ -1,7 +1,7 @@
 #!/usr/bin/env bash -e
 
-dotfiles_dir="$HOME/.dotfiles"
-dotfiles_repo_path="vjrasane/.dotfiles"
+dotfiles_dir="$HOME/dotfiles"
+dotfiles_repo_path="vjrasane/dotfiles"
 dotfiles_repo_https="https://github.com/$dotfiles_repo_path"
 
 install_on_ubuntu () {

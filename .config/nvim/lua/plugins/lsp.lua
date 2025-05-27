@@ -107,7 +107,7 @@ return {
 		-- used for completion, annotations and signatures of Neovim apis
 		"folke/lazydev.nvim",
 		ft = "lua",
-		enaled = false,
+		enabled = false,
 		dependencies = { "Bilal2453/luvit-meta" },
 		opts = {
 			library = {
