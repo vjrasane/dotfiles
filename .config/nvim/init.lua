@@ -23,7 +23,7 @@ require("lazy").setup({
 	install = { colorscheme = { "nightfly" } },
 	checker = { 
       enabled = true,
-      notify = true,
+      notify = false,
       frequency = 60 * 60 * 24 * 7 -- check once a week
   }, 
 	change_detection = { notify = false },
