@@ -3,8 +3,6 @@ alias tree="eza --icons=always --tree"
 alias ll="eza --color=always --all --long --git --icons=always"
 alias cat="bat"
 alias tf="tofu"
-alias kb="kubectl"
-alias kn="kubens"
 alias y="yadm"
 
 alias home='cd ~'

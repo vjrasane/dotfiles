@@ -6,4 +6,6 @@ source ~/zshrc/path.sh
 source ~/zshrc/functions.sh
 source ~/zshrc/fzf.sh
 source ~/zshrc/alias.sh
+source ~/zshrc/kubernetes.sh
 source ~/zshrc/zoxide.sh
+source ~/zshrc/direnv.sh
