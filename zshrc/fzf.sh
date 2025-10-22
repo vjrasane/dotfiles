@@ -36,3 +36,37 @@ _fzf_comprun() {
 [[ -s ~/fzf-git/fzf-git.sh ]] && source ~/fzf-git.sh/fzf-git.sh
 
 source <(fzf --zsh)
+
+# Helper function for jj bookmark completion
+_fzf_complete_jj_bookmarks() {
+  _fzf_complete --prompt="Bookmarks> " --preview='jj log -r ::{} --color=always 2>/dev/null' --preview-window='right:50%:wrap,<80(down:50%:wrap)' -- "$@" < <(
+    jj bookmark list --sort committer-date- --template 'name ++ if(remote, "@" ++ remote, "") ++ "\n"'
+  )
+}
+
+# Custom fzf completion for jj bookmarks
+_fzf_complete_jj() {
+  local tokens lbuf
+  lbuf="$1"
+  tokens=(${(z)lbuf})
+
+  # Check if we're in a bookmark subcommand (jj bookmark set/delete/rename/forget/track/untrack)
+  if [[ "${tokens[2]}" == "bookmark" ]]; then
+    _fzf_complete_jj_bookmarks "$@"
+    return
+  fi
+
+  # Check if previous token is --bookmark or -b
+  if [[ "${tokens[-1]}" == "--bookmark" ]] || [[ "${tokens[-1]}" == "-b" ]] || [[ "${tokens[-1]}" == "-r" ]] || [[ "${tokens[-1]}" == "--revisions" ]]; then
+    _fzf_complete_jj_bookmarks "$@"
+    return
+  fi
+
+  # Otherwise, use default fzf file completion
+  _fzf_path_completion "$prefix" "$lbuf"
+}
+
+# Post-completion handler to insert the selected bookmark
+_fzf_complete_jj_post() {
+  awk '{print $1}'
+}

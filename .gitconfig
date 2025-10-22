@@ -1,6 +1,7 @@
 [user]
 	name = Ville Räsänen
 	email = git@vjm.anonaddy.me
+	signingkey = /home/ville/.ssh/id_rsa.pub
 
 [core]
 	editor = nvim
@@ -84,5 +85,10 @@
 	autocorrect = prompt
 [commit]
 	verbose = true
+	gpgsign = true
 [pull]
 	rebase = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = /home/ville/.ssh/allowed_signers

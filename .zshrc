@@ -4,8 +4,10 @@ source ~/zshrc/python.sh
 source ~/zshrc/js.sh
 source ~/zshrc/path.sh
 source ~/zshrc/functions.sh
+source ~/zshrc/jujitsu.sh
 source ~/zshrc/fzf.sh
 source ~/zshrc/alias.sh
 source ~/zshrc/kubernetes.sh
 source ~/zshrc/zoxide.sh
 source ~/zshrc/direnv.sh
+source ~/zshrc/keychain.sh

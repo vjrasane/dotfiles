@@ -1,0 +1,10 @@
+#:schema https://jj-vcs.github.io/jj/latest/config-schema.json
+
+[ui]
+default-command = "log"
+pager = "delta"
+diff-formatter = ":git"
+
+[git]
+sign-commits = true
+
