@@ -4,7 +4,16 @@
 default-command = "log"
 pager = "delta"
 diff-formatter = ":git"
+merge-editor = "vscode"
 
 [git]
 sign-commits = true
 
+[signing]
+behavior = "own"
+backend = "ssh"
+key = "~/.ssh/id_rsa.pub"
+
+[merge-tools.nvim]
+program = "nvim"
+merge-args = ["-d", "$left", "$base", "$right", "-c", "wincmd J | wincmd ="]
