@@ -117,7 +117,7 @@ vim.opt.wrap = true
 
 -- Folding
 vim.opt.foldlevel = 99
-vim.opt.foldtext = "v:lua.require'utils'.ui.foldtext()"
+-- vim.opt.foldtext = "v:lua.require'utils'.ui.foldtext()"
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0

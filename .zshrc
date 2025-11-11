@@ -11,3 +11,4 @@ source ~/zshrc/kubernetes.sh
 source ~/zshrc/zoxide.sh
 source ~/zshrc/direnv.sh
 source ~/zshrc/keychain.sh
+
