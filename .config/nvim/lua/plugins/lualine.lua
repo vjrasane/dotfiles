@@ -19,6 +19,17 @@ return {
 			return repo_name
 		end
 
+		local function project()
+			local ok, project_mod = pcall(require, "project_nvim.project")
+			if ok then
+				local root = project_mod.get_project_root()
+				if root then
+					return vim.fs.basename(root)
+				end
+			end
+			return ""
+		end
+
 		local git_filetypes = { "gitcommit", "NeogitStatus", "NeogitDiffView", "NeogitCommitMessage" }
 		local git_ext = {
 			sections = {
@@ -54,7 +65,7 @@ return {
 				},
 				lualine_b = { "diff" },
 				lualine_c = {},
-				lualine_x = {},
+				lualine_x = { { project } },
 				lualine_y = { { "filetype" }, { "encoding" } },
 				lualine_z = { "location" },
 			},

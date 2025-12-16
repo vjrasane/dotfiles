@@ -7,6 +7,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
 			"nvim-telescope/telescope-file-browser.nvim",
+			"nvim-telescope/telescope-frecency.nvim",
 			"ahmedkhalf/project.nvim",
 		},
 		opts = function()
@@ -14,7 +15,13 @@ return {
 
 			return {
 				pickers = {},
-				extensions = {},
+				extensions = {
+					frecency = {
+						db_safe_mode = false,
+						show_unindexed = true,
+						show_filter_column = false,
+					},
+				},
 				defaults = {
 					hidden = true,
 					sorting_strategy = "descending",
@@ -72,6 +79,7 @@ return {
 		config = function(_, opts)
 			require("telescope").setup(opts)
 			require("telescope").load_extension("file_browser")
+			require("telescope").load_extension("frecency")
 			require("telescope").load_extension("projects")
 		end,
 		keys = {
@@ -90,15 +98,31 @@ return {
 			{
 				"<leader>f",
 				function()
-					require("telescope.builtin").find_files({ hidden = true })
+					require("telescope").extensions.frecency.frecency({
+						workspace = "CWD",
+					})
 				end,
-				desc = "Find Files (cwd)",
+				desc = "Find Files (frecency)",
+			},
+			{
+				"<leader>F",
+				function()
+					require("telescope.builtin").find_files({ hidden = true, no_ignore = true })
+				end,
+				desc = "Find Files (incl. ignored)",
 			},
 			{ "<leader>r", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
 			{
+				"<leader>R",
+				function()
+					require("telescope.builtin").oldfiles({ only_cwd = false })
+				end,
+				desc = "Recent (all)",
+			},
+			{
 				"<leader>sc",
 				function()
-					require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+					require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config"), hidden = true })
 				end,
 				desc = "Find Config File",
 			},
@@ -115,9 +139,29 @@ return {
 			{
 				"<leader>sg",
 				function()
-					require("telescope.builtin").live_grep()
+					require("telescope.builtin").live_grep({
+						additional_args = { "--hidden" },
+					})
 				end,
 				desc = "Grep",
+			},
+			{
+				"<leader>sG",
+				function()
+					require("telescope.builtin").live_grep({
+						additional_args = { "--hidden", "--no-ignore" },
+					})
+				end,
+				desc = "Grep (incl. ignored)",
+			},
+			{
+				"<leader>sw",
+				function()
+					require("telescope.builtin").grep_string({
+						additional_args = { "--hidden" },
+					})
+				end,
+				desc = "Word under cursor",
 			},
 			{
 				"<leader>sj",

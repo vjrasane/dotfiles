@@ -4,6 +4,7 @@ alias ll="eza --color=always --all --long --git --icons=always"
 alias cat="bat"
 alias tf="tofu"
 alias y="yadm"
+alias j="just"
 
 alias home='cd ~'
 alias cd..='cd ..'

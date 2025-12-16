@@ -52,6 +52,7 @@ return {
 				skip_confirm_for_simple_edits = true,
 				columns = { "icon" },
 				keymaps = {
+					["<Esc>"] = "actions.close",
 					["<C-h>"] = false,
 					["<C-l>"] = false,
 					["<C-k>"] = false,
