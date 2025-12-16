@@ -8,6 +8,7 @@ return {
 			"nvim-tree/nvim-web-devicons",
 			"nvim-telescope/telescope-file-browser.nvim",
 			"nvim-telescope/telescope-frecency.nvim",
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 			"ahmedkhalf/project.nvim",
 		},
 		opts = function()
@@ -16,10 +17,17 @@ return {
 			return {
 				pickers = {},
 				extensions = {
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "smart_case",
+					},
 					frecency = {
 						db_safe_mode = false,
 						show_unindexed = true,
 						show_filter_column = false,
+						matcher = "fuzzy",
 					},
 				},
 				defaults = {
@@ -78,6 +86,7 @@ return {
 		end,
 		config = function(_, opts)
 			require("telescope").setup(opts)
+			require("telescope").load_extension("fzf")
 			require("telescope").load_extension("file_browser")
 			require("telescope").load_extension("frecency")
 			require("telescope").load_extension("projects")
