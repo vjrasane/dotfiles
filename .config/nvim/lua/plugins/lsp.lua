@@ -25,7 +25,7 @@ local on_attach = function(event)
 	-- Jump to the definition of the word under your cursor.
 	--  This is where a variable was first declared, or where a function is defined, etc.
 	--  To jump back, press <C-t>.
-	map("n", "gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+	map("n", "gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
 
 	-- Find references for the word under your cursor.
 	map("n", "gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
