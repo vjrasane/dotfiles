@@ -1,4 +1,3 @@
-alias kb="kubectl"
-alias kn="kubens"
 
-export KUBECONFIG=$HOME/.kube/config
+export KUBECONFIG=$HOME/.kube/confi
+:wa

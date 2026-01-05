@@ -1,0 +1,8 @@
+keys:
+  - &ville age10qhzl4m6h2u6a9ankqdahuj2pexsj2f44af09g5q2w9sntupssyq96skej
+
+creation_rules:
+  - path_regex: secrets\.yaml$
+    key_groups:
+      - age:
+          - *ville

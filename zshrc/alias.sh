@@ -5,6 +5,9 @@ alias cat="bat"
 alias tf="tofu"
 alias y="yadm"
 alias j="just"
+alias hm="home-manager"
+alias kb="kubectl"
+alias kn="kubens"
 
 alias home='cd ~'
 alias cd..='cd ..'

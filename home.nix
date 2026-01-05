@@ -17,6 +17,16 @@ in {
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
+  # Sops secrets management
+  sops = {
+    age.keyFile = "${local.homeDirectory}/.config/sops/age/keys.txt";
+    defaultSopsFile = ./secrets.yaml;
+    secrets.ssh_private_key = {
+      path = "${config.home.homeDirectory}/.ssh/id_rsa";
+      mode = "0600";
+    };
+  };
+
   # Packages to install
   home.packages = with pkgs; [
     # Shell & terminal
@@ -43,17 +53,11 @@ in {
     direnv
 
     # SSH & security
-    keychain
     age
     sops
 
-    # Editor
-    neovim
-
     # Git & VCS
     git
-    lazygit
-    jujutsu
 
     # Development - languages
     nodejs_22
@@ -89,54 +93,69 @@ in {
     enableCompletion = true;
 
     # Source modular configuration from dotfiles
-    initExtra = ''
+    initContent = ''
       source $DOTFILES/zshrc/init.sh
       source $DOTFILES/zshrc/antidote.sh
       source $DOTFILES/zshrc/python.sh
       source $DOTFILES/zshrc/js.sh
       source $DOTFILES/zshrc/path.sh
       source $DOTFILES/zshrc/functions.sh
-      source $DOTFILES/zshrc/jujitsu.sh
       source $DOTFILES/zshrc/fzf.sh
       source $DOTFILES/zshrc/alias.sh
-      source $DOTFILES/zshrc/kubernetes.sh
-      source $DOTFILES/zshrc/zoxide.sh
-      source $DOTFILES/zshrc/direnv.sh
-      source $DOTFILES/zshrc/keychain.sh
     '';
   };
 
   # Git - machine-specific settings here, shared config included
   programs.git = {
     enable = true;
-    userName = local.gitUser;
-    userEmail = local.gitEmail;
 
     signing = {
       key = local.gitSigningKey;
       signByDefault = true;
     };
 
-    extraConfig = {
+    settings = {
       gpg.format = "ssh";
       "gpg \"ssh\"".allowedSignersFile = "~/.ssh/allowed_signers";
+      core.excludesFile = "${dotfiles}/gitignore";
+
+      user = {
+        name = local.gitUser;
+        email = local.gitEmail;
+      };
     };
 
     includes = [
-      {path = "${dotfiles}/.config/git/config.shared";}
+      {path = "${dotfiles}/gitconfig";}
     ];
   };
 
-  # FZF integration
-  programs.fzf = {
+  # Jujutsu integration
+  programs.jujutsu = {
     enable = true;
-    enableZshIntegration = true;
+    settings =
+      lib.recursiveUpdate
+      (builtins.fromTOML (builtins.readFile "${dotfiles}/jj.toml"))
+      {
+        user = {
+          name = local.gitUser;
+          email = local.gitEmail;
+        };
+        signing.key = local.gitSigningKey;
+      };
   };
 
-  # Zoxide integration
+  # FZF integration (zsh integration sourced manually in zshrc/fzf.sh)
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = false;
+  };
+
+  # Zoxide integration (replaces cd command)
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
+    options = ["--cmd cd"];
   };
 
   # Direnv with nix support
@@ -146,9 +165,25 @@ in {
     nix-direnv.enable = true;
   };
 
+  # Neovim
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+
+  # Keychain - SSH key management
+  programs.keychain = {
+    enable = true;
+    enableZshIntegration = true;
+    keys = ["id_rsa"];
+  };
+
   # Session environment variables
   home.sessionVariables = {
     DOTFILES = dotfiles;
+    KUBECONFIG = "${local.homeDirectory}/.kube/config";
   };
 
   # Session PATH
@@ -157,7 +192,6 @@ in {
       "$HOME/.cargo/bin"
       "$HOME/.local/bin"
       "/snap/bin"
-      "/opt/nvim/bin"
     ]
     ++ lib.optionals (local.isWsl or false) [
       "/mnt/c/Windows/System32"
@@ -173,9 +207,7 @@ in {
 
   xdg.configFile = {
     "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/nvim";
-    "jj".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/jj";
     "tmux".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/tmux";
-    "home-manager".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/home-manager";
   };
 
   # Nix is configured system-wide via ~/.config/nix/nix.conf

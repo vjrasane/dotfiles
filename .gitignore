@@ -4,7 +4,6 @@
 !.config/jj
 !.config/tmux
 !.config/git
-!.config/home-manager
 
 # Machine-specific config (not tracked)
-.config/home-manager/local.nix
+local.nix

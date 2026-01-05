@@ -1,6 +1,0 @@
-- name: Install microk8s
-  become: true
-  community.general.snap:
-    name: microk8s
-    classic: true
-    channel: 1.28/stable

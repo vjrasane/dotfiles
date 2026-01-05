@@ -1,0 +1,14 @@
+# Machine-specific configuration
+# Copy this file to local.nix and customize for your machine
+# local.nix is git-ignored and should not be committed
+#
+# Note: username, homeDirectory, and system are auto-detected
+{
+  # Git configuration
+  gitUser = "Your Name";
+  gitEmail = "your@email.com";
+  gitSigningKey = "~/.ssh/id_ed25519.pub";
+
+  # Set to true if running in WSL
+  isWsl = false;
+}
