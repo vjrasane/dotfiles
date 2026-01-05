@@ -80,26 +80,26 @@ in
     htop
   ];
 
-  # Zsh - minimal config, sources existing modular files in order
+  # Zsh - sources config directly from dotfiles
   programs.zsh = {
     enable = true;
     enableCompletion = true;
 
-    # Source modular configuration in the same order as .zshrc
+    # Source modular configuration from dotfiles
     initExtra = ''
-      source ~/zshrc/init.sh
-      source ~/zshrc/antidote.sh
-      source ~/zshrc/python.sh
-      source ~/zshrc/js.sh
-      source ~/zshrc/path.sh
-      source ~/zshrc/functions.sh
-      source ~/zshrc/jujitsu.sh
-      source ~/zshrc/fzf.sh
-      source ~/zshrc/alias.sh
-      source ~/zshrc/kubernetes.sh
-      source ~/zshrc/zoxide.sh
-      source ~/zshrc/direnv.sh
-      source ~/zshrc/keychain.sh
+      source $DOTFILES/zshrc/init.sh
+      source $DOTFILES/zshrc/antidote.sh
+      source $DOTFILES/zshrc/python.sh
+      source $DOTFILES/zshrc/js.sh
+      source $DOTFILES/zshrc/path.sh
+      source $DOTFILES/zshrc/functions.sh
+      source $DOTFILES/zshrc/jujitsu.sh
+      source $DOTFILES/zshrc/fzf.sh
+      source $DOTFILES/zshrc/alias.sh
+      source $DOTFILES/zshrc/kubernetes.sh
+      source $DOTFILES/zshrc/zoxide.sh
+      source $DOTFILES/zshrc/direnv.sh
+      source $DOTFILES/zshrc/keychain.sh
     '';
   };
 
@@ -143,6 +143,11 @@ in
     nix-direnv.enable = true;
   };
 
+  # Session environment variables
+  home.sessionVariables = {
+    DOTFILES = dotfiles;
+  };
+
   # Session PATH
   home.sessionPath = [
     "$HOME/.cargo/bin"
@@ -155,12 +160,10 @@ in
   ];
 
   # Symlink dotfiles from repo to home directory
-  # Note: .gitconfig is managed by programs.git, not symlinked
+  # Note: .gitconfig is managed by programs.git, .zshrc is managed by programs.zsh
+  # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
   home.file = {
     ".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.tmux.conf";
-    ".p10k.zsh".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.p10k.zsh";
-    ".zsh_plugins.txt".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.zsh_plugins.txt";
-    "zshrc".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zshrc";
   };
 
   xdg.configFile = {

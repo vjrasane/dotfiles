@@ -20,8 +20,8 @@ COMPLETION_WAITING_DOTS="true"
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-source ~/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit $DOTFILES/.p10k.zsh
+source $DOTFILES/.p10k.zsh
 
 export EDITOR=nvim
 export BAT_THEME=OneHalfDark
