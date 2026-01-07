@@ -2,14 +2,37 @@
   config,
   pkgs,
   lib,
-  local,
   ...
 }: let
-  # Default to ~/dotfiles, can override in local.nix
-  dotfiles = local.dotfilesPath or "${local.homeDirectory}/dotfiles";
+  # Auto-detect from environment (requires --impure flag)
+  username = builtins.getEnv "USER";
+  homeDirectory = builtins.getEnv "HOME";
+  dotfiles = "${homeDirectory}/dotfiles";
+
+  # Machine-specific settings
+  local = import "${dotfiles}/local.nix";
+
+  # Shared SSH configuration
+  ssh = import ./ssh.nix;
+  sshPrivateKey = ssh.privateKeyPath homeDirectory;
+  sshPublicKey = ssh.publicKeyPath homeDirectory;
+  sshAllowedSigners = "${homeDirectory}/.ssh/allowed_signers";
+
+  # Git user info (public, safe to commit)
+  gitUser = "vjrasane";
+  gitEmail = "3148501+vjrasane@users.noreply.github.com";
+  gitRemotes = [
+    "git@github.com:${gitUser}"
+    "https://github.com/${gitUser}"
+  ];
+
+  # Optional work configuration (gitignored)
+  workNixPath = "${dotfiles}/work.nix";
+  hasWork = builtins.pathExists workNixPath;
+  work = if hasWork then import workNixPath else {};
 in {
-  home.username = local.username;
-  home.homeDirectory = local.homeDirectory;
+  home.username = username;
+  home.homeDirectory = homeDirectory;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.05";
@@ -17,14 +40,12 @@ in {
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
-  # Sops secrets management
-  sops = {
-    age.keyFile = "${local.homeDirectory}/.config/sops/age/keys.txt";
-    defaultSopsFile = ./secrets.yaml;
-    secrets.ssh_private_key = {
-      path = "${config.home.homeDirectory}/.ssh/id_rsa";
-      mode = "0600";
-    };
+  # Agenix secrets management
+  age.identityPaths = ["${homeDirectory}/.config/age/key.txt"];
+  age.secrets.ssh_private_key = {
+    file = ./secrets/ssh_private_key.age;
+    path = sshPrivateKey;
+    mode = "0600";
   };
 
   # Packages to install
@@ -100,24 +121,38 @@ in {
     enable = true;
 
     signing = {
-      key = local.gitSigningKey;
+      key = sshPublicKey;
       signByDefault = true;
     };
 
     settings = {
       gpg.format = "ssh";
-      "gpg \"ssh\"".allowedSignersFile = "~/.ssh/allowed_signers";
+      "gpg \"ssh\"".allowedSignersFile = sshAllowedSigners;
       core.excludesFile = "${dotfiles}/gitignore";
 
       user = {
-        name = local.gitUser;
-        email = local.gitEmail;
+        name = gitUser;
+        email = gitEmail;
       };
     };
 
     includes = [
       {path = "${dotfiles}/gitconfig";}
-    ];
+    ] ++ (map (remote: {
+      condition = "hasconfig:remote.*.url:${remote}/**";
+      contents.user = {
+        name = gitUser;
+        email = gitEmail;
+      };
+    }) gitRemotes) ++ lib.optionals hasWork (
+      map (remote: {
+        condition = "hasconfig:remote.*.url:${remote}/**";
+        contents.user = {
+          name = work.user;
+          email = work.email;
+        };
+      }) (work.remotes or [])
+    );
   };
 
   # Jujutsu integration
@@ -128,10 +163,10 @@ in {
       (builtins.fromTOML (builtins.readFile "${dotfiles}/jj.toml"))
       {
         user = {
-          name = local.gitUser;
-          email = local.gitEmail;
+          name = gitUser;
+          email = gitEmail;
         };
-        signing.key = local.gitSigningKey;
+        signing.key = sshPublicKey;
       };
   };
 
@@ -203,7 +238,7 @@ in {
   # Session environment variables
   home.sessionVariables = {
     DOTFILES = dotfiles;
-    KUBECONFIG = "${local.homeDirectory}/.kube/config";
+    KUBECONFIG = "${homeDirectory}/.kube/config";
   };
 
   # Session PATH
@@ -222,7 +257,8 @@ in {
   # Note: .gitconfig is managed by programs.git, .zshrc is managed by programs.zsh
   # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
   home.file = {
-    ".ssh/id_rsa.pub".source = ./ssh_id_rsa.pub;
+    ".ssh/id_rsa.pub".source = ssh.publicKeyFile;
+    ".ssh/allowed_signers".text = "${gitEmail} ${ssh.publicKey}";
   };
 
   xdg.configFile = {
