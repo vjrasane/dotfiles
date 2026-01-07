@@ -9,8 +9,9 @@
   homeDirectory = builtins.getEnv "HOME";
   dotfiles = "${homeDirectory}/dotfiles";
 
-  # Machine-specific settings
-  local = import "${dotfiles}/local.nix";
+  # Detect WSL
+  procVersion = builtins.readFile /proc/version;
+  isWsl = builtins.match ".*[Mm]icrosoft.*" procVersion != null;
 
   # Shared SSH configuration
   ssh = import ./ssh.nix;
@@ -34,6 +35,8 @@
     then import workNixPath
     else {};
 in {
+  imports = [./modules/tmux.nix];
+
   home.username = username;
   home.homeDirectory = homeDirectory;
 
@@ -58,8 +61,6 @@ in {
 
   # Packages to install
   home.packages = with pkgs; [
-    # Shell & terminal
-    tmux
 
     # CLI essentials
     fd
@@ -78,8 +79,14 @@ in {
     # Development - languages
     nodejs_22
     python3
-    rustup
     go
+
+    # Rust
+    rustc
+    cargo
+    rust-analyzer
+    clippy
+    rustfmt
 
     # Development - tools
     gcc
@@ -98,6 +105,8 @@ in {
 
     # Database
     postgresql
+    lazysql
+    pgcli
 
     # System info
     neofetch
@@ -110,6 +119,7 @@ in {
 
     shellAliases = {
       hms = "home-manager switch --impure --flake ${dotfiles}";
+      psql = "pgcli";
     };
 
     # Source modular configuration from dotfiles
@@ -261,7 +271,7 @@ in {
       "$HOME/.local/bin"
       "/snap/bin"
     ]
-    ++ lib.optionals (local.isWsl or false) [
+    ++ lib.optionals isWsl [
       "/mnt/c/Windows/System32"
       "/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
     ];
@@ -279,7 +289,10 @@ in {
 
   xdg.configFile = {
     "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/nvim";
-    "tmux".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/tmux";
+    "pgcli/config".text = ''
+      [main]
+      keyring = False
+    '';
   };
 
   # Auto-switch home-manager on login

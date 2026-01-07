@@ -4,146 +4,128 @@ Personal dotfiles managed with Nix Home Manager.
 
 ## Setup on a new machine
 
-### 1. Install Nix
+1. **Install Nix**
 
-```bash
-# Multi-user installation (recommended)
-sh <(curl -L https://nixos.org/nix/install) --daemon
+   ```bash
+   sh <(curl -L https://nixos.org/nix/install) --daemon
+   ```
 
-# Or single-user installation
-sh <(curl -L https://nixos.org/nix/install) --no-daemon
-```
+   Restart your shell or run:
+   ```bash
+   . /etc/profile.d/nix.sh
+   ```
 
-Restart your shell or run:
-```bash
-. /etc/profile.d/nix.sh
-```
+1. **Enable flakes**
 
-### 2. Enable flakes
+   ```bash
+   mkdir -p ~/.config/nix
+   echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+   ```
 
-```bash
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-```
+1. **Add yourself to trusted users**
 
-### 3. Add yourself to trusted users
+   ```bash
+   echo "trusted-users = root $(whoami)" | sudo tee -a /etc/nix/nix.conf
+   sudo systemctl restart nix-daemon
+   ```
 
-Edit `/etc/nix/nix.conf` and add:
+1. **Clone this repository**
 
-```
-trusted-users = root <your-username>
-```
+   ```bash
+   git clone https://github.com/vjrasane/dotfiles.git ~/dotfiles
+   ```
 
-Then restart the nix daemon:
+1. **Set up age key for secrets decryption**
 
-```bash
-sudo systemctl restart nix-daemon
-```
+   Create the age key directory and add your private key:
 
-### 4. Clone this repository
+   ```bash
+   mkdir -p ~/.config/age
+   ```
 
-```bash
-git clone https://github.com/vjrasane/dotfiles.git ~/dotfiles
-```
+   Add your age private key to `~/.config/age/key.txt`. The file should contain:
 
-### 5. Create local configuration
+   ```
+   # created: <date>
+   # public key: age1...
+   AGE-SECRET-KEY-...
+   ```
 
-```bash
-cp ~/dotfiles/local.nix.example ~/dotfiles/local.nix
-```
+   This key is used by agenix to decrypt secrets (SSH keys, etc.) stored in `secrets/`.
 
-Edit `local.nix` with your machine-specific settings:
-- `gitUser`, `gitEmail`, `gitSigningKey` - git configuration
-- `isWsl` - set to `true` if running in WSL
+1. **Apply Home Manager configuration**
 
-Note: username, home directory, and system architecture are auto-detected.
+   ```bash
+   nix run home-manager/master -- switch --impure --flake ~/dotfiles
+   ```
 
-### 6. Set up age key for secrets decryption
+   This installs all packages, creates symlinks, and decrypts secrets.
 
-Create the age key directory and add your private key:
+1. **Set zsh as default shell**
 
-```bash
-mkdir -p ~/.config/sops/age
-```
-
-Add your age private key to `~/.config/sops/age/keys.txt`. The file should contain:
-
-```
-# created: <date>
-# public key: age1...
-AGE-SECRET-KEY-...
-```
-
-This key is used to decrypt secrets (SSH keys, etc.) stored in `secrets.yaml`.
-
-### 7. Apply Home Manager configuration
-
-```bash
-nix run home-manager/master -- switch --impure --flake ~/dotfiles
-```
-
-This installs all packages and creates symlinks from your home directory to the dotfiles repo.
-
-### 8. Set zsh as default shell
-
-```bash
-echo "$(which zsh)" | sudo tee -a /etc/shells
-chsh -s $(which zsh)
-```
-
-### 9. Install additional tools
-
-```bash
-# Tmux Plugin Manager (then press prefix + I in tmux)
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-# Rust toolchain
-rustup default stable
-```
-
-Antidote (zsh plugin manager) auto-installs on first shell start.
+   ```bash
+   echo "$(which zsh)" | sudo tee -a /etc/shells
+   chsh -s $(which zsh)
+   ```
 
 ## Updating
 
 ```bash
-# After editing home.nix
-home-manager switch --impure --flake ~/dotfiles
+# After editing home.nix (or use the alias)
+hms
+# or: home-manager switch --impure --flake ~/dotfiles
 
 # Update flake inputs
 nix flake update ~/dotfiles
-home-manager switch --impure --flake ~/dotfiles
+hms
 ```
 
-## Directory structure
+Home Manager also auto-switches on login via a systemd user service.
 
-```
-~/dotfiles/
-├── flake.nix             # Nix flake entry point
-├── home.nix              # Home Manager configuration
-├── local.nix             # Machine-specific config (git-ignored)
-├── local.nix.example     # Template for local.nix
-├── secrets.yaml          # Encrypted secrets (sops)
-├── .sops.yaml            # Sops configuration
-├── gitconfig             # Shared git settings (aliases, etc.)
-├── gitignore             # Global git ignores
-├── jj.toml               # Jujutsu config (merged with local settings)
-├── .config/
-│   ├── nvim/             # Neovim config (symlinked)
-│   └── tmux/             # Tmux themes (symlinked)
-├── zshrc/                # Modular zsh config
-├── .zsh_plugins.txt
-├── .p10k.zsh
-└── .tmux.conf
+## Optional: Work configuration
+
+Create `work.nix` (gitignored) for work-specific git settings:
+
+```nix
+{
+  user = "Your Name";
+  email = "you@company.com";
+  remotes = [
+    "git@github.com:company"
+    "https://github.com/company"
+  ];
+}
 ```
 
-## What gets symlinked
+This adds conditional git includes for work repositories.
 
-Home Manager creates these symlinks automatically:
+## Secrets management
+
+Secrets are encrypted with [age](https://age-encryption.org/) and managed by [agenix](https://github.com/ryantm/agenix).
 
 ```
-~/.tmux.conf   -> ~/dotfiles/.tmux.conf
-~/.config/nvim -> ~/dotfiles/.config/nvim
-~/.config/tmux -> ~/dotfiles/.config/tmux
+secrets/
+  ssh_private_key.age   # SSH private key
+  restic.env.age        # Restic backup credentials
 ```
 
-Note: `~/.gitconfig`, `~/.zshrc`, and `~/.config/jj/config.toml` are generated by Home Manager. Shared git settings are included from `~/dotfiles/gitconfig`. Jujutsu config is merged from `~/dotfiles/jj.toml` with user settings from `local.nix`.
+To add/edit secrets:
+
+```bash
+# Encrypt a new secret
+age -r "$(cat ~/.config/age/key.txt | grep 'public key' | cut -d: -f2 | tr -d ' ')" \
+  -o secrets/mysecret.age /path/to/plaintext
+
+# Decrypt a secret
+age -d -i ~/.config/age/key.txt secrets/mysecret.age
+```
+
+Then add the secret to `home.nix`:
+
+```nix
+age.secrets.mysecret = {
+  file = ./secrets/mysecret.age;
+  path = "${homeDirectory}/.config/mysecret";
+  mode = "0600";
+};
+```

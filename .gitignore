@@ -6,7 +6,6 @@
 !.config/git
 
 # Machine-specific config (not tracked)
-local.nix
 work.nix
 
 # Direnv cache
