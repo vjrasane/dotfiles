@@ -203,6 +203,7 @@ in {
   # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
   home.file = {
     ".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.tmux.conf";
+    ".ssh/id_rsa.pub".source = ./ssh_id_rsa.pub;
   };
 
   xdg.configFile = {
