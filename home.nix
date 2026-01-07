@@ -107,10 +107,7 @@ in {
     settings = {
       gpg.format = "ssh";
       "gpg \"ssh\"".allowedSignersFile = "~/.ssh/allowed_signers";
-      core = {
-        excludesFile = "${dotfiles}/gitignore";
-        hooksPath = "${dotfiles}/hooks";
-      };
+      core.excludesFile = "${dotfiles}/gitignore";
 
       user = {
         name = local.gitUser;

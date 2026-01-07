@@ -7,3 +7,6 @@
 
 # Machine-specific config (not tracked)
 local.nix
+
+# Direnv cache
+.direnv/
