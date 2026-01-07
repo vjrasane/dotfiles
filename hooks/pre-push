@@ -1,0 +1,10 @@
+#!/bin/sh
+# Run home-manager switch before pushing dotfiles changes
+
+echo "Running home-manager switch..."
+home-manager switch --impure --flake ~/dotfiles
+
+if [ $? -ne 0 ]; then
+    echo "home-manager switch failed. Push aborted."
+    exit 1
+fi

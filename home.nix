@@ -30,16 +30,10 @@ in {
   # Packages to install
   home.packages = with pkgs; [
     # Shell & terminal
-    zsh
     tmux
 
     # CLI essentials
-    ripgrep
     fd
-    fzf
-    eza
-    bat
-    delta
     jq
     yq-go
     just
@@ -48,16 +42,9 @@ in {
     unzip
     gnupg
 
-    # Directory & environment
-    zoxide
-    direnv
-
     # SSH & security
     age
     sops
-
-    # Git & VCS
-    git
 
     # Development - languages
     nodejs_22
@@ -84,13 +71,16 @@ in {
 
     # System info
     neofetch
-    htop
   ];
 
   # Zsh - sources config directly from dotfiles
   programs.zsh = {
     enable = true;
     enableCompletion = true;
+
+    shellAliases = {
+      hms = "home-manager switch --impure --flake ${dotfiles}";
+    };
 
     # Source modular configuration from dotfiles
     initContent = ''
@@ -117,7 +107,10 @@ in {
     settings = {
       gpg.format = "ssh";
       "gpg \"ssh\"".allowedSignersFile = "~/.ssh/allowed_signers";
-      core.excludesFile = "${dotfiles}/gitignore";
+      core = {
+        excludesFile = "${dotfiles}/gitignore";
+        hooksPath = "${dotfiles}/hooks";
+      };
 
       user = {
         name = local.gitUser;
@@ -180,6 +173,36 @@ in {
     keys = ["id_rsa"];
   };
 
+  # Bat - better cat
+  programs.bat = {
+    enable = true;
+  };
+
+  # Eza - better ls
+  programs.eza = {
+    enable = true;
+    icons = "auto";
+  };
+
+  # Htop
+  programs.htop.enable = true;
+
+  # Ripgrep
+  programs.ripgrep = {
+    enable = true;
+    arguments = ["--smart-case"];
+  };
+
+  # Delta - better diff
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      navigate = true;
+      line-numbers = true;
+    };
+  };
+
   # Session environment variables
   home.sessionVariables = {
     DOTFILES = dotfiles;
@@ -202,7 +225,6 @@ in {
   # Note: .gitconfig is managed by programs.git, .zshrc is managed by programs.zsh
   # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
   home.file = {
-    ".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.tmux.conf";
     ".ssh/id_rsa.pub".source = ./ssh_id_rsa.pub;
   };
 
