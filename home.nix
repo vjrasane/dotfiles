@@ -29,7 +29,10 @@
   # Optional work configuration (gitignored)
   workNixPath = "${dotfiles}/work.nix";
   hasWork = builtins.pathExists workNixPath;
-  work = if hasWork then import workNixPath else {};
+  work =
+    if hasWork
+    then import workNixPath
+    else {};
 in {
   home.username = username;
   home.homeDirectory = homeDirectory;
@@ -45,6 +48,11 @@ in {
   age.secrets.ssh_private_key = {
     file = ./secrets/ssh_private_key.age;
     path = sshPrivateKey;
+    mode = "0600";
+  };
+  age.secrets.restic_env = {
+    file = ./secrets/restic.env.age;
+    path = "${homeDirectory}/restic.env";
     mode = "0600";
   };
 
@@ -83,6 +91,7 @@ in {
     kubectx
     opentofu
     awscli2
+    restic
 
     # Containers
     docker-compose
@@ -136,23 +145,27 @@ in {
       };
     };
 
-    includes = [
-      {path = "${dotfiles}/gitconfig";}
-    ] ++ (map (remote: {
-      condition = "hasconfig:remote.*.url:${remote}/**";
-      contents.user = {
-        name = gitUser;
-        email = gitEmail;
-      };
-    }) gitRemotes) ++ lib.optionals hasWork (
-      map (remote: {
-        condition = "hasconfig:remote.*.url:${remote}/**";
-        contents.user = {
-          name = work.user;
-          email = work.email;
-        };
-      }) (work.remotes or [])
-    );
+    includes =
+      [
+        {path = "${dotfiles}/gitconfig";}
+      ]
+      ++ (map (remote: {
+          condition = "hasconfig:remote.*.url:${remote}/**";
+          contents.user = {
+            name = gitUser;
+            email = gitEmail;
+          };
+        })
+        gitRemotes)
+      ++ lib.optionals hasWork (
+        map (remote: {
+          condition = "hasconfig:remote.*.url:${remote}/**";
+          contents.user = {
+            name = work.user;
+            email = work.email;
+          };
+        }) (work.remotes or [])
+      );
   };
 
   # Jujutsu integration
@@ -258,12 +271,26 @@ in {
   # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
   home.file = {
     ".ssh/id_rsa.pub".source = ssh.publicKeyFile;
-    ".ssh/allowed_signers".text = "${gitEmail} ${ssh.publicKey}";
+    ".ssh/allowed_signers".text = let
+      signers = ["${gitEmail} ${ssh.publicKey}"] ++ lib.optionals hasWork ["${work.email} ${ssh.publicKey}"];
+    in
+      lib.concatStringsSep "\n" signers;
   };
 
   xdg.configFile = {
     "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/nvim";
     "tmux".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/tmux";
+  };
+
+  # Auto-switch home-manager on login
+  systemd.user.services.home-manager-switch = {
+    Unit.Description = "Home Manager switch on login";
+    Service = {
+      Type = "oneshot";
+      Environment = "PATH=${pkgs.nix}/bin:${pkgs.git}/bin";
+      ExecStart = "${pkgs.home-manager}/bin/home-manager switch --impure --flake ${dotfiles}";
+    };
+    Install.WantedBy = ["default.target"];
   };
 
   # Nix is configured system-wide via ~/.config/nix/nix.conf
