@@ -31,6 +31,7 @@
         ./modules/tmux.nix
         ./modules/git.nix
         ./modules/zsh.nix
+        ./modules/i3.nix
       ];
     };
   };

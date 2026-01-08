@@ -10,30 +10,22 @@
 
     plugins = with pkgs.tmuxPlugins; [
       sensible
-      yank
-      resurrect
-      continuum
       vim-tmux-navigator
+      yank
       {
-        plugin = tmux-nova;
+        plugin = catppuccin;
         extraConfig = ''
-          set -g @nova-nerdfonts true
-          set -g @nova-nerdfonts-left
-          set -g @nova-nerdfonts-right
+          set -g @catppuccin_flavor 'mocha'
+          set -g @catppuccin_window_status_style 'rounded'
 
-          set -g @nova-segment-mode "#{?client_prefix,Ω,ω}"
-          set -g @nova-segment-mode-colors "#50fa7b #282a36"
-
-          set -g @nova-segment-whoami "#(whoami)@#h"
-          set -g @nova-segment-whoami-colors "#50fa7b #282a36"
-
-          set -g @nova-pane "#I#{?pane_in_mode,  #{pane_mode},}  #W"
-
-          set -g @nova-rows 0
-          set -g @nova-segments-0-left "mode"
-          set -g @nova-segments-0-right "whoami"
+          set -g status-left ""
+          set -g status-right "#{E:@catppuccin_status_session}"
+          set -ag status-right "#{E:@catppuccin_status_user}"
+          set -ag status-right "#{E:@catppuccin_status_host}"
         '';
       }
+      resurrect
+      continuum
     ];
 
     extraConfig = ''
@@ -50,7 +42,19 @@
       bind-key -r -T prefix Left  resize-pane -L 5
       bind-key -r -T prefix Right resize-pane -R 5
 
+      bind-key -r Up resize-pane -U 5
+      bind-key -r Down resize-pane -D 5
+      bind-key -r Left resize-pane -L 5
+      bind-key -r Right resize-pane -R 5
+
       bind-key x kill-pane
+
+      # Splits (vim-like)
+      bind-key v split-window -h -c "#{pane_current_path}"
+      bind-key s split-window -v -c "#{pane_current_path}"
+      bind-key S choose-session
+      bind-key w new-window -c "#{pane_current_path}"
+      bind-key W choose-tree -Zw
 
       bind-key m choose-window -F "#{window_index}: #{window_name}" "join-pane -h -t %%"
       bind-key M choose-window -F "#{window_index}: #{window_name}" "join-pane -v -t %%"
@@ -67,6 +71,16 @@
 
       set -g @continuum-restore 'on'
       set -g @resurrect-strategy-nvim 'session'
+
+      # Copy mode
+      bind-key Escape copy-mode
+      bind-key -T copy-mode-vi Escape send-keys -X cancel
+      unbind -T copy-mode-vi MouseDragEnd1Pane
+
+      # Vim-like selection in copy mode
+      bind-key -T copy-mode-vi v send-keys -X begin-selection
+      bind-key -T copy-mode-vi V send-keys -X select-line
+      bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
     '';
   };
 }

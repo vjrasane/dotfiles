@@ -5,9 +5,6 @@ export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git
 export FZF_DEFAULT_OPTS=' --height=40% --preview="bat --color=always {}" --preview-window=right:60%:wrap'
 export FZF_CTRL_R_OPTS="--height 50% --preview 'echo {2..} | bat --color=always -pl sh' --preview-window=down:5:wrap"
 
-# Source fzf shell integration (keybindings and completion)
-source <(fzf --zsh)
-
 _fzf_compgen_path() {
   fd --hidden --exclude .git . "$1"
 }

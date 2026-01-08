@@ -65,7 +65,6 @@ in {
     # SSH & security
     age
     sops
-    ssh-askpass-fullscreen
     bitwarden-cli
 
     # Browser
@@ -92,6 +91,7 @@ in {
     kubectl
     kubernetes-helm
     kubectx
+    k9s
     opentofu
     awscli2
     restic
@@ -116,10 +116,10 @@ in {
   # Enable fontconfig to discover fonts installed via home.packages
   fonts.fontconfig.enable = true;
 
-  # FZF integration (zsh integration sourced manually in zshrc/fzf.sh)
+  # FZF integration
   programs.fzf = {
     enable = true;
-    enableZshIntegration = false;
+    enableZshIntegration = true;
   };
 
   # Zoxide integration (replaces cd command)
@@ -192,8 +192,7 @@ in {
   home.sessionVariables = {
     DOTFILES = dotfiles;
     KUBECONFIG = "${homeDir}/.kube/config";
-    SSH_ASKPASS = "${pkgs.ssh-askpass-fullscreen}/bin/ssh-askpass-fullscreen";
-    SSH_ASKPASS_REQUIRE = "prefer";
+    SSH_ASKPASS_REQUIRE = "never";
   };
 
   # Session PATH
