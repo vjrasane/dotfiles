@@ -30,6 +30,7 @@
         ./home.nix
         ./modules/tmux.nix
         ./modules/git.nix
+        ./modules/zsh.nix
       ];
     };
   };

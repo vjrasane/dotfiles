@@ -44,7 +44,5 @@ source "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-Michael
 source "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-MichaelAquilina-SLASH-zsh-you-should-use/zsh-you-should-use.plugin.zsh"
 fpath+=( "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-reegnz-SLASH-jq-zsh-plugin" )
 source "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-reegnz-SLASH-jq-zsh-plugin/jq.plugin.zsh"
-fpath+=( "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-sineto-SLASH-vi-mode" )
-source "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-sineto-SLASH-vi-mode/vi-mode.plugin.zsh"
 fpath+=( "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-vjrasane-SLASH-zsh-bitwarden-secrets-manager" )
 source "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-vjrasane-SLASH-zsh-bitwarden-secrets-manager/zsh-bitwarden-secrets-manager.plugin.zsh"

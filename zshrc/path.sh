@@ -1,7 +1,0 @@
-export PATH="$PATH:$HOME/.cargo/bin"
-export PATH="$PATH:$HOME/.dotfiles/bin"
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:/snap/bin"
-export PATH="$PATH:/opt/nvim/bin"
-export PATH="$PATH:/mnt/c/Windows/System32"
-export PATH="$PATH:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"

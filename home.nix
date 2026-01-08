@@ -10,12 +10,8 @@
   # Auto-detect from environment (requires --impure flag)
   username = builtins.getEnv "USER";
 
-  # Detect WSL
   procVersion = builtins.readFile /proc/version;
-  isWsl = builtins.match ".*[Mm]icrosoft.*" procVersion != null;
 
-  # Shared SSH configuration
-  ssh = import ./ssh.nix;
   keys = import "${dotfiles}/keys.nix";
 
   # Optional work configuration (gitignored)
@@ -40,11 +36,11 @@ in {
 
   age.identityPaths = [
     (keys.currentMachine.privateKeyPath homeDir)
-    "${homeDir}/.config/age/key.txt"
+    (keys.age.privateKeyPath homeDir)
   ];
   age.secrets.ssh_private_key = {
     file = ./secrets/ssh_private_key.age;
-    path = ssh.rsa.privateKeyPath;
+    path = keys.master.privateKeyPath homeDir;
     mode = "0600";
   };
   age.secrets.restic_env = {
@@ -77,6 +73,7 @@ in {
 
     # Development - languages
     nodejs_22
+    bun
     python3
     go
 
@@ -119,29 +116,6 @@ in {
   # Enable fontconfig to discover fonts installed via home.packages
   fonts.fontconfig.enable = true;
 
-  # Zsh - sources config directly from dotfiles
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-
-    shellAliases = {
-      hms = "home-manager switch --impure --flake ${dotfiles}";
-      psql = "pgcli";
-    };
-
-    # Source modular configuration from dotfiles
-    initContent = ''
-      source $DOTFILES/zshrc/init.sh
-      source $DOTFILES/zshrc/antidote.sh
-      source $DOTFILES/zshrc/python.sh
-      source $DOTFILES/zshrc/js.sh
-      source $DOTFILES/zshrc/path.sh
-      source $DOTFILES/zshrc/functions.sh
-      source $DOTFILES/zshrc/fzf.sh
-      source $DOTFILES/zshrc/alias.sh
-    '';
-  };
-
   # FZF integration (zsh integration sourced manually in zshrc/fzf.sh)
   programs.fzf = {
     enable = true;
@@ -174,18 +148,25 @@ in {
   programs.keychain = {
     enable = true;
     enableZshIntegration = true;
-    keys = ["id_rsa"];
+    keys = ["id_rsa" "id_ed25519"];
+    extraFlags = ["--quiet" "--ignore-missing"];
   };
 
   # Bat - better cat
   programs.bat = {
     enable = true;
+    config.theme = "OneHalfDark";
   };
 
   # Eza - better ls
   programs.eza = {
     enable = true;
     icons = "auto";
+    enableZshIntegration = true;
+    extraOptions = [
+      "--group-directories-first"
+      "--git"
+    ];
   };
 
   # Htop
@@ -216,22 +197,16 @@ in {
   };
 
   # Session PATH
-  home.sessionPath =
-    [
-      "$HOME/.cargo/bin"
-      "$HOME/.local/bin"
-      "/snap/bin"
-    ]
-    ++ lib.optionals isWsl [
-      "/mnt/c/Windows/System32"
-      "/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
-    ];
+  home.sessionPath = [
+    "$HOME/.cargo/bin"
+    "$HOME/.local/bin"
+  ];
 
   # Symlink dotfiles from repo to home directory
   # Note: .gitconfig is managed by programs.git, .zshrc is managed by programs.zsh
   # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
   home.file = {
-    ".ssh/id_rsa.pub".source = ssh.rsa.publicKeyFile;
+    "${keys.master.publicKeyPath homeDir}".text = keys.master.publicKey;
   };
 
   xdg.configFile = {
@@ -240,21 +215,6 @@ in {
       [main]
       keyring = False
     '';
-  };
-
-  # Auto-switch home-manager on login
-  systemd.user.services.home-manager-switch = {
-    Unit = {
-      Description = "Home Manager switch on login";
-      # Wait for age identity file to be accessible before running
-      ConditionPathExists = "${homeDir}/.config/age/key.txt";
-    };
-    Service = {
-      Type = "oneshot";
-      Environment = "PATH=${pkgs.nix}/bin:${pkgs.git}/bin";
-      ExecStart = "${pkgs.home-manager}/bin/home-manager switch --impure --flake ${dotfiles}";
-    };
-    Install.WantedBy = ["default.target"];
   };
 
   # Nix is configured system-wide via ~/.config/nix/nix.conf
