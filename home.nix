@@ -2,12 +2,13 @@
   config,
   pkgs,
   lib,
+  agenix-cli,
+  dotfiles,
+  homeDir,
   ...
 }: let
   # Auto-detect from environment (requires --impure flag)
   username = builtins.getEnv "USER";
-  homeDirectory = builtins.getEnv "HOME";
-  dotfiles = "${homeDirectory}/dotfiles";
 
   # Detect WSL
   procVersion = builtins.readFile /proc/version;
@@ -15,17 +16,7 @@
 
   # Shared SSH configuration
   ssh = import ./ssh.nix;
-  sshPrivateKey = ssh.privateKeyPath homeDirectory;
-  sshPublicKey = ssh.publicKeyPath homeDirectory;
-  sshAllowedSigners = "${homeDirectory}/.ssh/allowed_signers";
-
-  # Git user info (public, safe to commit)
-  gitUser = "vjrasane";
-  gitEmail = "3148501+vjrasane@users.noreply.github.com";
-  gitRemotes = [
-    "git@github.com:${gitUser}"
-    "https://github.com/${gitUser}"
-  ];
+  keys = import "${dotfiles}/keys.nix";
 
   # Optional work configuration (gitignored)
   workNixPath = "${dotfiles}/work.nix";
@@ -35,10 +26,8 @@
     then import workNixPath
     else {};
 in {
-  imports = [./modules/tmux.nix];
-
   home.username = username;
-  home.homeDirectory = homeDirectory;
+  home.homeDirectory = homeDir;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.05";
@@ -46,16 +35,21 @@ in {
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
-  # Agenix secrets management
-  age.identityPaths = ["${homeDirectory}/.config/age/key.txt"];
+  # Disable news notifications
+  news.display = "silent";
+
+  age.identityPaths = [
+    (keys.currentMachine.privateKeyPath homeDir)
+    "${homeDir}/.config/age/key.txt"
+  ];
   age.secrets.ssh_private_key = {
     file = ./secrets/ssh_private_key.age;
-    path = sshPrivateKey;
+    path = ssh.rsa.privateKeyPath;
     mode = "0600";
   };
   age.secrets.restic_env = {
     file = ./secrets/restic.env.age;
-    path = "${homeDirectory}/restic.env";
+    path = "${homeDir}/restic.env";
     mode = "0600";
   };
 
@@ -75,6 +69,11 @@ in {
     # SSH & security
     age
     sops
+    ssh-askpass-fullscreen
+    bitwarden-cli
+
+    # Browser
+    brave
 
     # Development - languages
     nodejs_22
@@ -110,7 +109,15 @@ in {
 
     # System info
     neofetch
+
+    # Fonts
+    nerd-fonts.meslo-lg
+  ] ++ [
+    agenix-cli
   ];
+
+  # Enable fontconfig to discover fonts installed via home.packages
+  fonts.fontconfig.enable = true;
 
   # Zsh - sources config directly from dotfiles
   programs.zsh = {
@@ -133,64 +140,6 @@ in {
       source $DOTFILES/zshrc/fzf.sh
       source $DOTFILES/zshrc/alias.sh
     '';
-  };
-
-  # Git - machine-specific settings here, shared config included
-  programs.git = {
-    enable = true;
-
-    signing = {
-      key = sshPublicKey;
-      signByDefault = true;
-    };
-
-    settings = {
-      gpg.format = "ssh";
-      "gpg \"ssh\"".allowedSignersFile = sshAllowedSigners;
-      core.excludesFile = "${dotfiles}/gitignore";
-
-      user = {
-        name = gitUser;
-        email = gitEmail;
-      };
-    };
-
-    includes =
-      [
-        {path = "${dotfiles}/gitconfig";}
-      ]
-      ++ (map (remote: {
-          condition = "hasconfig:remote.*.url:${remote}/**";
-          contents.user = {
-            name = gitUser;
-            email = gitEmail;
-          };
-        })
-        gitRemotes)
-      ++ lib.optionals hasWork (
-        map (remote: {
-          condition = "hasconfig:remote.*.url:${remote}/**";
-          contents.user = {
-            name = work.user;
-            email = work.email;
-          };
-        }) (work.remotes or [])
-      );
-  };
-
-  # Jujutsu integration
-  programs.jujutsu = {
-    enable = true;
-    settings =
-      lib.recursiveUpdate
-      (builtins.fromTOML (builtins.readFile "${dotfiles}/jj.toml"))
-      {
-        user = {
-          name = gitUser;
-          email = gitEmail;
-        };
-        signing.key = sshPublicKey;
-      };
   };
 
   # FZF integration (zsh integration sourced manually in zshrc/fzf.sh)
@@ -261,7 +210,9 @@ in {
   # Session environment variables
   home.sessionVariables = {
     DOTFILES = dotfiles;
-    KUBECONFIG = "${homeDirectory}/.kube/config";
+    KUBECONFIG = "${homeDir}/.kube/config";
+    SSH_ASKPASS = "${pkgs.ssh-askpass-fullscreen}/bin/ssh-askpass-fullscreen";
+    SSH_ASKPASS_REQUIRE = "prefer";
   };
 
   # Session PATH
@@ -280,11 +231,7 @@ in {
   # Note: .gitconfig is managed by programs.git, .zshrc is managed by programs.zsh
   # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
   home.file = {
-    ".ssh/id_rsa.pub".source = ssh.publicKeyFile;
-    ".ssh/allowed_signers".text = let
-      signers = ["${gitEmail} ${ssh.publicKey}"] ++ lib.optionals hasWork ["${work.email} ${ssh.publicKey}"];
-    in
-      lib.concatStringsSep "\n" signers;
+    ".ssh/id_rsa.pub".source = ssh.rsa.publicKeyFile;
   };
 
   xdg.configFile = {
@@ -297,7 +244,11 @@ in {
 
   # Auto-switch home-manager on login
   systemd.user.services.home-manager-switch = {
-    Unit.Description = "Home Manager switch on login";
+    Unit = {
+      Description = "Home Manager switch on login";
+      # Wait for age identity file to be accessible before running
+      ConditionPathExists = "${homeDir}/.config/age/key.txt";
+    };
     Service = {
       Type = "oneshot";
       Environment = "PATH=${pkgs.nix}/bin:${pkgs.git}/bin";

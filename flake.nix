@@ -20,9 +20,16 @@
   in {
     homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
+      extraSpecialArgs = {
+        agenix-cli = agenix.packages.${system}.default;
+        dotfiles = "${builtins.getEnv "HOME"}/dotfiles";
+        homeDir = builtins.getEnv "HOME";
+      };
       modules = [
         agenix.homeManagerModules.default
         ./home.nix
+        ./modules/tmux.nix
+        ./modules/git.nix
       ];
     };
   };
