@@ -6,7 +6,8 @@
   dotfiles,
   homeDir,
   ...
-}: let
+}:
+let
   # Auto-detect from environment (requires --impure flag)
   username = builtins.getEnv "USER";
 
@@ -17,11 +18,9 @@
   # Optional work configuration (gitignored)
   workNixPath = "${dotfiles}/work.nix";
   hasWork = builtins.pathExists workNixPath;
-  work =
-    if hasWork
-    then import workNixPath
-    else {};
-in {
+  work = if hasWork then import workNixPath else { };
+in
+{
   home.username = username;
   home.homeDirectory = homeDir;
 
@@ -64,6 +63,7 @@ in {
 
     # SSH & security
     age
+    agenix-cli
     sops
     bitwarden-cli
 
@@ -86,22 +86,19 @@ in {
     # Development - tools
     gcc
     gnumake
+    devenv
 
     # Cloud & DevOps
-    kubectl
-    kubernetes-helm
-    kubectx
-    k9s
     opentofu
     awscli2
     restic
 
     # Containers
-    docker-compose
+    lazydocker
+    dive
 
     # Database
     postgresql
-    lazysql
     pgcli
 
     # System info
@@ -109,8 +106,6 @@ in {
 
     # Fonts
     nerd-fonts.meslo-lg
-  ] ++ [
-    agenix-cli
   ];
 
   # Enable fontconfig to discover fonts installed via home.packages
@@ -126,7 +121,7 @@ in {
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
-    options = ["--cmd cd"];
+    options = [ "--cmd cd" ];
   };
 
   # Direnv with nix support
@@ -136,20 +131,15 @@ in {
     nix-direnv.enable = true;
   };
 
-  # Neovim
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
-
   # Keychain - SSH key management
   programs.keychain = {
     enable = true;
     enableZshIntegration = true;
-    keys = ["id_ed25519"];
-    extraFlags = ["--quiet" "--ignore-missing"];
+    keys = [ "id_ed25519" ];
+    extraFlags = [
+      "--quiet"
+      "--ignore-missing"
+    ];
   };
 
   # Bat - better cat
@@ -175,7 +165,7 @@ in {
   # Ripgrep
   programs.ripgrep = {
     enable = true;
-    arguments = ["--smart-case"];
+    arguments = [ "--smart-case" ];
   };
 
   # Delta - better diff
@@ -192,6 +182,7 @@ in {
   home.sessionVariables = {
     DOTFILES = dotfiles;
     KUBECONFIG = "${homeDir}/.kube/config";
+    SSH_ASKPASS = "";
     SSH_ASKPASS_REQUIRE = "never";
   };
 
@@ -209,7 +200,6 @@ in {
   };
 
   xdg.configFile = {
-    "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/nvim";
     "pgcli/config".text = ''
       [main]
       keyring = False

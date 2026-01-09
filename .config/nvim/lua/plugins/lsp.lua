@@ -108,13 +108,7 @@ return {
 		event = { "BufReadPre", "BufNewFile", "VeryLazy" },
 		enabled = true,
 		dependencies = {
-			-- Automatically install LSPs and related tools to stdpath for Neovim
-			{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
-
 			-- Useful status updates for LSP.
-			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
 			{ "j-hui/fidget.nvim", opts = {} },
 
 			-- Allows extra capabilities provided by nvim-cmp
@@ -126,116 +120,50 @@ return {
 				callback = on_attach,
 			})
 
-			-- Ensure the servers and tools above are installed
-			--  To check the current status of installed tools and/or manually install
-			--  other tools, you can run
-			--    :Mason
-			--
-			--  You can press `g?` for help in this menu.
-			require("mason").setup()
-			-- local pylsp = require("mason-registry").get_package("python-lsp-server")
-			-- pylsp:on("install:success", function()
-			-- 	local function mason_package_path(package)
-			-- 		local path = vim.fn.resolve(vim.fn.stdpath("data") .. "/mason/packages/" .. package)
-			-- 		return path
-			-- 	end
-			--
-			-- 	local path = mason_package_path("python-lsp-server")
-			-- 	local command = path .. "/venv/bin/pip"
-			-- 	local args = {
-			-- 		"install",
-			-- 		"-U",
-			-- 		"pylsp-rope",
-			-- "python-lsp-black",
-			-- "pyflakes",
-			-- "python-lsp-ruff",
-			-- "pyls-flake8",
-			-- "sqlalchemy-stubs",
-			-- }
-
-			-- 	require("plenary.job")
-			-- 		:new({
-			-- 			command = command,
-			-- 			args = args,
-			-- 			cwd = path,
-			-- 		})
-			-- 		:start()
-			-- end)
-
-			--  Add any additional override configuration in the following tables. Available keys are:
-			--  - cmd (table): Override the default command used to start the server
-			--  - filetypes (table): Override the default list of associated filetypes for the server
-			--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-			--  - settings (table): Override the default settings passed when initializing the server.
-			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-			local servers = {
-				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-				--
-				-- Some languages (like typescript) have entire language plugins that can be useful:
-				--    https://github.com/pmizio/typescript-tools.nvim
-				--
-				-- But for many setups, the LSP (`tsserver`) will work just fine
-				ts_ls = {},
-				astro = {},
-				eslint_d = {},
-				tailwindcss = {},
-				markdownlint = {},
-				pyright = {
-					-- settings = {
-					-- 	python = {
-					-- 		analysis = {
-					-- 			autoImportCompletion = true,
-					-- 			-- autoSearchPaths = true,
-					-- 			-- diagnosticMode = "openFilesOnly",
-					-- 			useLibraryCodeForTypes = true,
-					-- 			-- typeCheckingMode = "off",
-					-- 		},
-					-- 	},
-					-- },
-				},
-				gopls = {
-					settings = {
-						gopls = {
-							analyses = {
-								unusedparams = true,
-								shadow = true,
-							},
-							staticcheck = true,
-							gofumpt = true,
-						},
-					},
-				},
-				lua_ls = {
-					settings = {
-						Lua = {
-							completion = {
-								callSnippet = "Replace",
-							},
-							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-							-- diagnostics = { disable = { 'missing-fields' } },
-						},
-					},
-				},
-			}
-			-- You can add other tools here that you want Mason to install
-			-- for you, so that they are available from within Neovim.
-			local ensure_installed = vim.tbl_keys(servers or {})
-			vim.list_extend(ensure_installed, {
-				"stylua", -- Used to format Lua code
-			})
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
 			local capabilities = make_client_capabilities()
-			require("mason-lspconfig").setup({
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for tsserver)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
+			local lspconfig = require("lspconfig")
+
+			-- LSP server configurations
+			-- Binaries are managed by home-manager/nix
+
+			lspconfig.ts_ls.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.astro.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.tailwindcss.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.pyright.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.gopls.setup({
+				capabilities = capabilities,
+				settings = {
+					gopls = {
+						analyses = {
+							unusedparams = true,
+							shadow = true,
+						},
+						staticcheck = true,
+						gofumpt = true,
+					},
+				},
+			})
+
+			lspconfig.lua_ls.setup({
+				capabilities = capabilities,
+				settings = {
+					Lua = {
+						completion = {
+							callSnippet = "Replace",
+						},
+					},
 				},
 			})
 		end,
@@ -251,16 +179,4 @@ return {
 			require("lsp-file-operations").setup()
 		end,
 	},
-	-- {
-	-- 	"HallerPatrick/py_lsp.nvim",
-	-- 	ft = { "python" },
-	-- 	config = function()
-	-- 		local capabilities = make_client_capabilities()
-	-- 		require("py_lsp").setup({
-	-- 			language_server = "basedpyright",
-	-- 			source_strategies = { "poetry", "default", "system" },
-	-- 			capabilities = capabilities,
-	-- 		})
-	-- 	end,
-	-- },
 }

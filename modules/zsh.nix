@@ -84,6 +84,7 @@
       hm = "home-manager";
       kb = "kubectl";
       kn = "kubens";
+      lzd = "lazydocker";
 
       # Navigation
       home = "cd ~";
