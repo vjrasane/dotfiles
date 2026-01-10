@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     wl-clipboard
   ];
@@ -47,9 +48,9 @@
       bind-key -r -T prefix Right resize-pane -R 5
 
       bind-key -r Up resize-pane -U 20
-      bind-key -r Down resize-pane -D 20 
-      bind-key -r Left resize-pane -L 20 
-      bind-key -r Right resize-pane -R 20 
+      bind-key -r Down resize-pane -D 20
+      bind-key -r Left resize-pane -L 20
+      bind-key -r Right resize-pane -R 20
 
       bind-key x kill-pane
 

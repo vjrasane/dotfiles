@@ -4,7 +4,8 @@
   lib,
   dotfiles,
   ...
-}: {
+}:
+{
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -12,7 +13,11 @@
     # Oh-my-zsh integration
     oh-my-zsh = {
       enable = true;
-      plugins = ["git" "command-not-found" "extract"];
+      plugins = [
+        "git"
+        "command-not-found"
+        "extract"
+      ];
     };
 
     # Plugins from nixpkgs and GitHub
@@ -119,6 +124,7 @@
       source $DOTFILES/zshrc/init.sh
       source $DOTFILES/zshrc/functions.sh
       source $DOTFILES/zshrc/fzf.sh
+      source $DOTFILES/.p10k.zsh
     '';
   };
 }

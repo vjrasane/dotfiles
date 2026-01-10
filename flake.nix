@@ -17,30 +17,39 @@
     };
   };
 
-  outputs = {nixpkgs, home-manager, agenix, krew2nix, ...}: let
-    system = builtins.currentSystem;
-    username = builtins.getEnv "USER";
-    pkgs = nixpkgs.legacyPackages.${system};
-    kubectl = krew2nix.packages.${system}.kubectl;
-  in {
-    homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = {
-        agenix-cli = agenix.packages.${system}.default;
-        dotfiles = "${builtins.getEnv "HOME"}/dotfiles";
-        homeDir = builtins.getEnv "HOME";
-        inherit kubectl;
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      agenix,
+      krew2nix,
+      ...
+    }:
+    let
+      system = builtins.currentSystem;
+      username = builtins.getEnv "USER";
+      pkgs = nixpkgs.legacyPackages.${system};
+      kubectl = krew2nix.packages.${system}.kubectl;
+    in
+    {
+      homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = {
+          agenix-cli = agenix.packages.${system}.default;
+          dotfiles = "${builtins.getEnv "HOME"}/dotfiles";
+          homeDir = builtins.getEnv "HOME";
+          inherit kubectl;
+        };
+        modules = [
+          agenix.homeManagerModules.default
+          ./home.nix
+          ./modules/tmux.nix
+          ./modules/git.nix
+          ./modules/zsh.nix
+          ./modules/i3.nix
+          ./modules/kubernetes.nix
+          ./modules/neovim.nix
+        ];
       };
-      modules = [
-        agenix.homeManagerModules.default
-        ./home.nix
-        ./modules/tmux.nix
-        ./modules/git.nix
-        ./modules/zsh.nix
-        ./modules/i3.nix
-        ./modules/kubernetes.nix
-        ./modules/neovim.nix
-      ];
     };
-  };
 }

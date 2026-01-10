@@ -3,9 +3,11 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   mod = "Mod4"; # Super key
-in {
+in
+{
   xsession.windowManager.i3 = {
     enable = true;
     package = pkgs.i3;
@@ -15,7 +17,7 @@ in {
       terminal = "alacritty";
 
       fonts = {
-        names = ["MesloLGS Nerd Font"];
+        names = [ "MesloLGS Nerd Font" ];
         size = 10.0;
       };
 
@@ -128,7 +130,7 @@ in {
           position = "top";
           statusCommand = "${pkgs.i3status}/bin/i3status";
           fonts = {
-            names = ["MesloLGS Nerd Font"];
+            names = [ "MesloLGS Nerd Font" ];
             size = 10.0;
           };
           colors = {
@@ -160,7 +162,10 @@ in {
       ];
 
       startup = [
-        {command = "nm-applet"; notification = false;}
+        {
+          command = "nm-applet";
+          notification = false;
+        }
       ];
     };
   };

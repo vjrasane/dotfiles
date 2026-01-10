@@ -21,11 +21,11 @@ require("lazy").setup({
 		version = "*",
 	},
 	install = { colorscheme = { "nightfly" } },
-	checker = { 
+	checker = {
       enabled = true,
       notify = false,
       frequency = 60 * 60 * 24 * 7 -- check once a week
-  }, 
+  },
 	change_detection = { notify = false },
 	performance = {
 		rtp = {

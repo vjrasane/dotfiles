@@ -3,7 +3,8 @@
   pkgs,
   dotfiles,
   ...
-}: {
+}:
+{
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -36,5 +37,5 @@
   ];
 
   # Symlink nvim config from dotfiles
-  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/nvim";
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/nvim";
 }

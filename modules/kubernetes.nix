@@ -2,7 +2,8 @@
   pkgs,
   kubectl,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     # kubectl with krew plugins
     (kubectl.withKrewPlugins (plugins: [

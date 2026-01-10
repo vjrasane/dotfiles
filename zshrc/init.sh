@@ -21,5 +21,3 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # To customize prompt, run `p10k configure` or edit $DOTFILES/.p10k.zsh
-source $DOTFILES/.p10k.zsh
-

@@ -67,12 +67,12 @@ tug = [
 ]
 ab = ["abandon"]
 append = [
-  "new", 
+  "new",
   "-A",
   "@",
 ]
 prepend = [
-  "new", 
+  "new",
   "-B",
   "@",
 ]
