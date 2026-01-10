@@ -10,3 +10,10 @@ work.nix
 
 # Direnv cache
 .direnv/
+
+# Devenv
+.devenv/
+.devenv.flake.nix
+
+# Pre-commit hooks
+.pre-commit-config.yaml

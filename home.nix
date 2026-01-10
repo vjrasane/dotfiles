@@ -37,11 +37,6 @@ in
     (keys.currentMachine.privateKeyPath homeDir)
     (keys.age.privateKeyPath homeDir)
   ];
-  age.secrets.ssh_private_key = {
-    file = ./secrets/ssh_private_key.age;
-    path = keys.master.privateKeyPath homeDir;
-    mode = "0600";
-  };
   age.secrets.restic_env = {
     file = ./secrets/restic.env.age;
     path = "${homeDir}/restic.env";
@@ -191,13 +186,6 @@ in
     "$HOME/.cargo/bin"
     "$HOME/.local/bin"
   ];
-
-  # Symlink dotfiles from repo to home directory
-  # Note: .gitconfig is managed by programs.git, .zshrc is managed by programs.zsh
-  # zshrc/, .p10k.zsh, .zsh_plugins.txt are sourced directly via $DOTFILES
-  home.file = {
-    "${keys.master.publicKeyPath homeDir}".text = keys.master.publicKey;
-  };
 
   xdg.configFile = {
     "pgcli/config".text = ''
