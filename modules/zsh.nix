@@ -89,6 +89,7 @@
       hm = "home-manager";
       kb = "kubectl";
       kn = "kubens";
+      kctx = "kubectx";
       lzd = "lazydocker";
 
       # Navigation

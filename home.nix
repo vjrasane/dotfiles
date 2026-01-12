@@ -130,7 +130,7 @@ in
   programs.keychain = {
     enable = true;
     enableZshIntegration = true;
-    keys = [ "id_ed25519" ];
+    keys = [ "id_ed25519" "id_rsa" ];
     extraFlags = [
       "--quiet"
       "--ignore-missing"
