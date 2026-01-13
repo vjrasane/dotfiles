@@ -37,11 +37,6 @@ in
     (keys.currentMachine.privateKeyPath homeDir)
     (keys.age.privateKeyPath homeDir)
   ];
-  age.secrets.restic_env = {
-    file = ./secrets/restic.env.age;
-    path = "${homeDir}/restic.env";
-    mode = "0600";
-  };
 
   # Packages to install
   home.packages = with pkgs; [
@@ -130,7 +125,10 @@ in
   programs.keychain = {
     enable = true;
     enableZshIntegration = true;
-    keys = [ "id_ed25519" "id_rsa" ];
+    keys = [
+      "id_ed25519"
+      "id_rsa"
+    ];
     extraFlags = [
       "--quiet"
       "--ignore-missing"
@@ -172,6 +170,8 @@ in
       line-numbers = true;
     };
   };
+
+  services.tailscale-systray.enable = true;
 
   # Session environment variables
   home.sessionVariables = {
