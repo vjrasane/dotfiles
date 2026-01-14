@@ -14,11 +14,6 @@ let
   procVersion = builtins.readFile /proc/version;
 
   keys = import "${dotfiles}/keys.nix";
-
-  # Optional work configuration (gitignored)
-  workNixPath = "${dotfiles}/work.nix";
-  hasWork = builtins.pathExists workNixPath;
-  work = if hasWork then import workNixPath else { };
 in
 {
   home.username = username;
@@ -26,17 +21,6 @@ in
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.05";
-
-  # Let Home Manager manage itself
-  programs.home-manager.enable = true;
-
-  # Disable news notifications
-  news.display = "silent";
-
-  age.identityPaths = [
-    (keys.currentMachine.privateKeyPath homeDir)
-    (keys.age.privateKeyPath homeDir)
-  ];
 
   # Packages to install
   home.packages = with pkgs; [
@@ -77,6 +61,7 @@ in
     gcc
     gnumake
     devenv
+    stow
 
     # Cloud & DevOps
     opentofu
@@ -96,6 +81,16 @@ in
 
     # Fonts
     nerd-fonts.meslo-lg
+  ];
+  # Let Home Manager manage itself
+  programs.home-manager.enable = true;
+
+  # Disable news notifications
+  news.display = "silent";
+
+  age.identityPaths = [
+    (keys.currentMachine.privateKeyPath homeDir)
+    (keys.age.privateKeyPath homeDir)
   ];
 
   # Enable fontconfig to discover fonts installed via home.packages

@@ -91,6 +91,7 @@
       kn = "kubens";
       kctx = "kubectx";
       lzd = "lazydocker";
+      doco = "docker compose";
 
       # Navigation
       home = "cd ~";

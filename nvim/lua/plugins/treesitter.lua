@@ -31,6 +31,9 @@ local textobjects = {
 local ensure_installed = {
 	"bash",
 	"c",
+	"go",
+	"gomod",
+	"gosum",
 	"json",
 	"yaml",
 	"diff",
