@@ -92,6 +92,7 @@
       kctx = "kubectx";
       lzd = "lazydocker";
       doco = "docker compose";
+      denv = "devenv";
 
       # Navigation
       home = "cd ~";

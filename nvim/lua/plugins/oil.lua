@@ -101,6 +101,13 @@ return {
 				end,
 				desc = "Explorer (Oil)",
 			},
+			{
+				"-",
+				function()
+					require("oil").open()
+				end,
+				desc = "Open parent directory",
+			},
 		},
 	},
 }

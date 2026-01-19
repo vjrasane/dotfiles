@@ -49,6 +49,7 @@
           ./modules/i3.nix
           ./modules/kubernetes.nix
           ./modules/neovim.nix
+          ./modules/restic.nix
         ];
       };
     };

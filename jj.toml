@@ -8,6 +8,7 @@ merge-editor = "vscode"
 
 [git]
 sign-commits = true
+subprocess = true
 
 [signing]
 behavior = "own"

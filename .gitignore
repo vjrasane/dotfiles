@@ -10,3 +10,6 @@ work.nix
 
 # Pre-commit hooks
 .pre-commit-config.yaml
+
+*.env
+.env
