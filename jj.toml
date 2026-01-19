@@ -40,8 +40,10 @@ gf = [
   "fetch"
 ]
 gp = [
-  "git",
-  "push"
+  "util",
+  "exec",
+  "--",
+  "jj-push"
 ]
 i = [
   "git",

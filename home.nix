@@ -189,5 +189,10 @@ in
     '';
   };
 
+  home.file.".local/bin/jj-push" = {
+    source = "${dotfiles}/scripts/jj-push";
+    executable = true;
+  };
+
   # Nix is configured system-wide via ~/.config/nix/nix.conf
 }
