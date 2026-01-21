@@ -28,45 +28,25 @@ local textobjects = {
 	},
 }
 
-local ensure_installed = {
-	"bash",
-	"c",
-	"go",
-	"gomod",
-	"gosum",
-	"json",
-	"yaml",
-	"diff",
-	"html",
-	"astro",
-	"javascript",
-	"typescript",
-	"lua",
-	"luadoc",
-	"markdown",
-	"markdown_inline",
-	"query",
-	"vim",
-	"vimdoc",
-}
-
 return {
 
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		version = false,
-		event = { "BufReadPre", "BufNewFile" },
+		lazy = false,
 		dependencies = {
 			{
 				"nvim-treesitter/nvim-treesitter-context",
 				opts = {},
 			},
 		},
-		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter").setup({
-				ensure_installed = ensure_installed,
-				auto_install = true,
+			-- Parsers installed via Nix, just enable highlighting
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "*",
+				callback = function()
+					pcall(vim.treesitter.start)
+				end,
 			})
 		end,
 	},

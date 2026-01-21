@@ -4,12 +4,36 @@
   dotfiles,
   ...
 }:
+let
+  treesitterParsers = pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
+    p.bash
+    p.c
+    p.go
+    p.gomod
+    p.gosum
+    p.json
+    p.yaml
+    p.diff
+    p.html
+    p.astro
+    p.javascript
+    p.typescript
+    p.lua
+    p.luadoc
+    p.markdown
+    p.markdown_inline
+    p.query
+    p.vim
+    p.vimdoc
+  ]);
+in
 {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    plugins = [ treesitterParsers ];
   };
 
   # External dependencies for neovim plugins
