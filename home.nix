@@ -194,5 +194,10 @@ in
     executable = true;
   };
 
+  age.secrets.shell-secrets = {
+    file = "${dotfiles}/secrets/secrets.zsh.age";
+    path = "${homeDir}/.secrets.zsh";
+  };
+
   # Nix is configured system-wide via ~/.config/nix/nix.conf
 }

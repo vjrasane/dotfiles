@@ -128,6 +128,7 @@
       source $DOTFILES/zshrc/functions.sh
       source $DOTFILES/zshrc/fzf.sh
       source $DOTFILES/.p10k.zsh
+      [[ -f ~/.secrets.zsh ]] && source ~/.secrets.zsh
     '';
   };
 }

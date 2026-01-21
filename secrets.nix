@@ -7,4 +7,5 @@ in
   "secrets/restic-glacier.env.age".publicKeys = keys.encryptionKeys;
   "secrets/restic-s3.env.age".publicKeys = keys.encryptionKeys;
   "secrets/restic-work.env.age".publicKeys = keys.encryptionKeys;
+  "secrets/secrets.zsh.age".publicKeys = keys.encryptionKeys;
 }

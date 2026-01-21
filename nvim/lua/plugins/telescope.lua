@@ -173,7 +173,7 @@ return {
 				desc = "Word under cursor",
 			},
 			{
-				"<leader>sj",
+				"<leader>j",
 				function()
 					require("telescope.builtin").jumplist()
 				end,

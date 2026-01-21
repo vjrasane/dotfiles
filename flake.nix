@@ -50,6 +50,7 @@
           ./modules/kubernetes.nix
           ./modules/neovim.nix
           ./modules/restic.nix
+          ./modules/agents.nix
         ];
       };
     };
