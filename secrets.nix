@@ -12,4 +12,5 @@ in
   "secrets/kubeconfig-prod.age".publicKeys = keys.encryptionKeys;
   "secrets/kubeconfig-staging.age".publicKeys = keys.encryptionKeys;
   "secrets/kubeconfig-verda.age".publicKeys = keys.encryptionKeys;
+  "secrets/ansible-inventory.yml.age".publicKeys = keys.encryptionKeys;
 }

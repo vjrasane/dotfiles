@@ -1,6 +1,6 @@
 
 hooks:
-    @pre-commit run --all-files
+    @devenv tasks run devenv:git-hooks:run
 
 fmt:
     @shfmt -w scripts

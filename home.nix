@@ -198,5 +198,12 @@ in
     path = "${homeDir}/.secrets.zsh";
   };
 
+  age.secrets.ansible-inventory = {
+    file = "${dotfiles}/secrets/ansible-inventory.yml.age";
+    path = "${homeDir}/.config/ansible/inventory.yml";
+  };
+
+  xdg.configFile."ansible/.keep".text = "";
+
   # Nix is configured system-wide via ~/.config/nix/nix.conf
 }
