@@ -171,7 +171,6 @@ in
   # Session environment variables
   home.sessionVariables = {
     DOTFILES = dotfiles;
-    KUBECONFIG = "${homeDir}/.kube/config";
     SSH_ASKPASS = "";
     SSH_ASKPASS_REQUIRE = "never";
   };

@@ -6,5 +6,8 @@
 - Prefer editing existing files over creating new ones
 - Follow existing code patterns and conventions
 
-## MCP
-Always use Context7 MCP when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
+## MCP Usage
+- **context7**: Use for library/API documentation, code generation, setup or configuration steps without me having to explicitly ask
+- **kubernetes**: Use for any k8s cluster operations, troubleshooting, or resource inspection
+- **filesystem**: Use when needing to read/write files outside the current working directory
+- **sequential-thinking**: Use for complex architectural decisions, multi-step problem solving, or system design tasks

@@ -28,6 +28,14 @@ return {
 						show_unindexed = true,
 						show_filter_column = false,
 						matcher = "fuzzy",
+						recency_values = {
+							{ age = 4, value = 40 },
+							{ age = 14, value = 30 },
+							{ age = 31, value = 20 },
+							{ age = 90, value = 10 },
+							{ age = 240, value = 5 },
+							{ age = 1440, value = 2 },
+						},
 					},
 				},
 				defaults = {

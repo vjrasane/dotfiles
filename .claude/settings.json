@@ -3,5 +3,24 @@
     "lua-lsp@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
-  }
+  },
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.gitlab.com)",
+      "WebFetch(domain:kubernetes.io)",
+      "WebFetch(domain:nixos.org)",
+      "WebFetch(domain:nixos.wiki)",
+      "WebFetch(domain:home-manager-options.extranix.com)",
+      "mcp__context7",
+      "mcp__sequential-thinking",
+      "mcp__kubernetes__resources_get",
+      "mcp__kubernetes__pods_list_in_namespace",
+      "mcp__kubernetes__resources_list",
+      "mcp__kubernetes__events_list",
+      "mcp__kubernetes__pods_log"
+    ]
+  },
+  "enableAllProjectMcpServers": true
 }
