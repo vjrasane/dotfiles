@@ -6,6 +6,7 @@
 
   programs.tmux = {
     enable = true;
+    shell = "${pkgs.zsh}/bin/zsh";
     prefix = "C-a";
     mouse = true;
     keyMode = "vi";

@@ -90,7 +90,6 @@ in
 
   age.identityPaths = [
     (keys.currentMachine.privateKeyPath homeDir)
-    (keys.age.privateKeyPath homeDir)
   ];
 
   # Enable fontconfig to discover fonts installed via home.packages

@@ -34,7 +34,6 @@
 
     # Kubernetes tools
     kubernetes-helm
-    kubectx
     k9s
     kind
   ];

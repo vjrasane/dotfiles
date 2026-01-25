@@ -35,6 +35,15 @@ Personal dotfiles managed with Nix Home Manager.
    git clone https://github.com/vjrasane/dotfiles.git ~/dotfiles
    ```
 
+1. **Generate SSH key and add to GitHub**
+
+   ```bash
+   ssh-keygen -t ed25519
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+   Add the public key to GitHub at https://github.com/settings/keys
+
 1. **Set up age key for secrets decryption**
 
    Create the age key directory and add your private key:
@@ -43,7 +52,7 @@ Personal dotfiles managed with Nix Home Manager.
    mkdir -p ~/.config/age
    ```
 
-   Add your age private key to `~/.config/age/key.txt`. The file should contain:
+   Add your age private key to `~/.config/age/keys.txt`. The file should contain:
 
    ```
    # created: <date>
@@ -51,7 +60,21 @@ Personal dotfiles managed with Nix Home Manager.
    AGE-SECRET-KEY-...
    ```
 
-   This key is used by agenix to decrypt secrets (SSH keys, etc.) stored in `secrets/`.
+1. **Rekey secrets for the new machine**
+
+   Add the new machine's SSH public key to `keys.nix`:
+
+   ```bash
+   cat ~/.ssh/id_ed25519.pub
+   # Add this to encryptionKeys in keys.nix
+   ```
+
+   Then rekey all secrets:
+
+   ```bash
+   cd ~/dotfiles
+   agenix -r -i ~/.config/age/keys.txt
+   ```
 
 1. **Apply Home Manager configuration**
 
@@ -103,21 +126,18 @@ This adds conditional git includes for work repositories.
 
 Secrets are encrypted with [age](https://age-encryption.org/) and managed by [agenix](https://github.com/ryantm/agenix).
 
-```
-secrets/
-  ssh_private_key.age   # SSH private key
-  restic.env.age        # Restic backup credentials
-```
-
 To add/edit secrets:
 
 ```bash
 # Encrypt a new secret
-age -r "$(cat ~/.config/age/key.txt | grep 'public key' | cut -d: -f2 | tr -d ' ')" \
+age -r "$(cat ~/.config/age/keys.txt | grep 'public key' | cut -d: -f2 | tr -d ' ')" \
   -o secrets/mysecret.age /path/to/plaintext
 
 # Decrypt a secret
-age -d -i ~/.config/age/key.txt secrets/mysecret.age
+age -d -i ~/.config/age/keys.txt secrets/mysecret.age
+
+# Rekey all secrets (after adding new keys to keys.nix)
+agenix -r -i ~/.config/age/keys.txt
 ```
 
 Then add the secret to `home.nix`:
@@ -128,4 +148,19 @@ age.secrets.mysecret = {
   path = "${homeDirectory}/.config/mysecret";
   mode = "0600";
 };
+```
+
+## USB display driver (Silicon Motion)
+
+```bash
+wget https://www.siliconmotion.com/downloads/SMI-USB-Display-for-Linux-v2.24.7.0.zip
+unzip SMI-USB-Display-for-Linux-v2.24.7.0.zip
+sudo apt update
+sudo apt install dkms libdrm-dev
+cd SMI-USB-Display-for-Linux-v2.24.7.0
+chmod +x *.run
+sudo ./SMIUSBDisplay-driver.*.run
+
+# Uninstall
+sudo ./SMIUSBDisplay-driver.*.run uninstall
 ```
