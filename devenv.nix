@@ -36,7 +36,13 @@
         "zshrc/.*\\.sh$"
       ];
     };
-    trim-trailing-whitespace.enable = true;
-    end-of-file-fixer.enable = true;
+    trim-trailing-whitespace = {
+      enable = true;
+      excludes = [ "^secrets/" ];
+    };
+    end-of-file-fixer = {
+      enable = true;
+      excludes = [ "^secrets/" ];
+    };
   };
 }
