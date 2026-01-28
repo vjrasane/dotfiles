@@ -52,7 +52,7 @@ in
 
     # Formatters/linters
     stylua
-    nixfmt-rfc-style
+    nixfmt
     markdownlint-cli
     prettierd
     eslint_d

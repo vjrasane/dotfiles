@@ -15,6 +15,10 @@
       url = "github:eigengrau/krew2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -23,6 +27,7 @@
       home-manager,
       agenix,
       krew2nix,
+      ghostty,
       ...
     }:
     let
@@ -39,6 +44,7 @@
           dotfiles = "${builtins.getEnv "HOME"}/dotfiles";
           homeDir = builtins.getEnv "HOME";
           inherit kubectl;
+          inherit ghostty;
         };
         modules = [
           agenix.homeManagerModules.default

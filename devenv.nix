@@ -8,7 +8,7 @@
   ];
 
   git-hooks.hooks = {
-    nixfmt-rfc-style.enable = true;
+    nixfmt.enable = true;
     check-shebang-scripts-are-executable = {
       enable = true;
       excludes = [

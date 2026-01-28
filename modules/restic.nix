@@ -21,5 +21,13 @@
       file = "${dotfiles}/secrets/restic-work.env.age";
       path = "${homeDir}/.config/restic/work.env";
     };
+    restic-psql = {
+      file = "${dotfiles}/secrets/restic-psql.env.age";
+      path = "${homeDir}/.config/restic/psql.env";
+    };
+    restic-psql-cloudflare = {
+      file = "${dotfiles}/secrets/restic-psql-cloudflare.env.age";
+      path = "${homeDir}/.config/restic/psql-cloudflare.env";
+    };
   };
 }

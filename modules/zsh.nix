@@ -3,6 +3,7 @@
   pkgs,
   lib,
   dotfiles,
+  ghostty,
   ...
 }:
 {
@@ -88,9 +89,8 @@
       j = "just";
       hm = "home-manager";
       kb = "kubectl";
-      kn = "kubens";
-      kctx = "kubectx";
       lzd = "lazydocker";
+      d = "docker";
       doco = "docker compose";
       denv = "devenv";
 

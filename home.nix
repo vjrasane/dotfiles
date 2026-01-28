@@ -24,7 +24,6 @@ in
 
   # Packages to install
   home.packages = with pkgs; [
-
     # CLI essentials
     fd
     jq

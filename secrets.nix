@@ -6,6 +6,8 @@ in
   "secrets/restic-glacier.env.age".publicKeys = keys.encryptionKeys;
   "secrets/restic-s3.env.age".publicKeys = keys.encryptionKeys;
   "secrets/restic-work.env.age".publicKeys = keys.encryptionKeys;
+  "secrets/restic-psql.env.age".publicKeys = keys.encryptionKeys;
+  "secrets/restic-psql-cloudflare.env.age".publicKeys = keys.encryptionKeys;
   "secrets/secrets.zsh.age".publicKeys = keys.encryptionKeys;
   "secrets/kubeconfig-k3s.age".publicKeys = keys.encryptionKeys;
   "secrets/kubeconfig-prod.age".publicKeys = keys.encryptionKeys;
