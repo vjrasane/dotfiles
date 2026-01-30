@@ -78,7 +78,6 @@
     # Shell aliases
     shellAliases = {
       hms = "home-manager switch --impure --flake ${dotfiles}";
-      psql = "pgcli";
 
       # File listing
       tree = "eza --icons=always --tree";

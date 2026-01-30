@@ -8,6 +8,7 @@
     "allow": [
       "WebSearch",
       "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:docs.gitlab.com)",
       "WebFetch(domain:kubernetes.io)",
       "WebFetch(domain:nixos.org)",
@@ -19,7 +20,11 @@
       "mcp__kubernetes__pods_list_in_namespace",
       "mcp__kubernetes__resources_list",
       "mcp__kubernetes__events_list",
-      "mcp__kubernetes__pods_log"
+      "mcp__kubernetes__pods_log",
+      "mcp__kubernetes__pods_list",
+      "mcp__kubernetes__pods_get",
+      "Bash(helm show values:*)",
+      "Bash(grep:*)"
     ]
   },
   "enableAllProjectMcpServers": true

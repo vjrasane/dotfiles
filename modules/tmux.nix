@@ -18,6 +18,7 @@
       sensible
       vim-tmux-navigator
       yank
+      fingers
       {
         plugin = catppuccin;
         extraConfig = ''
