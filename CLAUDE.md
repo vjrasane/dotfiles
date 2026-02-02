@@ -1,4 +1,5 @@
-# Claude Code Instructions
+- This repo manages dotfiles using home manager. do not modify existing config files directly
+- This repo uses devenv to manage the development environment. use this to install and conigure tools during development
 
 ## Preferences
 - Keep changes minimal and focused
