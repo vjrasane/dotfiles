@@ -1,5 +1,28 @@
 return {
 	{
+		"stevearc/dressing.nvim",
+		event = "VeryLazy",
+		opts = {
+			input = {
+				enabled = true,
+				default_prompt = "Input:",
+				relative = "cursor",
+				prefer_width = 40,
+				border = "rounded",
+			},
+			select = {
+				enabled = true,
+				backend = { "builtin" },
+				builtin = {
+					relative = "cursor",
+					border = "rounded",
+					min_width = { 20, 0.1 },
+					min_height = { 0, 0 },
+				},
+			},
+		},
+	},
+	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
 		dependencies = {
