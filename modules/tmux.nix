@@ -39,10 +39,7 @@
       unbind r
       bind r source-file ~/.config/tmux/tmux.conf
 
-      bind-key h select-pane -L
-      bind-key l select-pane -R
-      bind-key j select-pane -D
-      bind-key k select-pane -U
+      bind-key l last-window
 
       bind-key -r -T prefix Up    resize-pane -U 5
       bind-key -r -T prefix Down  resize-pane -D 5

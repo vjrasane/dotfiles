@@ -29,7 +29,7 @@ in
         name = github.user;
         email = github.email;
       };
-      signing.key = keys.currentMachine.publicKeyPath homeDir;
+      signing.key = keys.currentMachine.privateKeyPath homeDir;
       signing.backends.ssh.allowed-signers = "${homeDir}/.ssh/allowed_signers";
       "--scope" = [
         {
@@ -51,6 +51,8 @@ in
     };
 
     settings = {
+      user.name = github.user;
+      user.email = github.email;
       gpg.format = "ssh";
       "gpg \"ssh\"".allowedSignersFile = "${homeDir}/.ssh/allowed_signers";
       core.excludesFile = "${dotfiles}/gitignore";
