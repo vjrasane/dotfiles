@@ -23,6 +23,10 @@
       "mcp__kubernetes__pods_log",
       "mcp__kubernetes__pods_list",
       "mcp__kubernetes__pods_get",
+      "mcp__filesystem__search_files",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__read_text_file",
+      "mcp__filesystem__list_directory",
       "Bash(helm show values:*)",
       "Bash(grep:*)"
     ]
