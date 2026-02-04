@@ -53,7 +53,6 @@
 
       bind-key x kill-pane
 
-      # Splits (vim-like)
       bind-key v split-window -h -c "#{pane_current_path}"
       bind-key s split-window -v -c "#{pane_current_path}"
       bind-key S choose-session

@@ -25,7 +25,7 @@ Prefer many small steps over fewer large ones. Each step should be completable i
 When responding, provide:
 1. Relevant import statements
 2. API signatures and brief explanations
-3. Code snippets showing the pattern in use (from docs, codebase, or minimal examples)
+3. Existing code snippets from docs or codebase showing the pattern (with file:line references)
 4. Links to documentation when helpful
 
 Never:

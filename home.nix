@@ -191,6 +191,11 @@ in
     executable = true;
   };
 
+  home.file.".local/bin/genpass" = {
+    source = "${dotfiles}/scripts/genpass";
+    executable = true;
+  };
+
   age.secrets.shell-secrets = {
     file = "${dotfiles}/secrets/secrets.zsh.age";
     path = "${homeDir}/.secrets.zsh";

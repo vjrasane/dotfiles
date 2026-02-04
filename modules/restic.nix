@@ -17,6 +17,10 @@
       file = "${dotfiles}/secrets/restic-s3.env.age";
       path = "${homeDir}/.config/restic/s3.env";
     };
+    restic-oci = {
+      file = "${dotfiles}/secrets/restic-oci.env.age";
+      path = "${homeDir}/.config/restic/oci.env";
+    };
     restic-work = {
       file = "${dotfiles}/secrets/restic-work.env.age";
       path = "${homeDir}/.config/restic/work.env";

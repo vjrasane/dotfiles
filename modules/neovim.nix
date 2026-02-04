@@ -58,6 +58,7 @@ in
     eslint_d
     shfmt
     shellcheck
+    dockerfmt
   ];
 
   # Symlink nvim config from dotfiles
