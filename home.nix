@@ -39,6 +39,8 @@ in
     agenix-cli
     sops
     bitwarden-cli
+    restic
+    resticprofile
 
     # Browser
     brave
@@ -65,7 +67,6 @@ in
     # Cloud & DevOps
     opentofu
     awscli2
-    restic
 
     # Containers
     lazydocker
@@ -195,18 +196,6 @@ in
     source = "${dotfiles}/scripts/genpass";
     executable = true;
   };
-
-  age.secrets.shell-secrets = {
-    file = "${dotfiles}/secrets/secrets.zsh.age";
-    path = "${homeDir}/.secrets.zsh";
-  };
-
-  age.secrets.ansible-inventory = {
-    file = "${dotfiles}/secrets/ansible-inventory.yml.age";
-    path = "${homeDir}/.config/ansible/inventory.yml";
-  };
-
-  xdg.configFile."ansible/.keep".text = "";
 
   # Nix is configured system-wide via ~/.config/nix/nix.conf
 }

@@ -31,8 +31,18 @@
           set -ag status-right "#{E:@catppuccin_status_host}"
         '';
       }
-      resurrect
-      continuum
+      {
+        plugin = resurrect;
+        extraConfig = ''
+          set -g @resurrect-strategy-nvim 'session'
+        '';
+      }
+      {
+        plugin = continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+        '';
+      }
     ];
 
     extraConfig = ''
@@ -71,9 +81,6 @@
       set -g detach-on-destroy off
       set -g pane-active-border-style 'fg=magenta,bg=default'
       set -g pane-border-style 'fg=brightblack,bg=default'
-
-      set -g @continuum-restore 'on'
-      set -g @resurrect-strategy-nvim 'session'
 
       # Copy mode
       bind-key Escape copy-mode

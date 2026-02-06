@@ -92,6 +92,7 @@
       d = "docker";
       doco = "docker compose";
       denv = "devenv";
+      rep = "resticprofile";
 
       # Navigation
       home = "cd ~";
