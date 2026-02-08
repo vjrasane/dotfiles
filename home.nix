@@ -197,5 +197,10 @@ in
     executable = true;
   };
 
+  home.file.".local/bin/genhex" = {
+    source = "${dotfiles}/scripts/genhex";
+    executable = true;
+  };
+
   # Nix is configured system-wide via ~/.config/nix/nix.conf
 }

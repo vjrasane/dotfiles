@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+length="${1:-32}"
+
+if ! [[ $length =~ ^[0-9]+$ ]]; then
+	echo "Usage: genhex [length]" >&2
+	echo "Default length: 32" >&2
+	exit 1
+fi
+
+openssl rand -hex "$length"
+echo
