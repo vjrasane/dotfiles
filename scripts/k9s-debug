@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+NAMESPACE="$1"
+
+if [ $# -eq 3 ]; then
+	POD="$2"
+	CONTAINER="$3"
+else
+	POD="$2"
+	CONTAINER=$(kubectl get pod -n "$NAMESPACE" "$POD" -o jsonpath='{.spec.containers[0].name}')
+fi
+
+read -rp "Debug image [busybox]: " IMAGE
+IMAGE="${IMAGE:-busybox}"
+# shellcheck disable=SC2016
+exec kubectl debug -it -n "$NAMESPACE" "$POD" --target="$CONTAINER" --image="$IMAGE" --profile=general -- sh -c '
+  f=$(mktemp)
+  tr "\0" "\n" < /proc/1/environ > "$f" 2>/dev/null
+  while IFS= read -r l; do
+    export "$l"
+  done < "$f"
+  rm "$f"
+  exec sh
+'

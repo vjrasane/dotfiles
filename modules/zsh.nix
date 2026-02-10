@@ -12,15 +12,6 @@
     enableCompletion = true;
 
     # Oh-my-zsh integration
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "command-not-found"
-        "extract"
-      ];
-    };
-
     # Plugins from nixpkgs and GitHub
     plugins = [
       {
@@ -83,6 +74,7 @@
       tree = "eza --icons=always --tree";
 
       # Tools
+      g = "git";
       cat = "bat";
       tf = "tofu";
       j = "just";

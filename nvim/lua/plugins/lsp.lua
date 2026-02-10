@@ -122,9 +122,23 @@ return {
 
 			local capabilities = make_client_capabilities()
 			local lspconfig = require("lspconfig")
+			local configs = require("lspconfig.configs")
+
+			configs.cooklang = {
+				default_config = {
+					cmd = { "cook", "lsp" },
+					filetypes = { "cook" },
+					root_dir = lspconfig.util.root_pattern(".git"),
+					single_file_support = true,
+				},
+			}
 
 			-- LSP server configurations
 			-- Binaries are managed by home-manager/nix
+
+			lspconfig.cooklang.setup({
+				capabilities = capabilities,
+			})
 
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,

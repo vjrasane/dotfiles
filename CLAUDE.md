@@ -12,3 +12,4 @@
 - **kubernetes**: Use for any k8s cluster operations, troubleshooting, or resource inspection
 - **filesystem**: Use when needing to read/write files outside the current working directory
 - **sequential-thinking**: Use for complex architectural decisions, multi-step problem solving, or system design tasks
+- **codegraphcontext**: Use for code structure analysis, dependency graphs, and understanding relationships between modules

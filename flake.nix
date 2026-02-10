@@ -56,7 +56,7 @@
           ./modules/kubernetes.nix
           ./modules/neovim.nix
           ./modules/secrets.nix
-          ./modules/agents.nix
+          ./modules/claude.nix
         ];
       };
     };

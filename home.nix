@@ -49,6 +49,7 @@ in
     nodejs_22
     bun
     python3
+    uv
     go
 
     # Rust

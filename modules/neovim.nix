@@ -25,6 +25,7 @@ let
     p.query
     p.vim
     p.vimdoc
+    p.cooklang
   ]);
 in
 {
@@ -43,6 +44,7 @@ in
     fd
 
     # Language servers
+    cook-cli
     gopls
     lua-language-server
     pyright
