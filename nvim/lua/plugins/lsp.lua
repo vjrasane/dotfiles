@@ -121,27 +121,13 @@ return {
 			})
 
 			local capabilities = make_client_capabilities()
-			local lspconfig = require("lspconfig")
-			local configs = require("lspconfig.configs")
-
-			configs.cooklang = {
-				default_config = {
-					cmd = { "cook", "lsp" },
-					filetypes = { "cook" },
-					root_dir = lspconfig.util.root_pattern(".git"),
-					single_file_support = true,
-				},
-			}
 
 			-- LSP server configurations
 			-- Binaries are managed by home-manager/nix
 
-			lspconfig.cooklang.setup({
-				capabilities = capabilities,
-			})
+			vim.lsp.config("*", { capabilities = capabilities })
 
-			lspconfig.ts_ls.setup({
-				capabilities = capabilities,
+			vim.lsp.config("ts_ls", {
 				settings = {
 					typescript = {
 						inlayHints = {
@@ -176,20 +162,7 @@ return {
 				},
 			})
 
-			lspconfig.astro.setup({
-				capabilities = capabilities,
-			})
-
-			lspconfig.tailwindcss.setup({
-				capabilities = capabilities,
-			})
-
-			lspconfig.pyright.setup({
-				capabilities = capabilities,
-			})
-
-			lspconfig.gopls.setup({
-				capabilities = capabilities,
+			vim.lsp.config("gopls", {
 				settings = {
 					gopls = {
 						analyses = {
@@ -202,8 +175,7 @@ return {
 				},
 			})
 
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
+			vim.lsp.config("lua_ls", {
 				settings = {
 					Lua = {
 						completion = {
@@ -211,6 +183,37 @@ return {
 						},
 					},
 				},
+			})
+
+			vim.lsp.config("rust_analyzer", {
+				root_markers = { "Cargo.toml", "rust-project.json" },
+				settings = {
+					["rust-analyzer"] = {
+						diagnostics = {
+							enable = true,
+						},
+						check = {
+							command = "clippy",
+						},
+					},
+				},
+			})
+
+			vim.lsp.config("cooklang", {
+				cmd = { "cook", "lsp" },
+				filetypes = { "cook" },
+				root_markers = { ".git" },
+			})
+
+			vim.lsp.enable({
+				"ts_ls",
+				"astro",
+				"tailwindcss",
+				"pyright",
+				"gopls",
+				"lua_ls",
+				"cooklang",
+				"rust_analyzer",
 			})
 		end,
 	},

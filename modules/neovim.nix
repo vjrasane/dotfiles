@@ -26,6 +26,7 @@ let
     p.vim
     p.vimdoc
     p.cooklang
+    p.rust
   ]);
 in
 {
@@ -51,6 +52,7 @@ in
     tailwindcss-language-server
     typescript-language-server
     nodePackages."@astrojs/language-server"
+    rust-analyzer
 
     # Formatters/linters
     stylua

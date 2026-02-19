@@ -45,16 +45,6 @@
         file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
       }
       {
-        name = "jq-zsh-plugin";
-        src = pkgs.fetchFromGitHub {
-          owner = "reegnz";
-          repo = "jq-zsh-plugin";
-          rev = "master";
-          sha256 = "0vvhs65vc6ka6l4i3d40rabc8c7yllvjch7adwszkq8953w12m9m";
-        };
-        file = "jq.plugin.zsh";
-      }
-      {
         name = "zsh-bitwarden-secrets-manager";
         src = pkgs.fetchFromGitHub {
           owner = "vjrasane";
@@ -116,6 +106,12 @@
 
     # Source modular configuration from dotfiles
     initContent = ''
+      bindkey -e
+
+      autoload -Uz edit-command-line
+      zle -N edit-command-line
+      bindkey '^e' edit-command-line
+
       source $DOTFILES/zshrc/init.sh
       source $DOTFILES/zshrc/functions.sh
       source $DOTFILES/zshrc/fzf.sh

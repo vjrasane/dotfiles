@@ -18,6 +18,12 @@ backend = "ssh"
 program = "nvim"
 merge-args = ["-d", "$left", "$base", "$right", "-c", "wincmd J | wincmd ="]
 
+[remotes.origin]
+auto-track-bookmarks = "glob:*"
+
+[remotes.upstream]
+auto-track-bookmarks = "exact:\"main\" | exact:\"master\""
+
 [aliases]
 bc = [
   "bookmark",
