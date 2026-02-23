@@ -7,7 +7,6 @@ fi
 autoload -Uz compinit
 compinit -i
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/terraform terraform
 
 # Bracketed paste handling - prevents pasted commands from auto-executing
 autoload -Uz bracketed-paste-magic
