@@ -4,6 +4,12 @@ return {
 	priority = 1000,
 	config = function()
 		require("catppuccin").setup({
+			custom_highlights = function(colors)
+				return {
+					LineNr = { fg = colors.overlay1 },
+					CursorLineNr = { fg = colors.lavender, style = { "bold" } },
+				}
+			end,
 			integrations = {
 				treesitter = true,
 				native_lsp = {
