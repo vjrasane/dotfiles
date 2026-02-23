@@ -7,8 +7,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
 			"nvim-telescope/telescope-file-browser.nvim",
-			"nvim-telescope/telescope-frecency.nvim",
-			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 			"ahmedkhalf/project.nvim",
 		},
 		opts = function()
@@ -23,21 +22,7 @@ return {
 						override_file_sorter = true,
 						case_mode = "smart_case",
 					},
-					frecency = {
-						db_safe_mode = false,
-						show_unindexed = true,
-						show_filter_column = false,
-						matcher = "fuzzy",
-						recency_values = {
-							{ age = 4, value = 40 },
-							{ age = 14, value = 30 },
-							{ age = 31, value = 20 },
-							{ age = 90, value = 10 },
-							{ age = 240, value = 5 },
-							{ age = 1440, value = 2 },
-						},
 					},
-				},
 				defaults = {
 					hidden = true,
 					sorting_strategy = "descending",
@@ -96,7 +81,6 @@ return {
 			require("telescope").setup(opts)
 			require("telescope").load_extension("fzf")
 			require("telescope").load_extension("file_browser")
-			require("telescope").load_extension("frecency")
 			require("telescope").load_extension("projects")
 		end,
 		keys = {
@@ -115,11 +99,9 @@ return {
 			{
 				"<leader>f",
 				function()
-					require("telescope").extensions.frecency.frecency({
-						workspace = "CWD",
-					})
+					require("telescope.builtin").find_files({ hidden = true })
 				end,
-				desc = "Find Files (frecency)",
+				desc = "Find Files",
 			},
 			{
 				"<leader>F",
@@ -225,8 +207,24 @@ return {
 			{
 				"<leader>sp",
 				function()
-					local ex = require("telescope").extensions.projects
-					ex.projects()
+					local telescope_actions = require("telescope.actions")
+					local telescope_state = require("telescope.actions.state")
+					local project_mod = require("project_nvim.project")
+
+					require("telescope").extensions.projects.projects({
+						attach_mappings = function(prompt_bufnr)
+							telescope_actions.select_default:replace(function()
+								local selected = telescope_state.get_selected_entry(prompt_bufnr)
+								if not selected then
+									return
+								end
+								telescope_actions.close(prompt_bufnr)
+								project_mod.set_pwd(selected.value, "telescope")
+								require("oil").open(selected.value)
+							end)
+							return true
+						end,
+					})
 				end,
 			},
 		},

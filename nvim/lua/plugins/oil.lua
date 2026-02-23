@@ -1,7 +1,7 @@
 return {
 	{
 		"stevearc/oil.nvim",
-		-- lazy = false,
+		lazy = false,
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			local oil = require("oil")
@@ -84,14 +84,11 @@ return {
 				},
 			})
 
-			-- vim.api.nvim_create_autocmd("User", {
-			-- 	pattern = "OilEnter",
-			-- 	callback = vim.schedule_wrap(function(args)
-			-- 		if vim.api.nvim_get_current_buf() == args.data.buf and oil.get_cursor_entry() then
-			-- 			oil.open_preview()
-			-- 		end
-			-- 	end),
-			-- })
+			if vim.fn.argc() == 0 then
+				vim.schedule(function()
+					oil.open()
+				end)
+			end
 		end,
 		keys = {
 			{
