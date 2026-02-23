@@ -83,12 +83,6 @@ return {
 					end,
 				},
 			})
-
-			if vim.fn.argc() == 0 then
-				vim.schedule(function()
-					oil.open()
-				end)
-			end
 		end,
 		keys = {
 			{
