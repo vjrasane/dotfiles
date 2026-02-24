@@ -93,6 +93,10 @@ in
         "${mod}+Shift+k" = "move up";
         "${mod}+Shift+l" = "move right";
 
+        # Workspace
+        "${mod}+Control+h" = "workspace prev";
+        "${mod}+Control+l" = "workspace next";
+
         # Splits
         "${mod}+v" = "split v";
         "${mod}+b" = "split h";
