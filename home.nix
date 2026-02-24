@@ -182,6 +182,10 @@ in
   ];
 
   xdg.configFile = {
+    "ghostty/config".text = ''
+      font-size = 11
+      command = tmux new-session -A -s main
+    '';
     "pgcli/config".text = ''
       [main]
       keyring = False

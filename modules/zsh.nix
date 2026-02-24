@@ -35,6 +35,11 @@
         file = "share/zsh-completions/zsh-completions.zsh";
       }
       {
+        name = "zsh-vi-mode";
+        src = pkgs.zsh-vi-mode;
+        file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+      }
+      {
         name = "zsh-history-substring-search";
         src = pkgs.zsh-history-substring-search;
         file = "share/zsh-history-substring-search/zsh-history-substring-search.zsh";
@@ -106,11 +111,8 @@
 
     # Source modular configuration from dotfiles
     initContent = ''
-      bindkey -e
-
       autoload -Uz edit-command-line
       zle -N edit-command-line
-      bindkey '^e' edit-command-line
 
       source $DOTFILES/zshrc/init.sh
       source $DOTFILES/zshrc/functions.sh

@@ -10,11 +10,10 @@ in
 {
   xsession.windowManager.i3 = {
     enable = true;
-    package = pkgs.i3;
 
     config = {
       modifier = mod;
-      terminal = "alacritty";
+      terminal = "ghostty";
 
       fonts = {
         names = [ "MesloLGS Nerd Font" ];
@@ -72,7 +71,7 @@ in
 
       keybindings = lib.mkOptionDefault {
         # Launch
-        "${mod}+Return" = "exec alacritty";
+        "${mod}+Return" = "exec ghostty";
         "${mod}+d" = "exec --no-startup-id rofi -show drun";
         "${mod}+Shift+d" = "exec --no-startup-id rofi -show run";
 
@@ -163,6 +162,10 @@ in
 
       startup = [
         {
+          command = "autorandr --change";
+          notification = false;
+        }
+        {
           command = "nm-applet";
           notification = false;
         }
@@ -239,7 +242,7 @@ in
     flameshot
     feh
     picom
-    alacritty
     networkmanagerapplet
+    autorandr
   ];
 }
