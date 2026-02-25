@@ -19,6 +19,7 @@
       vim-tmux-navigator
       yank
       fingers
+      fzf-tmux-url
       {
         plugin = catppuccin;
         extraConfig = ''

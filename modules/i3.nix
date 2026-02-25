@@ -74,6 +74,7 @@ in
         "${mod}+Return" = "exec ghostty";
         "${mod}+d" = "exec --no-startup-id rofi -show drun";
         "${mod}+Shift+d" = "exec --no-startup-id rofi -show run";
+        "${mod}+Tab" = "exec --no-startup-id rofi -show window";
 
         # Window management
         "${mod}+q" = "kill";
@@ -112,6 +113,9 @@ in
         # Restart/reload
         "${mod}+Shift+c" = "reload";
         "${mod}+Shift+r" = "restart";
+
+        # Lock
+        "${mod}+Escape" = "exec --no-startup-id i3lock -c 000000";
 
         # Screenshots
         "Print" = "exec --no-startup-id flameshot gui";
@@ -248,5 +252,6 @@ in
     picom
     networkmanagerapplet
     autorandr
+    xdotool
   ];
 }
