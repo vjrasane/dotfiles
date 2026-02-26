@@ -43,28 +43,6 @@ in
       "Bash(grep:*)"
     ];
     enableAllProjectMcpServers = true;
-    hooks.PreToolUse = [
-      {
-        matcher = "Bash|mcp__.*";
-        hooks = [
-          {
-            type = "prompt";
-            prompt = ''
-              Analyze the Bash command in the tool input. Determine if it contains multiple commands — this includes: pipes (|), chaining (&& or || or ;), subshells ($() or backticks), heredocs piped to commands, or code passed to interpreters (python -c, node -e, bash -c, xargs, etc.).
-
-              If it is a single, simple command with no pipes, chaining, subshells, or interpreter scripts (even if it has multiple arguments): return {"ok": true}
-
-              If it contains multiple commands:
-              1. Identify each distinct command or part
-              2. Write exactly one sentence per part explaining what it does, referencing the exact command text in backticks
-              3. Count the total sentences needed
-              4. If MORE than 5 sentences are needed: return {"ok": false, "reason": "Too complex: this command has [N] parts and needs [N] sentences to explain. Break it into separate, simpler commands."}
-              5. If 3 or fewer sentences: return {"ok": true, "reason": "[your sentences, each referencing the specific part in backticks]"}
-            '';
-          }
-        ];
-      }
-    ];
   };
 
   home.file.".mcp.json".text = builtins.toJSON {
