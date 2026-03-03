@@ -18,6 +18,8 @@ let
     p.astro
     p.javascript
     p.typescript
+    p.tsx
+    p.css
     p.lua
     p.luadoc
     p.markdown
@@ -50,8 +52,9 @@ in
     lua-language-server
     pyright
     tailwindcss-language-server
-    typescript-language-server
     nodePackages."@astrojs/language-server"
+    vscode-langservers-extracted
+    emmet-language-server
     rust-analyzer
 
     # Formatters/linters
@@ -59,7 +62,6 @@ in
     nixfmt
     markdownlint-cli
     prettierd
-    eslint_d
     shfmt
     shellcheck
     dockerfmt
