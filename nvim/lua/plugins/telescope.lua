@@ -1,11 +1,11 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
+		enabled = false,
 		version = false,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
-			"ahmedkhalf/project.nvim",
 		},
 		config = function()
 			require("telescope").setup({})

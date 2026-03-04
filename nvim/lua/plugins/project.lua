@@ -1,9 +1,22 @@
 return {
-	"ahmedkhalf/project.nvim",
+	"DrKJeff16/project.nvim",
 	event = "VeryLazy",
+	dependencies = {
+		"folke/snacks.nvim",
+	},
 	config = function()
-		require("project_nvim").setup({
-			detection_methods = { "pattern" },
+		require("project").setup({
+			snacks = {
+				enabled = true,
+				opts = {
+					hidden = false,
+					sort = "newest",
+					title = "Select Project",
+					layout = "select",
+				},
+			},
+			show_hidden = true,
+			exclude_dirs = { "~/.config/nvim/snippets" },
 			patterns = {
 				".git",
 				"_darcs",
@@ -16,10 +29,15 @@ return {
 				"tsconfig.json",
 				".gitlab-ci.yml",
 			},
-			silent_chdir = true,
-			show_hidden = true,
-			ignore_lsp = { "tailwindcss", "jsonls", "emmet_ls" },
-			exclude_dirs = { "~/.config/nvim/snippets" },
 		})
 	end,
+	keys = {
+		{
+			"<leader>sp",
+			function()
+				Snacks.picker.projects()
+			end,
+			desc = "Select project",
+		},
+	},
 }
