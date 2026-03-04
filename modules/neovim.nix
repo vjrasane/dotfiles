@@ -4,40 +4,12 @@
   dotfiles,
   ...
 }:
-let
-  treesitterParsers = pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
-    p.bash
-    p.c
-    p.go
-    p.gomod
-    p.gosum
-    p.json
-    p.yaml
-    p.diff
-    p.html
-    p.astro
-    p.javascript
-    p.typescript
-    p.tsx
-    p.css
-    p.lua
-    p.luadoc
-    p.markdown
-    p.markdown_inline
-    p.query
-    p.vim
-    p.vimdoc
-    p.cooklang
-    p.rust
-  ]);
-in
 {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    plugins = [ treesitterParsers ];
   };
 
   # External dependencies for neovim plugins
@@ -56,6 +28,9 @@ in
     vscode-langservers-extracted
     emmet-language-server
     rust-analyzer
+
+    # Treesitter parser compilation
+    tree-sitter
 
     # Formatters/linters
     stylua
