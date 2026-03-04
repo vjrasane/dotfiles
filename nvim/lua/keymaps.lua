@@ -50,6 +50,8 @@ vim.keymap.set("v", ">", ">gv")
 vim.keymap.set({ "n", "i", "v" }, "<A-o>", "m`o<esc>``", { desc = "Insert line below" })
 vim.keymap.set({ "n", "i", "v" }, "<A-O>", "m`O<esc>``", { desc = "Insert line above" })
 
+vim.keymap.set("n", "<leader>z", "za", { desc = "Toggle fold" })
+
 -- buffers
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
