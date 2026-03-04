@@ -1,4 +1,4 @@
-source <(fzf --zsh)
+zvm_after_init_commands+=('source <(fzf --zsh)')
 
 export FZF_COMPLETION_TRIGGER="**"
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
