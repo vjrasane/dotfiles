@@ -11,30 +11,28 @@ return {
 		opts = {
 			keymap = {
 				preset = "default",
-				["<CR>"] = { "accept", "fallback" },
-				["<Tab>"] = { "select_next", "fallback" },
-				["<S-Tab>"] = { "select_prev", "fallback" },
-				["<C-b>"] = { "scroll_documentation_up", "fallback" },
-				["<C-f>"] = { "scroll_documentation_down", "fallback" },
 			},
 			appearance = {
 				nerd_font_variant = "mono",
 			},
 			completion = {
-				menu = { border = "single" },
+				-- menu = { border = "single" },
 				documentation = {
-					auto_show = true,
-					window = { border = "single" },
+					auto_show = false,
+					-- window = { border = "single" },
 				},
 			},
-			signature = { window = { border = "single" } },
+			signature = {
+				enabled = true,
+				-- window = { border = "single" }
+			},
 			sources = {
 				default = { "lsp", "path", "snippets", "buffer", "copilot" },
 				providers = {
 					copilot = {
 						name = "copilot",
 						module = "blink-cmp-copilot",
-						score_offset = 100,
+						score_offset = 0,
 						async = true,
 					},
 				},

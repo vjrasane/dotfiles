@@ -28,7 +28,7 @@ return {
 								end
 								telescope_actions.close(prompt_bufnr)
 								project_mod.set_pwd(selected.value, "telescope")
-								require("oil").open(selected.value)
+								Snacks.picker.files({ cwd = selected.value })
 							end)
 							return true
 						end,

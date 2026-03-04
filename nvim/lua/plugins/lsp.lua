@@ -1,20 +1,24 @@
-local make_client_capabilities = function()
-	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-	return capabilities
-end
-
 local on_attach = function(event)
 	local map = function(mode, keys, func, desc)
 		vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 	end
 
 	map("n", "gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-	map("n", "gr", function() Snacks.picker.lsp_references() end, "[G]oto [R]eferences")
-	map("n", "gI", function() Snacks.picker.lsp_implementations() end, "[G]oto [I]mplementation")
-	map("n", "<leader>D", function() Snacks.picker.lsp_type_definitions() end, "Type [D]efinition")
-	map("n", "<leader>ds", function() Snacks.picker.lsp_symbols({ filter = { kind = false } }) end, "[D]ocument [S]ymbols")
-	map("n", "<leader>ws", function() Snacks.picker.lsp_workspace_symbols() end, "[W]orkspace [S]ymbols")
+	map("n", "gr", function()
+		Snacks.picker.lsp_references()
+	end, "[G]oto [R]eferences")
+	map("n", "gI", function()
+		Snacks.picker.lsp_implementations()
+	end, "[G]oto [I]mplementation")
+	map("n", "<leader>D", function()
+		Snacks.picker.lsp_type_definitions()
+	end, "Type [D]efinition")
+	map("n", "<leader>ds", function()
+		Snacks.picker.lsp_symbols({ filter = { kind = false } })
+	end, "[D]ocument [S]ymbols")
+	map("n", "<leader>ws", function()
+		Snacks.picker.lsp_workspace_symbols()
+	end, "[W]orkspace [S]ymbols")
 	map("n", "<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
 	map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 	map({ "n", "x" }, "<leader>cA", function()
@@ -52,6 +56,7 @@ local on_attach = function(event)
 		end, "[T]oggle Inlay [H]ints")
 	end
 end
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -68,7 +73,10 @@ return {
 				callback = on_attach,
 			})
 
-			local capabilities = make_client_capabilities()
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+			capabilities =
+				vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
 
 			vim.lsp.config("*", { capabilities = capabilities })
 
@@ -137,7 +145,8 @@ return {
 				callback = function(ev)
 					local client = vim.lsp.get_clients({ bufnr = ev.buf, name = "eslint" })[1]
 					if client then
-						local diag = vim.diagnostic.get(ev.buf, { namespace = vim.lsp.diagnostic.get_namespace(client.id) })
+						local diag =
+							vim.diagnostic.get(ev.buf, { namespace = vim.lsp.diagnostic.get_namespace(client.id) })
 						if #diag > 0 then
 							vim.cmd("EslintFixAll")
 						end
