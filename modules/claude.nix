@@ -39,6 +39,8 @@ in
       "mcp__filesystem__directory_tree"
       "mcp__filesystem__read_text_file"
       "mcp__filesystem__list_directory"
+      "mcp__filesystem__list_allowed_directories"
+      "mcp__filesystem__read_multiple_files"
       "Bash(helm show values:*)"
       "Bash(grep:*)"
     ];
