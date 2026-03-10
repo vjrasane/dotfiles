@@ -77,9 +77,6 @@ in
     postgresql
     pgcli
 
-    # System info
-    neofetch
-
     # Fonts
     nerd-fonts.meslo-lg
   ];
