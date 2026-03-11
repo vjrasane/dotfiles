@@ -58,3 +58,12 @@ function whatsmyip() {
 	echo -n "External IP: "
 	curl -s ifconfig.me
 }
+
+sshkeys() {
+	for keyfile in ~/.ssh/*.pub; do
+		[ -f "$keyfile" ] || continue
+		echo "=== $(basename "$keyfile") ==="
+		cat "$keyfile"
+		echo
+	done
+}

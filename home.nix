@@ -42,9 +42,6 @@ in
     restic
     resticprofile
 
-    # Browser
-    brave
-
     # Development - languages
     nodejs_22
     bun

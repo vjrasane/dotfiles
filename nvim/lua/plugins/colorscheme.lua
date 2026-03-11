@@ -4,6 +4,14 @@ return {
 	priority = 1000,
 	config = function()
 		require("catppuccin").setup({
+			flavor = "mocha",
+			color_overrides = {
+				mocha = {
+					base = "#282c34",
+					mantle = "#22252c",
+					crust = "#11111b",
+				},
+			},
 			custom_highlights = function(colors)
 				return {
 					LineNr = { fg = colors.overlay1 },
