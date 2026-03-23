@@ -84,6 +84,9 @@
       set -g detach-on-destroy off
       set -g pane-active-border-style 'fg=magenta,bg=default'
       set -g pane-border-style 'fg=brightblack,bg=default'
+      set -g pane-border-indicators both
+      set -g window-style 'fg=colour245,bg=#1a1a2e'
+      set -g window-active-style 'fg=default,bg=default'
 
       # Copy mode
       bind-key Escape copy-mode

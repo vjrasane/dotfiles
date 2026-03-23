@@ -39,6 +39,7 @@ bmm = [
   "main"
 ]
 d = [ "describe", ]
+c = [ "commit", ]
 de = ["diffedit",]
 e = [ "edit", ]
 gf = [
