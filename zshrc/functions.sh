@@ -67,3 +67,9 @@ sshkeys() {
 		echo
 	done
 }
+
+portkill() {
+	port=$1
+	echo "Killing processes on port $port..."
+	lsof -ti:$port | xargs kill -9 2>/dev/null && echo "Killed" || echo "No processes found on port $port"
+}
