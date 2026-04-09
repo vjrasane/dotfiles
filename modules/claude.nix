@@ -45,6 +45,17 @@ in
       "Bash(grep:*)"
     ];
     enableAllProjectMcpServers = true;
+    hooks.PostToolUse = [
+      {
+        matcher = "Write";
+        hooks = [
+          {
+            type = "command";
+            command = ''jq -r '.tool_input.file_path // empty' | { read -r f; [[ "$f" == "$HOME/.claude/toolbox/"* ]] && chmod +x "$f"; } 2>/dev/null || true'';
+          }
+        ];
+      }
+    ];
   };
 
   home.file.".mcp.json".text = builtins.toJSON {

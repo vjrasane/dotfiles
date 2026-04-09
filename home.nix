@@ -173,6 +173,7 @@ in
   home.sessionPath = [
     "$HOME/.cargo/bin"
     "$HOME/.local/bin"
+    "$HOME/.claude/toolbox"
   ];
 
   xdg.configFile = {
