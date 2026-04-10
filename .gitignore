@@ -1,5 +1,5 @@
 # Machine-specific config (not tracked)
-work.nix
+local.nix
 
 # Direnv cache
 .direnv/

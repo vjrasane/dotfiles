@@ -57,7 +57,11 @@
           ./modules/neovim.nix
           ./modules/secrets.nix
           ./modules/claude.nix
-        ];
+          ./modules/ssh.nix
+        ] ++ (
+          let localPath = "${builtins.getEnv "HOME"}/dotfiles/local.nix";
+          in if builtins.pathExists localPath then [ (import localPath) ] else [ ]
+        );
       };
     };
 }
