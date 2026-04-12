@@ -25,6 +25,11 @@ return {
 		end,
 	},
 	{
+		"davidmh/mdx.nvim",
+		lazy = false,
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+	},
+	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = { "BufReadPre", "BufNewFile" },
 		opts = {},
