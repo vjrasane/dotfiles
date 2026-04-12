@@ -1,12 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if command -v pre-commit &>/dev/null && [[ -f .pre-commit-config.yaml ]]; then
-	echo "Running pre-commit hooks..."
-	if ! pre-commit run --all-files; then
-		echo "Hooks failed, aborting push"
-		exit 1
+run_hooks=true
+args=()
+for arg in "$@"; do
+	if [[ "$arg" == "--no-hooks" ]]; then
+		run_hooks=false
+	else
+		args+=("$arg")
+	fi
+done
+
+if $run_hooks && [[ -f .pre-commit-config.yaml ]]; then
+	if command -v pre-commit &>/dev/null && pre-commit --version &>/dev/null 2>&1; then
+		echo "Running pre-commit hooks..."
+		if ! pre-commit run --all-files; then
+			echo "Hooks failed, aborting push"
+			exit 1
+		fi
 	fi
 fi
 
-exec jj git push "$@"
+exec jj git push "${args[@]}"
