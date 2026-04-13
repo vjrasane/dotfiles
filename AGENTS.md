@@ -34,11 +34,8 @@ Do NOT use `git add`, `git commit`, `git push`, `git pull`, `git checkout`, `git
 
 Agents and skills are defined in `claude/agents/` and `claude/skills/` in this repo. Home Manager symlinks them to `~/.claude/agents/` and `~/.claude/skills/` via `modules/agents.nix`. Edit the source files here, not the symlinked copies.
 
-MCP servers are configured in `modules/agents.nix` via `programs.mcp.servers` (shared, agent-agnostic) and wired into Claude Code with `programs.claude-code.enableMcpIntegration`.
+Global MCP servers (context7, sequential-thinking) are configured in `modules/agents.nix` via `programs.mcp.servers` and wired into Claude Code with `programs.claude-code.enableMcpIntegration`. Project-specific MCPs should be added per-project using `/add-mcp`.
 
 ## MCP Usage
 - **context7**: Use for library/API documentation, code generation, setup or configuration steps without me having to explicitly ask
-- **kubernetes**: Use for any k8s cluster operations, troubleshooting, or resource inspection
-- **filesystem**: Use when needing to read/write files outside the current working directory
 - **sequential-thinking**: Use for complex architectural decisions, multi-step problem solving, or system design tasks
-- **codegraphcontext**: Use for code structure analysis, dependency graphs, and understanding relationships between modules

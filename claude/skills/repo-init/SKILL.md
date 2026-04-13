@@ -196,6 +196,10 @@ jj quick reference:
 - `jj git push` — push to remote
 
 Do NOT use `git add`, `git commit`, `git push`, `git pull`, `git checkout`, `git switch`, `git branch`, or any other git porcelain command.
+
+## MCP Servers
+
+MCP servers for this project are managed through devenv. Add servers to `claude.code.mcpServers` in `devenv.nix` — devenv generates the `.mcp.json` file automatically. Use `/add-mcp` to add common servers.
 ```
 
 ### Step 7: Create .claude/settings.json (optional)

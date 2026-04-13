@@ -1,12 +1,8 @@
 {
   pkgs,
   dotfiles,
-  homeDir,
   ...
 }:
-let
-  ldLibraryPath = "${pkgs.stdenv.cc.cc.lib}/lib";
-in
 {
   home.file."AGENTS.md".source = "${dotfiles}/AGENTS.md";
 
@@ -21,46 +17,12 @@ in
         ];
         env.CONTEXT7_API_KEY = "\${CONTEXT7_API_KEY}";
       };
-      kubernetes = {
-        command = "npx";
-        args = [
-          "-y"
-          "kubernetes-mcp-server@latest"
-        ];
-      };
-      filesystem = {
-        command = "npx";
-        args = [
-          "-y"
-          "@modelcontextprotocol/server-filesystem"
-          homeDir
-        ];
-      };
       sequential-thinking = {
         command = "npx";
         args = [
           "-y"
           "@modelcontextprotocol/server-sequential-thinking"
         ];
-      };
-      codegraphcontext = {
-        command = "uvx";
-        args = [
-          "--from"
-          "codegraphcontext"
-          "cgc"
-          "mcp"
-          "start"
-        ];
-        env.LD_LIBRARY_PATH = ldLibraryPath;
-      };
-      n8n = {
-        command = "npx";
-        args = [ "n8n-mcp" ];
-        env = {
-          MCP_MODE = "stdio";
-          N8N_MCP_TELEMETRY_DISABLED = "true";
-        };
       };
     };
   };
@@ -86,20 +48,6 @@ in
         "WebFetch(domain:home-manager-options.extranix.com)"
         "mcp__context7"
         "mcp__sequential-thinking"
-        "mcp__codegraphcontext"
-        "mcp__kubernetes__resources_get"
-        "mcp__kubernetes__pods_list_in_namespace"
-        "mcp__kubernetes__resources_list"
-        "mcp__kubernetes__events_list"
-        "mcp__kubernetes__pods_log"
-        "mcp__kubernetes__pods_list"
-        "mcp__kubernetes__pods_get"
-        "mcp__filesystem__search_files"
-        "mcp__filesystem__directory_tree"
-        "mcp__filesystem__read_text_file"
-        "mcp__filesystem__list_directory"
-        "mcp__filesystem__list_allowed_directories"
-        "mcp__filesystem__read_multiple_files"
         "Bash(helm show values:*)"
         "Bash(grep:*)"
       ];
