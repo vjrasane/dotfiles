@@ -4,7 +4,7 @@ set -euo pipefail
 run_hooks=true
 args=()
 for arg in "$@"; do
-	if [[ "$arg" == "--no-hooks" ]]; then
+	if [[ $arg == "--no-hooks" ]]; then
 		run_hooks=false
 	else
 		args+=("$arg")

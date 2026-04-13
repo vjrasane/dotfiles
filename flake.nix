@@ -58,9 +58,12 @@
           ./modules/secrets.nix
           ./modules/agents.nix
           ./modules/ssh.nix
-        ] ++ (
-          let localPath = "${builtins.getEnv "HOME"}/dotfiles/local.nix";
-          in if builtins.pathExists localPath then [ (import localPath) ] else [ ]
+        ]
+        ++ (
+          let
+            localPath = "${builtins.getEnv "HOME"}/dotfiles/local.nix";
+          in
+          if builtins.pathExists localPath then [ (import localPath) ] else [ ]
         );
       };
     };
