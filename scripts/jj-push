@@ -11,11 +11,23 @@ for arg in "$@"; do
 	fi
 done
 
-if $run_hooks && [[ -f .pre-commit-config.yaml ]]; then
-	if command -v pre-commit &>/dev/null && pre-commit --version &>/dev/null 2>&1; then
+if $run_hooks; then
+	if command -v pre-commit &>/dev/null; then
 		echo "Running pre-commit hooks..."
 		if ! pre-commit run --all-files; then
 			echo "Hooks failed, aborting push"
+			exit 1
+		fi
+	elif command -v prek &>/dev/null && [[ -f .pre-commit-config.yaml ]]; then
+		echo "Running prek hooks..."
+		if ! prek run --all-files --config .pre-commit-config.yaml; then
+			echo "Hooks failed, aborting push"
+			exit 1
+		fi
+	elif command -v ripsecrets &>/dev/null; then
+		echo "Running ripsecrets..."
+		if ! ripsecrets --strict-ignore .; then
+			echo "Secrets detected, aborting push"
 			exit 1
 		fi
 	fi
