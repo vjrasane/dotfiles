@@ -16,6 +16,9 @@ let
   keys = import "${dotfiles}/keys.nix";
 in
 {
+  nixpkgs.config.allowUnfreePredicate =
+    pkg: builtins.elem (lib.getName pkg) [ "claude-code" ];
+
   home.username = username;
   home.homeDirectory = homeDir;
 

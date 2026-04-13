@@ -1,15 +1,20 @@
 # Machine-specific config (not tracked)
 local.nix
 
-# Direnv cache
+# Direnv
 .direnv/
 
 # Devenv
-.devenv/
-.devenv.flake.nix
+.devenv*
+devenv.local.nix
+devenv.local.yaml
 
 # Pre-commit hooks
 .pre-commit-config.yaml
 
-*.env
+# Environment
 .env
+
+# Claude
+.claude/
+.mcp.json

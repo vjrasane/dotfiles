@@ -1,11 +1,25 @@
 {
   pkgs,
+  config,
   ...
 }:
 {
   packages = with pkgs; [
     just
   ];
+
+  claude.code.enable = true;
+
+  claude.code.mcpServers = {
+    devenv = {
+      type = "stdio";
+      command = "devenv";
+      args = [ "mcp" ];
+      env = {
+        DEVENV_ROOT = config.devenv.root;
+      };
+    };
+  };
 
   git-hooks.hooks = {
     nixfmt.enable = true;
