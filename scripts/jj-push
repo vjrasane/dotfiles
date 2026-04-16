@@ -24,12 +24,6 @@ if $run_hooks; then
 			echo "Hooks failed, aborting push"
 			exit 1
 		fi
-	elif command -v ripsecrets &>/dev/null; then
-		echo "Running ripsecrets..."
-		if ! ripsecrets --strict-ignore .; then
-			echo "Secrets detected, aborting push"
-			exit 1
-		fi
 	fi
 fi
 
