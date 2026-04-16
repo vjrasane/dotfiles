@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# If we're not in a devenv shell but the repo has a devenv project, re-exec inside devenv
+if [[ -z ${DEVENV_ROOT:-} ]]; then
+	repo_root="$(jj root 2>/dev/null || true)"
+	if [[ -n $repo_root && -d "$repo_root/.devenv" ]]; then
+		echo "Re-executing in devenv shell..."
+		exec devenv shell --devenv-root "$repo_root" -- "$0" "$@"
+	fi
+fi
+
 run_hooks=true
 args=()
 for arg in "$@"; do
@@ -27,4 +36,5 @@ if $run_hooks; then
 	fi
 fi
 
+echo "Running jj git push ${args[*]:-}"
 exec jj git push "${args[@]}"
