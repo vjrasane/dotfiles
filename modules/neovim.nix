@@ -5,15 +5,14 @@
   ...
 }:
 {
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
+  home.sessionVariables.EDITOR = "nvim";
+  home.shellAliases = {
+    vi = "nvim";
+    vim = "nvim";
   };
 
-  # External dependencies for neovim plugins
   home.packages = with pkgs; [
+    neovim
     # Telescope dependencies
     ripgrep
     fd
@@ -24,7 +23,7 @@
     lua-language-server
     pyright
     tailwindcss-language-server
-    nodePackages."@astrojs/language-server"
+    astro-language-server
     vscode-langservers-extracted
     emmet-language-server
     rust-analyzer

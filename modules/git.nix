@@ -1,83 +1,147 @@
 {
+  config,
   pkgs,
   lib,
   dotfiles,
-  homeDir,
   ...
 }:
 let
   keys = import "${dotfiles}/keys.nix";
-
-  github = {
-    user = "vjrasane";
-    email = "3148501+vjrasane@users.noreply.github.com";
-  };
-
-  work = {
-    user = "ville";
-    email = builtins.concatStringsSep "@" [
-      "ville"
-      "datacrunch.io"
-    ];
-  };
 in
 {
-  programs.jujutsu = {
-    enable = true;
-    settings = lib.recursiveUpdate (builtins.fromTOML (builtins.readFile "${dotfiles}/jj.toml")) ({
-      user = {
-        name = github.user;
-        email = github.email;
+  home.packages = with pkgs; [
+    git-filter-repo
+    bfg-repo-cleaner
+  ];
+
+  programs = {
+    difftastic = {
+      git.enable = true;
+      git.diffToolMode = true;
+    };
+
+    delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options = {
+        navigate = true;
+        line-numbers = true;
+        side-by-side = true;
       };
-      signing.key = keys.currentMachine.privateKeyPath homeDir;
-      signing.backends.ssh.allowed-signers = "${homeDir}/.ssh/allowed_signers";
-      "--scope" = [
-        {
-          "--when".repositories = [ "${homeDir}/repositories/work" ];
-          user = {
-            name = work.user;
-            email = work.email;
-          };
-        }
-      ];
-    });
-  };
-
-  programs.git = {
-    enable = true;
-    signing = {
-      key = keys.currentMachine.publicKeyPath homeDir;
-      signByDefault = true;
     };
 
-    settings = {
-      user.name = github.user;
-      user.email = github.email;
-      gpg.format = "ssh";
-      "gpg \"ssh\"".allowedSignersFile = "${homeDir}/.ssh/allowed_signers";
-      core.excludesFile = "${dotfiles}/gitignore";
-    };
+    git = {
+      enable = true;
+      signing = {
+        format = "ssh";
+        key = keys.currentMachine.publicKeyPath config.home.homeDirectory;
+        signByDefault = true;
+      };
 
-    includes = [
-      { path = "${dotfiles}/gitconfig"; }
-      {
-        condition = "gitdir:${homeDir}/repositories/work/";
-        contents.user = {
-          name = work.user;
-          email = work.email;
+      settings = {
+        user = {
+          name = "vjrasane";
+          email = "3148501+vjrasane@users.noreply.github.com";
         };
-      }
-    ];
 
-  };
+        core = {
+          editor = "nvim";
+          fsmonitor = false;
+          untrackedCache = true;
+        };
 
-  home.file.".ssh/allowed_signers".text =
-    let
-      emails = lib.unique [
-        github.email
-        work.email
+        merge.conflictstyle = "diff3";
+
+        diff = {
+          colorMoved = "plain";
+          algorithm = "histogram";
+          mnemonicPrefix = true;
+          renames = true;
+        };
+
+        push.default = "simple";
+        push.autoSetupRemote = true;
+        push.followTags = true;
+
+        pull.rebase = true;
+
+        fetch.prune = true;
+        fetch.pruneTags = true;
+        fetch.all = true;
+
+        rebase.autoStash = true;
+        rebase.autoSquash = true;
+        rebase.updateRefs = true;
+
+        tag.sort = "version:refname";
+        branch.sort = "-committerdate";
+
+        column.ui = "auto";
+
+        help.autocorrect = "prompt";
+
+        commit.verbose = true;
+
+        gpg.format = "ssh";
+        gpg.ssh.allowedSignersFile = "${config.xdg.configHome}/git/allowed_signers";
+
+        checkout.defaultRemote = "origin";
+        init.defaultBranch = "main";
+
+        rerere.enabled = true;
+        rerere.autoUpdate = true;
+
+        alias = {
+          ch = "checkout";
+          ac = "!git status && git add -p && git commit";
+          aa = "!git status && git add -p && git commit --amend";
+          behead = "reset --hard HEAD";
+          amend = "commit --amend";
+          ameno = "commit --amend --no-edit";
+          meco = "merge --continue";
+          redo = "!f() { git checkout \${1-develop} && git pull && git checkout - && git rebase \${1-develop}; }; f";
+          reco = "rebase --continue";
+          rebo = "rebase --abort";
+          remast = "!git redo master";
+          redev = "!git redo develop";
+          restag = "!git redo staging";
+          reonto = "!f() { onto=\${1:-develop}; mergebase=$(git merge-base HEAD \${onto}); git rebase --onto \${onto} \${2:-\${mergebase}}; }; f";
+          rein = "!f() { git rebase -i $(git merge-base HEAD \${1:-develop}); }; f";
+          st = "status";
+          force = "push --force-with-lease origin HEAD";
+          brf = "!f() { git fetch origin; git checkout \${1}; git checkout -; git branch -f \${1} HEAD; git checkout \${1}; }; f";
+          b = "! git br";
+          head = "push origin HEAD";
+          cd = "checkout develop";
+          cs = "checkout staging";
+          cb = "checkout -";
+          br = "!git for-each-ref --color=always --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' | tail -15";
+          lg = "log --oneline --decorate --color --graph";
+          lg1 = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all";
+          lg2 = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all";
+          g = "lg1";
+          fetcha = "fetch --all";
+          fa = "fetch --all";
+          alias = "! git config --get-regexp ^alias\\\\. | sed -e s/^alias\\\\.// -e s/\\\\ /\\\\ =\\\\ /";
+        };
+      };
+
+      ignores = [
+        "*.local.*"
+        "/.jj"
+        "/result"
+        ".claude"
+        ".idea"
+        ".DS_Store"
+        ".vscode"
+        "venv"
+        ".venv"
+        ".envrc"
+        "*~"
+        "*.swp"
+        "/.direnv/"
+        "/.devenv/"
       ];
-      signers = lib.flatten (map (email: map (key: "${email} ${key}") (keys.signingKeys homeDir)) emails);
-    in
-    lib.concatStringsSep "\n" signers;
+    };
+  };
 }

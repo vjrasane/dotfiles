@@ -102,6 +102,9 @@
       # Paste from system clipboard
       bind-key p run-shell "wl-paste | tmux load-buffer - && tmux paste-buffer"
       bind-key P paste-buffer
+
+      # Re-assert prefix after plugin initialization
+      set -g prefix C-a
     '';
   };
 }

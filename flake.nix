@@ -51,6 +51,7 @@
           ./home.nix
           ./modules/tmux.nix
           ./modules/git.nix
+          ./modules/jj.nix
           ./modules/zsh.nix
           ./modules/i3.nix
           ./modules/kubernetes.nix
@@ -58,6 +59,7 @@
           ./modules/secrets.nix
           ./modules/agents.nix
           ./modules/ssh.nix
+          ./modules/work.nix
         ]
         ++ (
           let

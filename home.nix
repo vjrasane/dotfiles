@@ -42,7 +42,7 @@ in
     sops
     bitwarden-cli
     restic
-    resticprofile
+    (resticprofile.overrideAttrs { doCheck = false; })
 
     # Development - languages
     nodejs_22
@@ -150,16 +150,6 @@ in
   programs.ripgrep = {
     enable = true;
     arguments = [ "--smart-case" ];
-  };
-
-  # Delta - better diff
-  programs.delta = {
-    enable = true;
-    enableGitIntegration = true;
-    options = {
-      navigate = true;
-      line-numbers = true;
-    };
   };
 
   services.tailscale-systray.enable = true;
