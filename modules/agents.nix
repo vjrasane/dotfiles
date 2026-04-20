@@ -87,7 +87,17 @@ in
         copilot = "${dotfiles}/claude/agents/copilot.md";
         proofreader = "${dotfiles}/claude/agents/proofreader.md";
       };
-      skills = "${dotfiles}/claude/skills";
+      skills = {
+        add-mcp = "${dotfiles}/claude/skills/add-mcp";
+        copilot = "${dotfiles}/claude/skills/copilot";
+        planner = "${dotfiles}/claude/skills/planner";
+        repo-init = "${dotfiles}/claude/skills/repo-init";
+        researcer = "${dotfiles}/claude/skills/researcer";
+        review = "${dotfiles}/claude/skills/review";
+        skill-writer = "${dotfiles}/claude/skills/skill-writer";
+        writing-assistant = "${dotfiles}/claude/skills/writing-assistant";
+      };
+
       enableMcpIntegration = true;
       settings = {
         enableAllProjectMcpServers = true;
