@@ -29,7 +29,7 @@ in
         show-cryptographic-signatures = true;
         diff-editor = ":builtin";
         diff-formatter = [
-          ":difft"
+          "${pkgs.difftastic}/bin/difft"
           "--color=always"
           "$left"
           "$right"

@@ -15,10 +15,7 @@ in
   ];
 
   programs = {
-    difftastic = {
-      git.enable = true;
-      git.diffToolMode = true;
-    };
+    difftastic.enable = true;
 
     delta = {
       enable = true;
