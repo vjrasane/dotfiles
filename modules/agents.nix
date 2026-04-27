@@ -100,6 +100,10 @@ in
 
       enableMcpIntegration = true;
       settings = {
+        model = "claude-opus-4-6";
+        fastMode = false;
+        alwaysThinkingEnabled = true;
+        autoCompactWindow = 700000;
         enableAllProjectMcpServers = true;
         enabledPlugins = {
           "lua-lsp@claude-plugins-official" = true;
