@@ -40,7 +40,6 @@ in
     age
     agenix-cli
     sops
-    bitwarden-cli
     restic
     (resticprofile.overrideAttrs { doCheck = false; })
 
