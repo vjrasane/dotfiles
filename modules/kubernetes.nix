@@ -11,6 +11,10 @@
       file = "${dotfiles}/secrets/kubeconfig-k3s.age";
       path = "${homeDir}/.kube/config.k3s";
     };
+    kubeconfig-verda = {
+      file = "${dotfiles}/secrets/kubeconfig-verda.age";
+      path = "${homeDir}/.kube/config.verda";
+    };
   };
 
   home.packages = with pkgs; [

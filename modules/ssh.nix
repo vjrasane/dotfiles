@@ -3,6 +3,11 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = { };
+    matchBlocks = {
+      ocivm = {
+        hostname = "132.145.234.144";
+        user = "ubuntu";
+      };
+    };
   };
 }
