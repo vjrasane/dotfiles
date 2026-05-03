@@ -117,7 +117,7 @@ in
           commit = "";
           pr = "";
         };
-        effortLevel = "high";
+        effortLevel = "medium";
         includeGitInstructions = false;
         disableDeepLinkRegistration = "disable";
         statusLine = {
