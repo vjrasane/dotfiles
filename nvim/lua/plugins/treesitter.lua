@@ -20,7 +20,7 @@ return {
 				"json", "yaml", "diff", "html", "astro",
 				"javascript", "typescript", "tsx", "css",
 				"lua", "luadoc", "markdown", "markdown_inline",
-				"query", "vim", "vimdoc", "cooklang", "rust",
+				"nix", "python", "query", "vim", "vimdoc", "cooklang", "rust",
 			})
 		end,
 	},
@@ -41,9 +41,13 @@ return {
 			{ "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } },
 		},
 		config = function()
+			local hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
 			---@diagnostic disable-next-line: missing-fields
 			require("Comment").setup({
-				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+				pre_hook = function(ctx)
+					local ok, result = pcall(hook, ctx)
+					if ok then return result end
+				end,
 			})
 		end,
 	},

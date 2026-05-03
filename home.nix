@@ -35,6 +35,7 @@ in
     wget
     unzip
     gnupg
+    pdsh
 
     # SSH & security
     age
@@ -158,6 +159,8 @@ in
     DOTFILES = dotfiles;
     SSH_ASKPASS = "";
     SSH_ASKPASS_REQUIRE = "never";
+    PDSH_RCMD_TYPE = "ssh";
+    PDSH_SSH_ARGS = "-o ForwardAgent=True";
   };
 
   # Session PATH

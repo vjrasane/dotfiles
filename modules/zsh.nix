@@ -79,6 +79,8 @@
       d = "docker";
       doco = "docker compose";
       denv = "devenv";
+      dv = "devenv";
+      dr = "direnv";
       rep = "resticprofile";
 
       # Navigation
