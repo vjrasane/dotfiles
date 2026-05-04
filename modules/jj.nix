@@ -141,6 +141,7 @@ in
         ];
         ap = [ "append" ];
         pre = [ "prepend" ];
+        sq = [ "squash" ];
       };
 
       revset-aliases = {

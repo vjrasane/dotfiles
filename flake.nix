@@ -59,6 +59,7 @@
           ./modules/secrets.nix
           ./modules/agents.nix
           ./modules/ssh.nix
+          ./modules/sops.nix
           ./modules/work.nix
         ]
         ++ (
