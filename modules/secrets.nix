@@ -20,4 +20,9 @@
     file = "${dotfiles}/secrets/restic-profiles.yaml.age";
     path = "${homeDir}/.config/resticprofile/profiles.yaml";
   };
+
+  age.secrets.oci-api-key = {
+    file = "${dotfiles}/secrets/oci_api_key.pem.age";
+    path = "${homeDir}/.oci/oci_api_key.pem";
+  };
 }

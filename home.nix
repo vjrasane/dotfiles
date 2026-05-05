@@ -161,6 +161,7 @@ in
     SSH_ASKPASS_REQUIRE = "never";
     PDSH_RCMD_TYPE = "ssh";
     PDSH_SSH_ARGS = "-o ForwardAgent=True";
+    OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING = "True";
   };
 
   # Session PATH
@@ -194,6 +195,21 @@ in
     source = "${dotfiles}/scripts/genhex";
     executable = true;
   };
+
+  home.file.".oci/config".text = ''
+    [DEFAULT]
+    user=ocid1.user.oc1..aaaaaaaabkrntaizikwuj6imrsaqpt2bu2dqj4yhrrl73ylyjxpqq6xp3nra
+    fingerprint=04:95:47:c8:8b:36:50:fb:8c:22:db:65:ba:9d:99:22
+    key_file=${homeDir}/.oci/oci_api_key.pem
+    tenancy=ocid1.tenancy.oc1..aaaaaaaamk6vlzuo63wjckkep53yasj5e5dwomnrdvvieodt63ksyutypjta
+    region=eu-frankfurt-1
+  '';
+
+  home.file.".config/age/recipients".text =
+    let
+      keys = import "${dotfiles}/keys.nix";
+    in
+    lib.concatStringsSep "\n" keys.encryptionKeys + "\n";
 
   # Nix is configured system-wide via ~/.config/nix/nix.conf
 }

@@ -8,6 +8,16 @@
     just
   ];
 
+  scripts.age-encrypt.exec = ''
+    if [ $# -ne 1 ]; then
+      echo "Usage: age-encrypt <file>" >&2
+      exit 1
+    fi
+    tmp=$(mktemp)
+    ${pkgs.age}/bin/age -R ~/.config/age/recipients -o "$tmp" "$1"
+    mv "$tmp" "$1"
+  '';
+
   claude.code.enable = true;
 
   claude.code.mcpServers = {

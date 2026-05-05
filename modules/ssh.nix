@@ -5,7 +5,7 @@
     enableDefaultConfig = false;
     matchBlocks = {
       ocivm = {
-        hostname = "144.24.167.182";
+        hostname = "152.70.169.143";
         port = 2222;
         user = "ubuntu";
       };
