@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     wl-clipboard
+    tmuxinator
   ];
 
   programs.tmux = {
@@ -85,6 +86,8 @@
       set -g pane-active-border-style 'fg=magenta,bg=default'
       set -g pane-border-style 'fg=brightblack,bg=default'
       set -g pane-border-indicators both
+      set -g pane-border-status top
+      set -g pane-border-format "#{?#{==:#{pane_title},#{host}}, #(echo #{pane_current_path} | sed 's|^$HOME/|~/|' | rev | cut -d/ -f1-2 | rev) , #{pane_title} }"
       set -g window-style 'fg=colour245,bg=#1a1a2e'
       set -g window-active-style 'fg=default,bg=default'
 
