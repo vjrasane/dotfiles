@@ -9,6 +9,7 @@
   home.shellAliases = {
     vi = "nvim";
     vim = "nvim";
+    vimhjkl = "uvx --from 'git+https://github.com/S-Sigdel/vimhjkl' vimhjkl";
   };
 
   home.packages = with pkgs; [

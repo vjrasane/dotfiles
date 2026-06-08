@@ -40,6 +40,7 @@ Determine where to create the Skill:
 - Home Manager symlinks this directory to `~/.claude/skills/`
 - Always create global/personal skills here so they are version-controlled and properly symlinked
 - Individual workflows, preferences, and personal productivity tools
+- **Important**: After creating the skill directory, you must also register it in `modules/agents.nix` under `programs.claude-code.skills` (e.g. `skill-name = "${dotfiles}/claude/skills/skill-name";`). The skill won't be discovered until this entry exists and Home Manager is rebuilt.
 
 **Project Skills** (`.claude/skills/` relative to a project root):
 - Team workflows and conventions

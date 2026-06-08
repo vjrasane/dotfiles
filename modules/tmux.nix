@@ -26,8 +26,8 @@
         extraConfig = ''
           set -g @catppuccin_flavor 'mocha'
           set -g @catppuccin_window_status_style 'rounded'
-          set -g @catppuccin_window_text " #(echo #{pane_current_path} | sed 's|^$HOME/|~/|' | rev | cut -d/ -f1-2 | rev)"
-          set -g @catppuccin_window_current_text " #(echo #{pane_current_path} | sed 's|^$HOME/|~/|' | rev | cut -d/ -f1-2 | rev)"
+          set -g @catppuccin_window_text " #{?#{automatic-rename},#(echo #{pane_current_path} | sed 's|^$HOME/|~/|' | rev | cut -d/ -f1-2 | rev),#W}"
+          set -g @catppuccin_window_current_text " #{?#{automatic-rename},#(echo #{pane_current_path} | sed 's|^$HOME/|~/|' | rev | cut -d/ -f1-2 | rev),#W}"
 
           set -g status-left ""
           set -g status-right "#{E:@catppuccin_status_session}"

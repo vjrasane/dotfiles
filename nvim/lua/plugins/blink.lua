@@ -5,6 +5,7 @@ return {
 		event = "InsertEnter",
 		dependencies = {
 			"giuxtaposition/blink-cmp-copilot",
+			"joshuarubin/iferr.nvim",
 		},
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
@@ -28,6 +29,9 @@ return {
 			},
 			sources = {
 				default = { "lsp", "path", "snippets", "buffer", "copilot" },
+				per_filetype = {
+					go = { "iferr", "lsp", "path", "snippets", "buffer", "copilot" },
+				},
 				providers = {
 					copilot = {
 						name = "copilot",
@@ -35,10 +39,19 @@ return {
 						score_offset = 0,
 						async = true,
 					},
+					iferr = {
+						name = "iferr",
+						module = "iferr.adapters.blink",
+						score_offset = 100,
+					},
 				},
 			},
 			fuzzy = { implementation = "prefer_rust_with_warning" },
 		},
+		config = function(_, opts)
+			opts.keymap["<C-y>"] = { "accept", require("iferr.adapters.blink").expand, "fallback" }
+			require("blink.cmp").setup(opts)
+		end,
 		opts_extend = { "sources.default" },
 	},
 	{

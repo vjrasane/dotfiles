@@ -138,6 +138,7 @@ in
         "*.swp"
         "/.direnv/"
         "/.devenv/"
+        ".code-graph/"
       ];
     };
   };

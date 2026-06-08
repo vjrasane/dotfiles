@@ -1,0 +1,20 @@
+{
+	"if err errorf": {
+		"prefix": "ief",
+		"body": [
+			"if ${3:err} != nil {",
+			"\treturn ${1:nil, }fmt.Errorf(\"${2:context}: %w\", $3)",
+			"}$0"
+		],
+		"description": "if err != nil { return fmt.Errorf(...) }"
+	},
+	"if err wrap": {
+		"prefix": "iew",
+		"body": [
+			"if ${2:err} != nil {",
+			"\treturn fmt.Errorf(\"${1:context}: %w\", $2)",
+			"}$0"
+		],
+		"description": "if err != nil { return fmt.Errorf wrap }"
+	}
+}

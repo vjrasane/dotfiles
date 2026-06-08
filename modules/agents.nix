@@ -95,6 +95,7 @@ in
         researcer = "${dotfiles}/claude/skills/researcer";
         review = "${dotfiles}/claude/skills/review";
         skill-writer = "${dotfiles}/claude/skills/skill-writer";
+        workspace = "${dotfiles}/claude/skills/workspace";
         writing-assistant = "${dotfiles}/claude/skills/writing-assistant";
       };
 
@@ -152,6 +153,10 @@ in
           "Bash(jj log*)"
           "Bash(jj diff*)"
           "Bash(jj show*)"
+          "Bash(jj workspace *)"
+          "Bash(jj new *)"
+          "Bash(jj edit *)"
+          "Bash(jj bookmark *)"
           "Bash(gh api:*)"
           "Bash(gh search:*)"
           "Bash(nix eval*)"
@@ -162,6 +167,9 @@ in
 
           "mcp__context7"
           "mcp__sequential-thinking"
+
+          "Read(~/.claude/skills/*)"
+          "Read(~/dotfiles/claude/skills/*)"
         ];
         hooks = {
           Notification = [
