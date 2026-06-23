@@ -3,7 +3,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       ocivm-a1 = {
         hostname = "152.70.169.143";
         port = 2222;

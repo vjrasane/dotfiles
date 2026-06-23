@@ -30,6 +30,18 @@ return {
 				".gitlab-ci.yml",
 			},
 		})
+
+		-- Guard against invalid buffers reaching buf_is_file. A nested
+		-- BufEnter fires during nvim_win_set_buf on LSP definition jumps,
+		-- where ev.buf may already be invalid. Upstream omits the check.
+		local api = require("project.api")
+		local orig_buf_is_file = api.buf_is_file
+		api.buf_is_file = function(bufnr)
+			if bufnr ~= nil and not vim.api.nvim_buf_is_valid(bufnr) then
+				return false
+			end
+			return orig_buf_is_file(bufnr)
+		end
 	end,
 	keys = {
 		{

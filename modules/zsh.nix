@@ -82,6 +82,7 @@
       dv = "devenv";
       dr = "direnv";
       rep = "resticprofile";
+      oc = "opencode";
 
       # Navigation
       home = "cd ~";

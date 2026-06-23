@@ -74,7 +74,25 @@ in
       inherit context;
       enable = true;
       enableMcpIntegration = true;
-      settings.plugin = [ "superpowers@git+https://github.com/obra/superpowers.git" ];
+      settings = {
+        model = "anthropic/claude-opus-4-8";
+        small_model = "anthropic/claude-haiku-4-5";
+        plugin = [
+          "superpowers@git+https://github.com/obra/superpowers.git"
+          "opencode-claude-auth"
+        ];
+        permission = {
+          bash = {
+            "*" = "ask";
+            "ssh *" = "ask";
+            "echo *" = "allow";
+            "head *" = "allow";
+            "go vet *" = "allow";
+            "go build *" = "allow";
+          };
+        };
+        lsp = true;
+      };
     };
 
     claude-code = {
@@ -101,7 +119,7 @@ in
 
       enableMcpIntegration = true;
       settings = {
-        model = "claude-opus-4-6";
+        model = "claude-opus-4-8";
         fastMode = false;
         alwaysThinkingEnabled = true;
         autoCompactWindow = 700000;
