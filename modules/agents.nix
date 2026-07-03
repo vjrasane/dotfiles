@@ -207,7 +207,8 @@ in
               hooks = [
                 {
                   type = "command";
-                  command = "printf '\\a' > /dev/tty";
+                  command = "{ printf '\\a' > /dev/tty; } 2>/dev/null || true";
+
                 }
               ];
             }
