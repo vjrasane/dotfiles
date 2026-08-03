@@ -110,7 +110,7 @@ in
         copilot = "${dotfiles}/claude/skills/copilot";
         planner = "${dotfiles}/claude/skills/planner";
         repo-init = "${dotfiles}/claude/skills/repo-init";
-        researcer = "${dotfiles}/claude/skills/researcer";
+        researcher = "${dotfiles}/claude/skills/researcher";
         review = "${dotfiles}/claude/skills/review";
         skill-writer = "${dotfiles}/claude/skills/skill-writer";
         workspace = "${dotfiles}/claude/skills/workspace";
