@@ -21,6 +21,25 @@
     path = "${homeDir}/.config/resticprofile/profiles.yaml";
   };
 
+  xdg.configFile."resticprofile/excludes.txt".text = ''
+    .cache
+    **/node_modules
+    **/.devenv
+    **/.venv
+    **/.tox
+    **/.git
+    **/.jj
+    **/__pycache__
+    **/.cargo
+    **/.next
+    $HOME/.local
+    $HOME/.npm
+    $HOME/go
+    $HOME/.config
+    $HOME/tmp
+    *.tmp
+  '';
+
   age.secrets.oci-api-key = {
     file = "${dotfiles}/secrets/oci_api_key.pem.age";
     path = "${homeDir}/.oci/oci_api_key.pem";
