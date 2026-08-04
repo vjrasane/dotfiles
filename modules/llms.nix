@@ -116,6 +116,8 @@ in
 {
   home.packages = [ kimiCode ];
 
+  home.file.".kimi-code/AGENTS.md".text = context;
+
   programs = {
     mcp = {
       enable = true;

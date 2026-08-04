@@ -55,6 +55,7 @@
           ./modules/zsh.nix
           ./modules/i3.nix
           ./modules/kubernetes.nix
+          ./modules/keyd.nix
           ./modules/neovim.nix
           ./modules/secrets.nix
           ./modules/llms.nix

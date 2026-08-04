@@ -30,7 +30,6 @@ in
     fd
     jq
     yq-go
-    just
     curl
     wget
     unzip
@@ -162,6 +161,7 @@ in
     PDSH_RCMD_TYPE = "ssh";
     PDSH_SSH_ARGS = "-o ForwardAgent=True";
     OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING = "True";
+    _ZO_DOCTOR = "0"; # AI agents' shells drop zoxide's chpwd hook, tripping its doctor warning
   };
 
   # Session PATH

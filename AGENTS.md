@@ -14,6 +14,10 @@ This project uses **devenv** to manage development tools and dependencies. The e
 - Do NOT use devenv for language-specific libraries — use the project's native package manager instead (npm, uv, pip, cargo, go modules, etc.)
 - To add a new tool: edit `devenv.nix`, then let direnv reload or run `devenv shell`
 
+## System-level config
+
+- keyd (homerow mods) is a system daemon bootstrapped with `just setup-keyd`; its config is managed in `modules/keyd.nix` and symlinked to `/etc/keyd/default.conf`. After changing it: `home-manager switch`, then `sudo keyd.rvaiya reload` (`keyd.rvaiya`, not `keyd`, is the binary name on Debian/Ubuntu).
+
 ## Version Control
 
 This project uses **jj (Jujutsu)** for version control with git colocated mode. NEVER use git commands unless absolutely necessary (e.g., a tool has no jj support, or jj lacks the needed functionality). If you must use git, explain why.

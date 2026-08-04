@@ -4,9 +4,7 @@
   ...
 }:
 {
-  packages = with pkgs; [
-    just
-  ];
+  packages = with pkgs; [ just ];
 
   scripts.age-encrypt.exec = ''
     if [ $# -ne 1 ]; then
