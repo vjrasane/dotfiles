@@ -8,11 +8,77 @@ let
   inherit (pkgs)
     nodejs
     fetchFromGitHub
+    fetchurl
+    unzip
     makeWrapper
     buildNpmPackage
+    stdenvNoCC
     ;
 
-  context = builtins.readFile "${dotfiles}/claude/context.md";
+  context = builtins.readFile "${dotfiles}/llms/claude/context.md";
+
+  kimiCode =
+    let
+      version = "0.32.0";
+      base = "https://github.com/MoonshotAI/kimi-code/releases/download/%40moonshot-ai/kimi-code%40${version}";
+      sources = {
+        "x86_64-linux" = {
+          file = "kimi-code-linux-x64.zip";
+          hash = "sha256-C4fO8HOuYTCCo3q0tJzNENEDsruyJ0/69FjIvWgb4rA=";
+        };
+        "aarch64-linux" = {
+          file = "kimi-code-linux-arm64.zip";
+          hash = "sha256-L9WtrtIH80frHCnrtcu/GNx1ZKN3rvnGYoLZ8Hv8C48=";
+        };
+        "x86_64-darwin" = {
+          file = "kimi-code-darwin-x64.zip";
+          hash = "sha256-OFsG6gdKoEhP0KYV3G+SCdGutohiVeZOyN2t9CvVQAA=";
+        };
+        "aarch64-darwin" = {
+          file = "kimi-code-darwin-arm64.zip";
+          hash = "sha256-Kw5+ufdIzIj4SqGBDnZ55b/sfWn3DukaM2yGDo7PnZU=";
+        };
+      };
+      inherit (stdenvNoCC.hostPlatform) system;
+      src' = sources.${system} or (throw "kimi-code: unsupported system ${system}");
+    in
+    stdenvNoCC.mkDerivation {
+      pname = "kimi-code";
+      inherit version;
+
+      src = fetchurl {
+        url = "${base}/${src'.file}";
+        inherit (src') hash;
+      };
+
+      nativeBuildInputs = [ unzip ];
+
+      # Prebuilt bun single-file executable: patchelf/strip corrupt the JS payload
+      # appended after the ELF, so install it verbatim and rely on the host loader.
+      dontStrip = true;
+      dontPatchELF = true;
+
+      unpackPhase = ''
+        runHook preUnpack
+        unzip -q $src
+        runHook postUnpack
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        install -Dm755 kimi $out/bin/kimi
+        runHook postInstall
+      '';
+
+      meta = {
+        description = "Kimi Code CLI — Moonshot AI terminal coding agent";
+        mainProgram = "kimi";
+        homepage = "https://github.com/MoonshotAI/kimi-code";
+        license = lib.licenses.mit;
+        platforms = builtins.attrNames sources;
+        maintainers = [ ];
+      };
+    };
 
   claudeHud = buildNpmPackage (finalAttrs: {
     pname = "claude-hud";
@@ -48,6 +114,8 @@ let
   });
 in
 {
+  home.packages = [ kimiCode ];
+
   programs = {
     mcp = {
       enable = true;
@@ -100,21 +168,21 @@ in
       enable = true;
       package = pkgs.claude-code;
       agents = {
-        code-reviewer = "${dotfiles}/claude/agents/code-reviewer.md";
-        cooklang = "${dotfiles}/claude/agents/cooklang.md";
-        copilot = "${dotfiles}/claude/agents/copilot.md";
-        proofreader = "${dotfiles}/claude/agents/proofreader.md";
+        code-reviewer = "${dotfiles}/llms/claude/agents/code-reviewer.md";
+        cooklang = "${dotfiles}/llms/claude/agents/cooklang.md";
+        copilot = "${dotfiles}/llms/claude/agents/copilot.md";
+        proofreader = "${dotfiles}/llms/claude/agents/proofreader.md";
       };
       skills = {
-        add-mcp = "${dotfiles}/claude/skills/add-mcp";
-        copilot = "${dotfiles}/claude/skills/copilot";
-        planner = "${dotfiles}/claude/skills/planner";
-        repo-init = "${dotfiles}/claude/skills/repo-init";
-        researcher = "${dotfiles}/claude/skills/researcher";
-        review = "${dotfiles}/claude/skills/review";
-        skill-writer = "${dotfiles}/claude/skills/skill-writer";
-        workspace = "${dotfiles}/claude/skills/workspace";
-        writing-assistant = "${dotfiles}/claude/skills/writing-assistant";
+        add-mcp = "${dotfiles}/llms/claude/skills/add-mcp";
+        copilot = "${dotfiles}/llms/claude/skills/copilot";
+        planner = "${dotfiles}/llms/claude/skills/planner";
+        repo-init = "${dotfiles}/llms/claude/skills/repo-init";
+        researcher = "${dotfiles}/llms/claude/skills/researcher";
+        review = "${dotfiles}/llms/claude/skills/review";
+        skill-writer = "${dotfiles}/llms/claude/skills/skill-writer";
+        workspace = "${dotfiles}/llms/claude/skills/workspace";
+        writing-assistant = "${dotfiles}/llms/claude/skills/writing-assistant";
       };
 
       enableMcpIntegration = true;
@@ -187,7 +255,7 @@ in
           "mcp__sequential-thinking"
 
           "Read(~/.claude/skills/*)"
-          "Read(~/dotfiles/claude/skills/*)"
+          "Read(~/dotfiles/llms/claude/skills/*)"
         ];
         hooks = {
           Notification = [

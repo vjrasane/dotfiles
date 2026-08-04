@@ -57,7 +57,7 @@
           ./modules/kubernetes.nix
           ./modules/neovim.nix
           ./modules/secrets.nix
-          ./modules/agents.nix
+          ./modules/llms.nix
           ./modules/ssh.nix
           ./modules/sops.nix
           ./modules/work.nix

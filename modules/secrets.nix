@@ -44,4 +44,9 @@
     file = "${dotfiles}/secrets/oci_api_key.pem.age";
     path = "${homeDir}/.oci/oci_api_key.pem";
   };
+
+  age.secrets.kimi-code-config = {
+    file = "${dotfiles}/secrets/kimi-code-config.toml.age";
+    path = "${homeDir}/.kimi-code/config.toml";
+  };
 }

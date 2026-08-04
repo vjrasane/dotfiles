@@ -108,6 +108,9 @@
 
       # Re-assert prefix after plugin initialization
       set -g prefix C-a
+
+      set -g extended-keys on
+      set -g extended-keys-format csi-u
     '';
   };
 }

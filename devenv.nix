@@ -20,6 +20,10 @@
 
   claude.code.enable = true;
 
+  # prek's stash/restore is incompatible with the jj working copy and wipes
+  # newly-added files; keep git-hooks for commits, not on every Claude edit.
+  claude.code.hooks.git-hooks-run.enable = false;
+
   claude.code.mcpServers = {
     devenv = {
       type = "stdio";
