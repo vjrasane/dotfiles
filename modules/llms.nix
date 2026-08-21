@@ -256,8 +256,8 @@ in
           "mcp__context7"
           "mcp__sequential-thinking"
 
-          "Read(~/.claude/skills/*)"
-          "Read(~/dotfiles/llms/claude/skills/*)"
+          "Read(~/.claude/skills/**)"
+          "Read(~/dotfiles/llms/claude/skills/**)"
         ];
         hooks = {
           Notification = [

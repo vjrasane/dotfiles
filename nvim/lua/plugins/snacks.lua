@@ -50,7 +50,7 @@ return {
 			{ "<leader>j", function() Snacks.picker.jumps() end, desc = "Jumplist" },
 			{ "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
 			{ "<leader>sG", function() Snacks.picker.grep({ ignored = true }) end, desc = "Grep (incl. ignored)" },
-			{ "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Word under cursor" },
+			{ "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Word under cursor / selection", mode = { "n", "x" } },
 			{ "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer" },
 			{ "<leader>sd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document diagnostics" },
 			{ "<leader>sD", function() Snacks.picker.diagnostics() end, desc = "Workspace diagnostics" },

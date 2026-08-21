@@ -39,14 +39,21 @@ Create a new `jj` workspace rooted alongside the current repo.
    jj new -m "<descriptive message>"
    ```
 
-6. **Copy devenv and direnv files** from the source repo root to the new workspace:
-   - Check for `.envrc`, `.devenv`, `.devenv.flake.nix`, and any other gitignored devenv-related files
-   - Copy each one into the new workspace root:
-     ```
-     cp -a $(jj workspace root)/.envrc ../ws-<feature-name>/.envrc
-     cp -a $(jj workspace root)/.devenv ../ws-<feature-name>/.devenv
-     ```
-   - Skip any that don't exist in the source repo
+6. **Symlink gitignored root files** (direnv, devenv, and `*.local.*` overrides) from the source repo root into the new workspace:
+   ```
+   SRC="$(jj workspace root)"
+   DST="../ws-<feature-name>"
+   git -C "$SRC" ls-files --others --ignored --exclude-standard -z \
+     | grep -zZ -v '/' \
+     | grep -zZ -e '\.local\.' -e '^\.envrc$' -e '^\.devenv' \
+     | grep -zZ -v '^\.devenv\.flake\.nix$' \
+     | while IFS= read -r -d '' f; do
+         ln -s "$SRC/$f" "$DST/$f"
+       done
+   ```
+   - `git ls-files --others --ignored --exclude-standard` enumerates gitignored files respecting `.gitignore` semantics (read-only).
+   - `grep -v '/'` keeps root-level entries only, so the `.devenv/` directory is skipped while `.envrc`, `.devenv.local.nix`, and any `*.local.*` file at root are symlinked.
+   - `.devenv.flake.nix` is excluded — it is a generated artifact devenv rewrites in place; symlinking it would clobber the source. devenv regenerates it in the workspace on first shell entry.
 
 7. **Create a bookmark** on the new change using the same feature name:
    ```

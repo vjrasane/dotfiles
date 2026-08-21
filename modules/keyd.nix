@@ -36,5 +36,9 @@
     j = down
     k = up
     l = right
+    e = G-7
+    r = G-0
+    d = G-8
+    f = G-9
   '';
 }

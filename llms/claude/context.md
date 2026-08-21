@@ -8,6 +8,7 @@
 * Never use git for anything. You are forbidden from running any git commands ever
 * Instead of git use `jj`. But never do any git/jj operations, except for read-only ones like `jj show`. You are forbidden from creating new commits, branches, bookmarks, tags, and pushing to any remotes
 * The only exception from the rule above: you're allowed to run `jj new -m "…"` when starting working a new big logical piece of code
+* Second exception: when running the `workspace` skill you may run the write ops it prescribes — `jj workspace add`, `jj edit`, and `jj bookmark create` — but only within that skill's flow
 * Never try to revert your changes with `jj abandon` or `git reset`. If you need a big changeset to be reverted, ask me to do it. For small ones, just edit the files.
 * When putting issues in the commit description follow the format: `<ISSUE>: <description>`. Add `(<scope>)` between issue id and colon if the repo uses conventional commits.
 
