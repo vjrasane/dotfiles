@@ -21,6 +21,7 @@
     # Language servers
     cook-cli
     gopls
+    golangci-lint
     lua-language-server
     pyright
     tailwindcss-language-server

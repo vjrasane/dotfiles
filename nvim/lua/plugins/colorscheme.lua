@@ -7,9 +7,9 @@ return {
 			flavor = "mocha",
 			color_overrides = {
 				mocha = {
-					base = "#282c34",
-					mantle = "#22252c",
-					crust = "#11111b",
+					base = "#0a0a0a",
+					mantle = "#141414",
+					crust = "#1e1e1e",
 				},
 			},
 			custom_highlights = function(colors)

@@ -174,6 +174,7 @@ in
   xdg.configFile = {
     "ghostty/config".text = ''
       font-size = 11
+      background = 000000
     '';
     "pgcli/config".text = ''
       [main]

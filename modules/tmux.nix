@@ -82,13 +82,14 @@
 
       set -g renumber-windows on
       set -g set-clipboard on
+      set -g copy-command 'wl-copy -t text/plain'
       set -g detach-on-destroy off
       set -g pane-active-border-style 'fg=magenta,bg=default'
       set -g pane-border-style 'fg=brightblack,bg=default'
       set -g pane-border-indicators both
       set -g pane-border-status top
       set -g pane-border-format "#{?#{==:#{pane_title},#{host}}, #(echo #{pane_current_path} | sed 's|^$HOME/|~/|' | rev | cut -d/ -f1-2 | rev) , #{pane_title} }"
-      set -g window-style 'fg=colour245,bg=#1a1a2e'
+      set -g window-style 'fg=colour245,bg=#000000'
       set -g window-active-style 'fg=default,bg=default'
 
       # Copy mode
@@ -100,7 +101,7 @@
       bind-key -T copy-mode-vi v send-keys -X begin-selection
       bind-key -T copy-mode-vi V send-keys -X select-line
       bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
-      bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "wl-copy"
+      bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel
 
       # Paste from system clipboard
       bind-key p run-shell "wl-paste | tmux load-buffer - && tmux paste-buffer"
