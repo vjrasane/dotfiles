@@ -182,6 +182,7 @@ in
         repo-init = "${dotfiles}/llms/claude/skills/repo-init";
         researcher = "${dotfiles}/llms/claude/skills/researcher";
         review = "${dotfiles}/llms/claude/skills/review";
+        review-mr = "${dotfiles}/llms/claude/skills/review-mr";
         skill-writer = "${dotfiles}/llms/claude/skills/skill-writer";
         workspace = "${dotfiles}/llms/claude/skills/workspace";
         writing-assistant = "${dotfiles}/llms/claude/skills/writing-assistant";

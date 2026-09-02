@@ -5,11 +5,11 @@
 * Always think as hard as you can before outputting anything. Ultrathink.
 
 ## Version control
-* Never use git for anything. You are forbidden from running any git commands ever
-* Instead of git use `jj`. But never do any git/jj operations, except for read-only ones like `jj show`. You are forbidden from creating new commits, branches, bookmarks, tags, and pushing to any remotes
-* The only exception from the rule above: you're allowed to run `jj new -m "…"` when starting working a new big logical piece of code
-* Second exception: when running the `workspace` skill you may run the write ops it prescribes — `jj workspace add`, `jj edit`, and `jj bookmark create` — but only within that skill's flow
-* Never try to revert your changes with `jj abandon` or `git reset`. If you need a big changeset to be reverted, ask me to do it. For small ones, just edit the files.
+* Never use git for anything. You are forbidden from running any git commands ever. Use `jj` instead.
+* Non-destructive `jj` ops are allowed without asking: read-only commands (`jj show`, `jj log`, `jj status`, `jj diff`, …); `jj new`, `jj commit`/`jj describe`, `jj bookmark create`
+* Destructive `jj` ops require explicit permission each time — never run them without asking first: `jj squash`, `jj abandon`, `jj rebase`, `jj split`, `jj undo`, `jj restore`, and anything else that rewrites or discards existing changes
+* Never push to any remote without explicit permission
+* To revert your own changes prefer editing the files back. For anything needing a destructive op or reverting a large changeset, ask me first
 * When putting issues in the commit description follow the format: `<ISSUE>: <description>`. Add `(<scope>)` between issue id and colon if the repo uses conventional commits.
 
 ## Output Style

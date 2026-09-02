@@ -23,6 +23,8 @@ in
           "log"
           "--reversed"
           "--no-pager"
+          "--limit"
+          "25"
         ];
         pager = "delta";
         editor = "nvim";
