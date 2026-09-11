@@ -14,6 +14,11 @@
         port = 2222;
         user = "ubuntu";
       };
+      rpi5-01 = {
+        hostname = "192.168.1.100";
+        port = 22;
+        user = "vjrasane";
+      };
     };
   };
 }
