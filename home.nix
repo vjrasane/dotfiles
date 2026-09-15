@@ -128,7 +128,10 @@ in
   # Bat - better cat
   programs.bat = {
     enable = true;
-    config.theme = "OneHalfDark";
+    config = {
+      theme = "OneHalfDark";
+      style = "header,grid";
+    };
   };
 
   # Eza - better ls
