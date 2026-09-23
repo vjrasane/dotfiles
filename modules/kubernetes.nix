@@ -20,7 +20,6 @@
     kubernetes-helm
     kustomize
     k9s
-    kind
   ];
 
   home.file.".local/bin/k9s-debug" = {
