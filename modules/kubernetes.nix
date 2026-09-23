@@ -19,6 +19,7 @@
     # Kubernetes tools
     kubernetes-helm
     kustomize
+    kind
     k9s
   ];
 
