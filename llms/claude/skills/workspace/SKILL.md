@@ -18,7 +18,8 @@ Create a new `jj` workspace rooted alongside the current repo.
 2. **Determine the workspace name**:
    - If the user provided a feature name, slugify it: lowercase, dashes, no special chars
    - Otherwise suggest a name based on the task context or ask
-   - Final directory: `ws-<feature-name>` (e.g. `ws-add-auth-middleware`)
+   - If the workspace is for an existing ticket, prepend the ticket slug (its ID + name, kebab-cased) to the feature name (e.g. ticket "PROJ-123: Add auth middleware" → `proj-123-add-auth-middleware`)
+   - Final directory: `ws-<feature-name>` (e.g. `ws-add-auth-middleware`, or `ws-proj-123-add-auth-middleware` for a ticket)
 
 3. **Resolve paths**:
    - Get the repo root: `jj workspace root`
