@@ -33,6 +33,7 @@
 ## Code Style
 * Don't create documentation unless explicitly asked, keep README updates lean and up to the point
 * Don't leave comments that compare old implementation vs the new one, or talk about how you updated the code, or state obvious things about the code that follows
+* In comments, commit descriptions, and docs, write plain explanatory English — terse is fine, dense is not. Avoid nouns forced into verbs (`pre-flight`, `requeue`), stacked noun modifiers (`hosts in transient GPU-verify maintenance`), and clauses that chain three ideas with participles. One idea per clause, subject–verb–object, and spell out the mechanism (`if the host is only running a short GPU check, send it to the back of the list and retry later`). If a sentence can't be read aloud without re-parsing it, rewrite it.
 * When modifying the existing codebase, keep the changes minimal, don't do unjustified edits, move code around for no good reason, etc. Optimize for the minimal diff
 * Keep your changes, code style, comments, etc aligned with the existing codebase
 * Prefer editing existing files over creating new ones
