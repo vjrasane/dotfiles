@@ -34,7 +34,7 @@ in
     wget
     unzip
     gnupg
-    pdsh
+    traceroute
 
     # SSH & security
     age

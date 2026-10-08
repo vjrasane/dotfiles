@@ -196,11 +196,9 @@ in
         autoCompactWindow = 700000;
         enableAllProjectMcpServers = true;
         enabledPlugins = {
-          "lua-lsp@claude-plugins-official" = true;
           "superpowers@claude-plugins-official" = true;
           "gopls-lsp@claude-plugins-official" = true;
           "typescript-lsp@claude-plugins-official" = true;
-          "rust-analyzer-lsp@claude-plugins-official" = true;
           "pyright-lsp@claude-plugins-official" = true;
         };
         attribution = {
@@ -214,6 +212,7 @@ in
           type = "command";
           command = "${claudeHud}";
         };
+        permissions.defaultMode = "auto";
         permissions.allow = [
           "WebSearch"
 
