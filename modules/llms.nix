@@ -178,6 +178,7 @@ in
       skills = {
         add-mcp = "${dotfiles}/llms/claude/skills/add-mcp";
         copilot = "${dotfiles}/llms/claude/skills/copilot";
+        linear-ticket = "${dotfiles}/llms/claude/skills/linear-ticket";
         planner = "${dotfiles}/llms/claude/skills/planner";
         repo-init = "${dotfiles}/llms/claude/skills/repo-init";
         researcher = "${dotfiles}/llms/claude/skills/researcher";

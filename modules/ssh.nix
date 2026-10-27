@@ -19,6 +19,9 @@
         port = 22;
         user = "vjrasane";
       };
+      "*" = {
+        ConnectTimeout = 10;
+      };
     };
   };
 }
