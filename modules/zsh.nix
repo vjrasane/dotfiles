@@ -75,6 +75,7 @@
       j = "just";
       hm = "home-manager";
       kb = "kubectl";
+      kx = "kubectx";
       lzd = "lazydocker";
       d = "docker";
       doco = "docker compose";
