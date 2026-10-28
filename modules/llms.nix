@@ -185,6 +185,7 @@ in
         review = "${dotfiles}/llms/claude/skills/review";
         review-mr = "${dotfiles}/llms/claude/skills/review-mr";
         skill-writer = "${dotfiles}/llms/claude/skills/skill-writer";
+        start-ticket = "${dotfiles}/llms/claude/skills/start-ticket";
         workspace = "${dotfiles}/llms/claude/skills/workspace";
         writing-assistant = "${dotfiles}/llms/claude/skills/writing-assistant";
       };
