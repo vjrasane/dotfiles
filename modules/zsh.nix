@@ -75,6 +75,7 @@
       j = "just";
       hm = "home-manager";
       kb = "kubectl";
+      kn = "kubens";
       kx = "kubectx";
       lzd = "lazydocker";
       d = "docker";
