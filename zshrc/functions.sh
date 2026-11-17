@@ -73,3 +73,35 @@ portkill() {
 	echo "Killing processes on port $port..."
 	lsof -ti:$port | xargs kill -9 2>/dev/null && echo "Killed" || echo "No processes found on port $port"
 }
+
+# List jj workspace candidates (ws-* dirs) in the current dir and the current repo's parent
+_ws_candidates() {
+	local -a roots
+	local -A seen
+	local root r dir
+	roots=("$PWD")
+	root=$(jj workspace root 2>/dev/null) && roots+=("${root:h}")
+	for r in $roots; do
+		for dir in $r/ws-*(N/); do
+			[[ -e $dir/.jj && -z ${seen[$dir]} ]] || continue
+			seen[$dir]=1
+			print -r -- "$dir"
+		done
+	done
+}
+
+# Fuzzy-switch to a jj workspace (ws-* sibling dirs) near the current location,
+# falling back to zoxide (cd) with the raw query when nothing matches
+ws() {
+	local -a cands
+	cands=(${(f)"$(_ws_candidates)"})
+	local t ret
+	if (( ${#cands} )); then
+		t=$(print -rl -- $cands | fzf -q "${*:-}" --select-1 --exit-0 --delimiter / --nth -1 \
+			--preview 'jj --ignore-working-copy -R {} log --limit 5 --color=always')
+		ret=$?
+		[[ -n $t ]] && { cd "$t"; return }
+		(( ret == 130 )) && return $ret
+	fi
+	(( $# )) && cd "$@"
+}

@@ -69,3 +69,11 @@ _fzf_complete_jj() {
 _fzf_complete_jj_post() {
   awk '{print $1}'
 }
+
+# `ws **<TAB>` -> fuzzy pick from the same workspace candidates as the ws function
+_fzf_complete_ws() {
+  _fzf_complete --prompt="Workspace> " --delimiter / --nth -1 \
+    --preview='jj --ignore-working-copy -R {} log --limit 5 --color=always' \
+    --preview-window='right:50%:wrap,<80(down:50%:wrap)' \
+    -- "$@" < <(_ws_candidates)
+}
