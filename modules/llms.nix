@@ -268,7 +268,7 @@ in
               hooks = [
                 {
                   type = "command";
-                  command = "{ printf '\\a' > /dev/tty; } 2>/dev/null; { [ -n \"$TMUX_PANE\" ] && [ \"$(tmux display -p -t \"$TMUX_PANE\" '#{session_attached}')\" = 0 ] && tmux set-option -t \"$TMUX_PANE\" @agent blocked; } 2>/dev/null; true";
+                  command = "printf '\\a' > /dev/tty";
                 }
               ];
             }
@@ -279,7 +279,7 @@ in
               hooks = [
                 {
                   type = "command";
-                  command = "{ printf '\\a' > /dev/tty; } 2>/dev/null; { [ -n \"$TMUX_PANE\" ] && [ \"$(tmux display -p -t \"$TMUX_PANE\" '#{session_attached}')\" = 0 ] && tmux set-option -t \"$TMUX_PANE\" @agent ready; } 2>/dev/null; true";
+                  command = "{ printf '\\a' > /dev/tty; } 2>/dev/null || true";
                 }
               ];
             }
