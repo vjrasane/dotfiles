@@ -2,7 +2,7 @@
 {
   home.packages = with pkgs; [
     wl-clipboard
-    tmuxinator
+    sesh
   ];
 
   programs.tmux = {
@@ -30,7 +30,7 @@
           set -g @catppuccin_window_current_text " #{?#{automatic-rename},#(echo #{pane_current_path} | sed 's|^$HOME/|~/|' | rev | cut -d/ -f1-2 | rev),#W}"
 
           set -g status-left ""
-          set -g status-right "#{E:@catppuccin_status_session}"
+          set -g status-right "#[fg=yellow,bold]#(tmux list-sessions -F '##{?##{@agent},##{?##{==:##{@agent},blocked},⚠ ,✓ }##{session_name} ,}')#[default]#{E:@catppuccin_status_session}"
           set -ag status-right "#{E:@catppuccin_status_user}"
           set -ag status-right "#{E:@catppuccin_status_host}"
         '';
@@ -53,7 +53,10 @@
       unbind r
       bind r source-file ~/.config/tmux/tmux.conf
 
+      bind-key a switch-client -l
       bind-key l last-window
+      bind-key n next-window
+      bind-key p previous-window
 
       bind-key -r -T prefix Up    resize-pane -U 5
       bind-key -r -T prefix Down  resize-pane -D 5
@@ -73,14 +76,24 @@
       bind-key w new-window -c "#{pane_current_path}"
       bind-key W choose-tree -Zw
 
+      bind-key o display-popup -E -w 70% -h 70% "sesh connect \"$(sesh list --icons | fzf --ansi --no-sort --reverse --prompt 'sesh ' --preview 'sesh preview {}' --preview-window 'right:55%')\""
+
       bind-key m choose-window -F "#{window_index}: #{window_name}" "join-pane -h -t %%"
       bind-key M choose-window -F "#{window_index}: #{window_name}" "join-pane -v -t %%"
 
       set-option -g status-position top
+      set-option -g status-interval 5
       set-option -sa terminal-overrides ",xterm*:Tc"
       set -ag terminal-overrides ",xterm-256color:RGB"
 
       set -g renumber-windows on
+
+      # Auto-name a new session after its directory when tmux leaves it numeric
+      set-hook -g session-created 'run-shell -b "tmux rename-session -t \"=#{session_name}\" \"#{?#{m:*[!0-9]*,#{session_name}},#{session_name},#{b:pane_current_path}}\""'
+
+      # Clear an agent flag when you switch into that session
+      set-hook -g client-session-changed 'set-option -u @agent'
+
       set -g set-clipboard on
       set -g copy-command 'wl-copy -t text/plain'
       set -g detach-on-destroy off
@@ -104,8 +117,7 @@
       bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel
 
       # Paste from system clipboard
-      bind-key p run-shell "wl-paste | tmux load-buffer - && tmux paste-buffer"
-      bind-key P paste-buffer
+      bind-key P run-shell "wl-paste | tmux load-buffer - && tmux paste-buffer"
 
       # Re-assert prefix after plugin initialization
       set -g prefix C-a

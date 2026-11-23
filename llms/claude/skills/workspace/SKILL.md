@@ -61,4 +61,12 @@ Create a new `jj` workspace rooted alongside the current repo.
    jj bookmark create <feature-name>
    ```
 
-8. **Report**: Print the workspace path and current `jj log --limit 3` so the user can verify. Suggest the user `cd` into the workspace and start a new Claude session there.
+8. **Create a detached tmux session** for the workspace so it is reachable by name, but only when running inside tmux (`$TMUX` is set):
+   ```
+   if [ -n "$TMUX" ] && ! tmux has-session -t "=<feature-name>" 2>/dev/null; then
+     tmux new-session -d -s "<feature-name>" -c "$(pwd)"
+   fi
+   ```
+   The session name matches the bookmark and the `ws-<feature-name>` directory, so `sesh` (bound to `C-a o`) lists the workspace by its slug.
+
+9. **Report**: Print the workspace path and current `jj log --limit 3` so the user can verify. Suggest the user `cd` into the workspace and start a new Claude session there.
