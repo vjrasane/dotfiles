@@ -61,6 +61,7 @@
           ./modules/llms.nix
           ./modules/ssh.nix
           ./modules/sops.nix
+          ./modules/syncthing.nix
           ./modules/work.nix
         ]
         ++ (
