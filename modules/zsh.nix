@@ -69,6 +69,7 @@
       tree = "eza --icons=always --tree";
 
       # Tools
+      sesh = "/usr/local/bin/sesh";
       g = "git";
       cat = "bat";
       tf = "tofu";

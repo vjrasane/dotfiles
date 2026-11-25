@@ -21,7 +21,14 @@ in
     overrideFolders = true;
 
     settings = {
-      devices = { };
+      devices = {
+      };
+
+      folders.corpus = {
+        path = "~/corpus";
+        devices = [ ];
+        type = "sendreceive";
+      };
 
       options = {
         globalAnnounceEnabled = false;
